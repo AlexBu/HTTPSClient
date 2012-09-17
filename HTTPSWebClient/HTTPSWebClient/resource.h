@@ -10,6 +10,8 @@
 #define IDC_BUTTON_POST                 1003
 #define IDC_BUTTON_GET                  1004
 #define IDC_STATIC_VALICODEPIC          1005
+#define IDC_BUTTON1                     1006
+#define IDC_BUTTON_CONNECT              1006
 
 // Next default values for new objects
 // 
@@ -17,7 +19,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

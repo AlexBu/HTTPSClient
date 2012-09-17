@@ -18,6 +18,9 @@
 
 CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CHTTPSWebClientDlg::IDD, pParent)
+	, URLString(_T(""))
+	, POSTString(_T(""))
+	, GETString(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -25,12 +28,16 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT_URL, URLString);
+	DDX_Text(pDX, IDC_EDIT_POST, POSTString);
+	DDX_Text(pDX, IDC_EDIT_GET, GETString);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON_CONNECT, &CHTTPSWebClientDlg::OnConnect)
 END_MESSAGE_MAP()
 
 
@@ -86,3 +93,28 @@ HCURSOR CHTTPSWebClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CHTTPSWebClientDlg::OnConnect()
+{
+	Test_SetURL();
+
+	// check URL and try to connect
+	UpdateData(TRUE);
+
+	CheckURL();
+
+	theApp.ConnectToURL(URLString);
+}
+
+void CHTTPSWebClientDlg::CheckURL()
+{
+	return;
+}
+
+void CHTTPSWebClientDlg::Test_SetURL()
+{
+	//test: set URL to 12306
+	//URLString = L"www.12306.cn/mormhweb/myfw/";
+	URLString = L"www.12306.cn";
+	UpdateData(FALSE);
+}

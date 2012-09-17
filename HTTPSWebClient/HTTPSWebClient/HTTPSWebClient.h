@@ -27,6 +27,8 @@ public:
 // й╣ож
 
 	DECLARE_MESSAGE_MAP()
+public:
+	void ConnectToURL( const CString& URLString );
 };
 
 extern CHTTPSWebClientApp theApp;

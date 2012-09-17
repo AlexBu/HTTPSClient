@@ -28,4 +28,15 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnConnect();
+
+	void Test_SetURL();
+
+	void CheckURL();
+private:
+	CString URLString;
+public:
+	CString POSTString;
+	CString GETString;
 };
