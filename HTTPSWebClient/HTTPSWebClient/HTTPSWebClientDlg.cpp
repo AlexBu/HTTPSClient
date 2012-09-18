@@ -96,7 +96,7 @@ HCURSOR CHTTPSWebClientDlg::OnQueryDragIcon()
 
 void CHTTPSWebClientDlg::OnConnect()
 {
-	Test_SetURL();
+	//Test_SetURL();
 
 	// check URL and try to connect
 	UpdateData(TRUE);
@@ -104,6 +104,9 @@ void CHTTPSWebClientDlg::OnConnect()
 	CheckURL();
 
 	theApp.ConnectToURL(URLString);
+
+	// set GET content
+	UpdateData(FALSE);
 }
 
 void CHTTPSWebClientDlg::CheckURL()
