@@ -21,6 +21,7 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, URLString(_T(""))
 	, POSTString(_T(""))
 	, GETString(_T(""))
+	, SESSIONString(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -31,13 +32,14 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_URL, URLString);
 	DDX_Text(pDX, IDC_EDIT_POST, POSTString);
 	DDX_Text(pDX, IDC_EDIT_GET, GETString);
+	DDX_Text(pDX, IDC_EDIT_SESSION, SESSIONString);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_BUTTON_CONNECT, &CHTTPSWebClientDlg::OnConnect)
+	ON_BN_CLICKED(IDC_BUTTON_GET, &CHTTPSWebClientDlg::OnGet)
 END_MESSAGE_MAP()
 
 
@@ -94,7 +96,7 @@ HCURSOR CHTTPSWebClientDlg::OnQueryDragIcon()
 }
 
 
-void CHTTPSWebClientDlg::OnConnect()
+void CHTTPSWebClientDlg::OnGet()
 {
 	//Test_SetURL();
 
@@ -103,7 +105,7 @@ void CHTTPSWebClientDlg::OnConnect()
 
 	CheckURL();
 
-	theApp.ConnectToURL(URLString);
+	theApp.GetFromURL(URLString);
 
 	// set GET content
 	UpdateData(FALSE);
