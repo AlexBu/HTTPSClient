@@ -57,6 +57,9 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	// 例如修改为公司或组织名
 	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
+	hConnect = NULL;
+	hSession = NULL;
+
 	CHTTPSWebClientDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
@@ -73,31 +76,19 @@ BOOL CHTTPSWebClientApp::InitInstance()
 
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
+
+	//close previous connections
+	if (hConnect) WinHttpCloseHandle(hConnect);
+	if (hSession) WinHttpCloseHandle(hSession);
+
 	return FALSE;
 }
 
-void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
+void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 {
-	DWORD dwSize = 0;
-	DWORD dwDownloaded = 0;
-	LPSTR pszOutBuffer;
-	BOOL  bResults = FALSE;
-	HINTERNET  hSession = NULL, 
-		hConnect = NULL,
-		hRequest = NULL;
-
-	//split URL and content
-	CString URI, resource;
-	int splitURLpos = URLString.Find(L'/');
-	if( splitURLpos != -1)
-	{
-		URI = URLString.Left(splitURLpos);
-		resource = URLString.Right(URLString.GetLength() - splitURLpos);
-	}
-	else
-	{
-		URI = URLString;
-	}
+	//close previous connections
+	if (hConnect) WinHttpCloseHandle(hConnect);
+	if (hSession) WinHttpCloseHandle(hSession);
 
 	// Use WinHttpOpen to obtain a session handle.
 	hSession = WinHttpOpen( L"WinHTTP Example/1.0",  
@@ -108,20 +99,27 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 
 	// Specify an HTTP server.
 	if (hSession)
-		hConnect = WinHttpConnect( hSession, URI,
+		hConnect = WinHttpConnect( hSession, URLString,
 		INTERNET_DEFAULT_HTTPS_PORT, 0);
 
+	return;
+}
 
-
+void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
+{
+	DWORD dwSize = 0;
+	DWORD dwDownloaded = 0;
+	LPSTR pszOutBuffer;
+	BOOL  bResults = FALSE;
+	HINTERNET hRequest = NULL;
 
 	// Create an HTTP request handle.
-	if (hConnect)
-		hRequest = WinHttpOpenRequest( hConnect, L"GET", resource,
+	if (hConnect && hSession)
+		hRequest = WinHttpOpenRequest( hConnect, L"GET", URLString,
 		NULL, WINHTTP_NO_REFERER, 
 		WINHTTP_DEFAULT_ACCEPT_TYPES, 
 		//WINHTTP_FLAG_BYPASS_PROXY_CACHE
 		WINHTTP_FLAG_SECURE
-		0
 		);
 
 	DWORD dwFlags;
@@ -134,18 +132,6 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 
 	WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
 		&dwFlags, sizeof (dwFlags) );
-
-	//// query security info
-	//WINHTTP_CERTIFICATE_INFO cert_info;
-	//DWORD cert_info_size;
-	//cert_info_size = sizeof(cert_info);
-	//ZeroMemory(&cert_info, cert_info_size);
-
-	//if(hRequest)
-	//	bResults = WinHttpQueryOption(hRequest, 
-	//	WINHTTP_OPTION_SECURITY_CERTIFICATE_STRUCT,
-	//	&cert_info, &cert_info_size
-	//	);
 
 	// Send a request.
 	if (hRequest)
@@ -162,10 +148,9 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 	// Keep checking for data until there is nothing left.
 	if (bResults)
 	{
-		((CHTTPSWebClientDlg*)m_pMainWnd)->GETString.Empty();
+		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
 		do 
 		{
-
 			// Check for available data.
 			dwSize = 0;
 			if (!WinHttpQueryDataAvailable( hRequest, &dwSize))
@@ -198,7 +183,7 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 						unicodeBuf = new TCHAR[unicodeBufSize + 1];
 						ZeroMemory(unicodeBuf, (unicodeBufSize + 1)*sizeof(TCHAR));
 						MultiByteToWideChar(CP_UTF8, 0, pszOutBuffer, dwSize, unicodeBuf, unicodeBufSize);
-						((CHTTPSWebClientDlg*)m_pMainWnd)->GETString += unicodeBuf;
+						((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString += unicodeBuf;
 						delete []unicodeBuf;
 					}
 					
@@ -211,15 +196,17 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 		} while (dwSize>0);
 	}
 
-		// Report any errors.
-		if (!bResults)
-			printf("Error %d has occurred.\n",GetLastError());
+	// Report any errors.
+	if (!bResults)
+		printf("Error %d has occurred.\n",GetLastError());
 
-		// Close any open handles.
-		if (hRequest) WinHttpCloseHandle(hRequest);
-		if (hConnect) WinHttpCloseHandle(hConnect);
-		if (hSession) WinHttpCloseHandle(hSession);
-
+	// Close any open handles.
+	if (hRequest) WinHttpCloseHandle(hRequest);
 
 	return;
+}
+
+void CHTTPSWebClientApp::PostToURL(const CString& URLString, const CString& WebResString, const CString& PostString)
+{
+	//
 }

@@ -29,6 +29,11 @@ public:
 	DECLARE_MESSAGE_MAP()
 public:
 	void GetFromURL( const CString& URLString );
+	void ConnectToURL( const CString& URLString );
+	void PostToURL(const CString& URLString, const CString& WebResString, const CString& PostString);
+private:
+	HINTERNET	hSession;
+	HINTERNET	hConnect;
 };
 
 extern CHTTPSWebClientApp theApp;

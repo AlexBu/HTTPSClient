@@ -18,10 +18,11 @@
 
 CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CHTTPSWebClientDlg::IDD, pParent)
-	, URLString(_T(""))
+	, WebResString(_T(""))
 	, POSTString(_T(""))
-	, GETString(_T(""))
+	, RespondString(_T(""))
 	, SESSIONString(_T(""))
+	, AddrString(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -29,10 +30,11 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_EDIT_URL, URLString);
+	DDX_Text(pDX, IDC_EDIT_URL, WebResString);
 	DDX_Text(pDX, IDC_EDIT_POST, POSTString);
-	DDX_Text(pDX, IDC_EDIT_GET, GETString);
+	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
 	DDX_Text(pDX, IDC_EDIT_SESSION, SESSIONString);
+	DDX_Text(pDX, IDC_EDIT_SITE, AddrString);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -40,6 +42,8 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON_GET, &CHTTPSWebClientDlg::OnGet)
+	ON_BN_CLICKED(IDC_BUTTON_CONN, &CHTTPSWebClientDlg::OnConnect)
+	ON_BN_CLICKED(IDC_BUTTON_POST, &CHTTPSWebClientDlg::OnPost)
 END_MESSAGE_MAP()
 
 
@@ -105,7 +109,7 @@ void CHTTPSWebClientDlg::OnGet()
 
 	CheckURL();
 
-	theApp.GetFromURL(URLString);
+	theApp.GetFromURL(WebResString);
 
 	// set GET content
 	UpdateData(FALSE);
@@ -120,6 +124,17 @@ void CHTTPSWebClientDlg::Test_SetURL()
 {
 	//test: set URL to 12306
 	//URLString = L"www.12306.cn/mormhweb/myfw/";
-	URLString = L"www.12306.cn";
+	WebResString = L"www.12306.cn";
 	UpdateData(FALSE);
+}
+
+void CHTTPSWebClientDlg::OnConnect()
+{
+	UpdateData(TRUE);
+	theApp.ConnectToURL(AddrString);
+}
+
+void CHTTPSWebClientDlg::OnPost()
+{
+	theApp.PostToURL(AddrString, WebResString, POSTString);
 }

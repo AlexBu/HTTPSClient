@@ -35,9 +35,12 @@ public:
 
 	void CheckURL();
 private:
-	CString URLString;
+	CString WebResString;
 public:
 	CString POSTString;
-	CString GETString;
+	CString RespondString;
 	CString SESSIONString;
+	CString AddrString;
+	afx_msg void OnConnect();
+	afx_msg void OnPost();
 };
