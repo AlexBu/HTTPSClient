@@ -29,7 +29,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnConnect();
+	afx_msg void OnGet();
 
 	void Test_SetURL();
 
@@ -39,4 +39,5 @@ private:
 public:
 	CString POSTString;
 	CString GETString;
+	CString SESSIONString;
 };

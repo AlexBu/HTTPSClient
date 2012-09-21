@@ -55,7 +55,7 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	CHTTPSWebClientDlg dlg;
 	m_pMainWnd = &dlg;
@@ -76,7 +76,7 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	return FALSE;
 }
 
-void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
+void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 {
 	DWORD dwSize = 0;
 	DWORD dwDownloaded = 0;
@@ -86,6 +86,19 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 		hConnect = NULL,
 		hRequest = NULL;
 
+	//split URL and content
+	CString URI, resource;
+	int splitURLpos = URLString.Find(L'/');
+	if( splitURLpos != -1)
+	{
+		URI = URLString.Left(splitURLpos);
+		resource = URLString.Right(URLString.GetLength() - splitURLpos);
+	}
+	else
+	{
+		URI = URLString;
+	}
+
 	// Use WinHttpOpen to obtain a session handle.
 	hSession = WinHttpOpen( L"WinHTTP Example/1.0",  
 		//WINHTTP_ACCESS_TYPE_NO_PROXY,
@@ -93,21 +106,46 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 		WINHTTP_NO_PROXY_NAME, 
 		WINHTTP_NO_PROXY_BYPASS, 0);
 
-	//TODO: the URL is invalid
 	// Specify an HTTP server.
 	if (hSession)
-		hConnect = WinHttpConnect( hSession, URLString,
+		hConnect = WinHttpConnect( hSession, URI,
 		INTERNET_DEFAULT_HTTPS_PORT, 0);
+
+
+
 
 	// Create an HTTP request handle.
 	if (hConnect)
-		hRequest = WinHttpOpenRequest( hConnect, L"GET", NULL,
+		hRequest = WinHttpOpenRequest( hConnect, L"GET", resource,
 		NULL, WINHTTP_NO_REFERER, 
 		WINHTTP_DEFAULT_ACCEPT_TYPES, 
 		//WINHTTP_FLAG_BYPASS_PROXY_CACHE
-		//WINHTTP_FLAG_SECURE
+		WINHTTP_FLAG_SECURE
 		0
 		);
+
+	DWORD dwFlags;
+	DWORD dwBuffLen = sizeof(dwFlags);            
+	WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
+		(LPVOID)&dwFlags, &dwBuffLen);
+	dwFlags |= SECURITY_FLAG_IGNORE_UNKNOWN_CA;
+	dwFlags |= SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
+	dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
+
+	WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
+		&dwFlags, sizeof (dwFlags) );
+
+	//// query security info
+	//WINHTTP_CERTIFICATE_INFO cert_info;
+	//DWORD cert_info_size;
+	//cert_info_size = sizeof(cert_info);
+	//ZeroMemory(&cert_info, cert_info_size);
+
+	//if(hRequest)
+	//	bResults = WinHttpQueryOption(hRequest, 
+	//	WINHTTP_OPTION_SECURITY_CERTIFICATE_STRUCT,
+	//	&cert_info, &cert_info_size
+	//	);
 
 	// Send a request.
 	if (hRequest)
@@ -123,6 +161,8 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 
 	// Keep checking for data until there is nothing left.
 	if (bResults)
+	{
+		((CHTTPSWebClientDlg*)m_pMainWnd)->GETString.Empty();
 		do 
 		{
 
@@ -149,15 +189,27 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 					printf( "Error %u in WinHttpReadData.\n", 
 					GetLastError());
 				else
+				{
 					//cout << pszOutBuffer;
-					((CHTTPSWebClientDlg*)m_pMainWnd)->GETString += pszOutBuffer;
+					LPTSTR unicodeBuf = NULL;
+					int unicodeBufSize = MultiByteToWideChar(CP_UTF8, 0, pszOutBuffer, dwSize, unicodeBuf, 0);
+					if(unicodeBufSize > 0)
+					{
+						unicodeBuf = new TCHAR[unicodeBufSize + 1];
+						ZeroMemory(unicodeBuf, (unicodeBufSize + 1)*sizeof(TCHAR));
+						MultiByteToWideChar(CP_UTF8, 0, pszOutBuffer, dwSize, unicodeBuf, unicodeBufSize);
+						((CHTTPSWebClientDlg*)m_pMainWnd)->GETString += unicodeBuf;
+						delete []unicodeBuf;
+					}
+					
+				}
 
 				// Free the memory allocated to the buffer.
 				delete [] pszOutBuffer;
 			}
 
 		} while (dwSize>0);
-
+	}
 
 		// Report any errors.
 		if (!bResults)
