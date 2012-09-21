@@ -43,4 +43,5 @@ public:
 	CString AddrString;
 	afx_msg void OnConnect();
 	afx_msg void OnPost();
+	afx_msg void OnGetValpic();
 };

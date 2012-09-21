@@ -45,6 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/ijg&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,8 +68,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winhttp.lib"
+				AdditionalDependencies="winhttp.lib libjpeg.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(Solutiondir)\ijg&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -256,6 +258,50 @@
 			</File>
 			<File
 				RelativePath=".\res\HTTPSWebClient.rc2"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="ijg"
+			>
+			<File
+				RelativePath="..\ijg\jconfig.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jdct.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jerror.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jinclude.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jmemsys.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jmorecfg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jpegint.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jpeglib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\jversion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ijg\libjpeg.lib"
 				>
 			</File>
 		</Filter>

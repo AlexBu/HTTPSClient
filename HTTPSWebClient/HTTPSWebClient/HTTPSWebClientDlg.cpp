@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_GET, &CHTTPSWebClientDlg::OnGet)
 	ON_BN_CLICKED(IDC_BUTTON_CONN, &CHTTPSWebClientDlg::OnConnect)
 	ON_BN_CLICKED(IDC_BUTTON_POST, &CHTTPSWebClientDlg::OnPost)
+	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValpic)
 END_MESSAGE_MAP()
 
 
@@ -137,4 +138,10 @@ void CHTTPSWebClientDlg::OnConnect()
 void CHTTPSWebClientDlg::OnPost()
 {
 	theApp.PostToURL(AddrString, WebResString, POSTString);
+}
+
+void CHTTPSWebClientDlg::OnGetValpic()
+{
+	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=sjrand";
+	theApp.GetValidatePic(ValPicAddr);
 }

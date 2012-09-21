@@ -6,6 +6,8 @@
 #include "HTTPSWebClient.h"
 #include "HTTPSWebClientDlg.h"
 
+#include "jpeglib.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -209,4 +211,96 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 void CHTTPSWebClientApp::PostToURL(const CString& URLString, const CString& WebResString, const CString& PostString)
 {
 	//
+}
+
+void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
+{
+	// get validation pic data and display it on cstatic control
+	DWORD dwSize = 0;
+	DWORD dwDownloaded = 0;
+	LPSTR pszOutBuffer;
+	BOOL  bResults = FALSE;
+	HINTERNET hRequest = NULL;
+
+	// Create an HTTP request handle.
+	if (hConnect && hSession)
+		hRequest = WinHttpOpenRequest( hConnect, L"GET", ValPicAddr,
+		NULL, WINHTTP_NO_REFERER, 
+		WINHTTP_DEFAULT_ACCEPT_TYPES, 
+		//WINHTTP_FLAG_BYPASS_PROXY_CACHE
+		WINHTTP_FLAG_SECURE
+		);
+
+	DWORD dwFlags;
+	DWORD dwBuffLen = sizeof(dwFlags);            
+	WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
+		(LPVOID)&dwFlags, &dwBuffLen);
+	dwFlags |= SECURITY_FLAG_IGNORE_UNKNOWN_CA;
+	dwFlags |= SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
+	dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
+
+	WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
+		&dwFlags, sizeof (dwFlags) );
+
+	// Send a request.
+	if (hRequest)
+		bResults = WinHttpSendRequest( hRequest,
+		WINHTTP_NO_ADDITIONAL_HEADERS,
+		0, WINHTTP_NO_REQUEST_DATA, 0, 
+		0, 0);
+
+
+	// End the request.
+	if (bResults)
+		bResults = WinHttpReceiveResponse( hRequest, NULL);
+
+	// Keep checking for data until there is nothing left.
+	if (bResults)
+	{
+		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
+		do 
+		{
+			// Check for available data.
+			dwSize = 0;
+			if (!WinHttpQueryDataAvailable( hRequest, &dwSize))
+				printf("Error %u in WinHttpQueryDataAvailable.\n",
+				GetLastError());
+
+			// Allocate space for the buffer.
+			pszOutBuffer = new char[dwSize+1];
+			if (!pszOutBuffer)
+			{
+				printf("Out of memory\n");
+				dwSize=0;
+			}
+			else
+			{
+				// Read the Data.
+				ZeroMemory(pszOutBuffer, dwSize+1);
+
+				if (!WinHttpReadData( hRequest, (LPVOID)pszOutBuffer, 
+					dwSize, &dwDownloaded))
+					printf( "Error %u in WinHttpReadData.\n", 
+					GetLastError());
+				else
+				{
+					// pszOutBuffer stores the jpeg data, convert to plain bitmap
+
+				}
+
+				// Free the memory allocated to the buffer.
+				delete [] pszOutBuffer;
+			}
+
+		} while (dwSize>0);
+	}
+
+	// Report any errors.
+	if (!bResults)
+		printf("Error %d has occurred.\n",GetLastError());
+
+	// Close any open handles.
+	if (hRequest) WinHttpCloseHandle(hRequest);
+
+	return;
 }

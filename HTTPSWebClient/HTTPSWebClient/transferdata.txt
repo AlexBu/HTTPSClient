@@ -1,0 +1,26 @@
+login page
+GET https://dynamic.12306.cn/otsweb/loginAction.do?method=init
+
+picture
+GET https://dynamic.12306.cn/otsweb/passCodeAction.do?rand=sjrand
+
+
+POST https://dynamic.12306.cn/otsweb/loginAction.do?method=loginAysnSuggest
+<content empty>
+
+respond
+{"loginRand":"434","randError":"Y"}
+
+POST https://dynamic.12306.cn/otsweb/loginAction.do?method=login
+POST data:
+loginRand=434
+&refundLogin=N
+&refundFlag=Y
+&loginUser.user_name=bkp84336
+&nameErrorFocus=
+&user.password=bsp2236
+&passwordErrorFocus=
+&randCode=HEXK
+&randErrorFocus=
+
+respond
