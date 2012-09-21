@@ -88,8 +88,8 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 
 	// Use WinHttpOpen to obtain a session handle.
 	hSession = WinHttpOpen( L"WinHTTP Example/1.0",  
-		WINHTTP_ACCESS_TYPE_NO_PROXY,
-		//WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
+		//WINHTTP_ACCESS_TYPE_NO_PROXY,
+		WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
 		WINHTTP_NO_PROXY_NAME, 
 		WINHTTP_NO_PROXY_BYPASS, 0);
 
@@ -104,8 +104,9 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 		hRequest = WinHttpOpenRequest( hConnect, L"GET", NULL,
 		NULL, WINHTTP_NO_REFERER, 
 		WINHTTP_DEFAULT_ACCEPT_TYPES, 
-		WINHTTP_FLAG_BYPASS_PROXY_CACHE
+		//WINHTTP_FLAG_BYPASS_PROXY_CACHE
 		//WINHTTP_FLAG_SECURE
+		0
 		);
 
 	// Send a request.
