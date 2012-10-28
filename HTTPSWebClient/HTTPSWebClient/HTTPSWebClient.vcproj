@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="HTTPSWebClient"
+	Name="GUI"
 	ProjectGUID="{F383D991-19D3-44D1-A9F6-B671FE624F1E}"
 	RootNamespace="HTTPSWebClient"
 	Keyword="MFCProj"

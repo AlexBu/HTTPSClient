@@ -131,7 +131,11 @@ void CHTTPSWebClientDlg::Test_SetURL()
 
 void CHTTPSWebClientDlg::OnConnect()
 {
-	UpdateData(TRUE);
+	AddrString = L"dynamic.12306.cn";
+	//UpdateData(FALSE);
+	
+	//UpdateData(TRUE);
+	
 	theApp.ConnectToURL(AddrString);
 }
 

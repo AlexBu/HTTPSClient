@@ -1,17 +1,23 @@
+url:
+dynamic.12306.cn
+
+types:
+https
+
 login page
-GET https://dynamic.12306.cn/otsweb/loginAction.do?method=init
+GET /otsweb/loginAction.do?method=init
 
 picture
-GET https://dynamic.12306.cn/otsweb/passCodeAction.do?rand=sjrand
+GET /otsweb/passCodeAction.do?rand=sjrand
 
 
-POST https://dynamic.12306.cn/otsweb/loginAction.do?method=loginAysnSuggest
+POST /otsweb/loginAction.do?method=loginAysnSuggest
 <content empty>
 
 respond
 {"loginRand":"434","randError":"Y"}
 
-POST https://dynamic.12306.cn/otsweb/loginAction.do?method=login
+POST /otsweb/loginAction.do?method=login
 POST data:
 loginRand=434
 &refundLogin=N

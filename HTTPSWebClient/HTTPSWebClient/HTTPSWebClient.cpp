@@ -117,7 +117,8 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 
 	// Create an HTTP request handle.
 	if (hConnect && hSession)
-		hRequest = WinHttpOpenRequest( hConnect, L"GET", URLString,
+		hRequest = WinHttpOpenRequest( hConnect, NULL, // null as GET verb
+		URLString,
 		NULL, WINHTTP_NO_REFERER, 
 		WINHTTP_DEFAULT_ACCEPT_TYPES, 
 		//WINHTTP_FLAG_BYPASS_PROXY_CACHE
@@ -125,7 +126,7 @@ void CHTTPSWebClientApp::GetFromURL( const CString& URLString )
 		);
 
 	DWORD dwFlags;
-	DWORD dwBuffLen = sizeof(dwFlags);            
+	DWORD dwBuffLen = sizeof(dwFlags);
 	WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
 		(LPVOID)&dwFlags, &dwBuffLen);
 	dwFlags |= SECURITY_FLAG_IGNORE_UNKNOWN_CA;
