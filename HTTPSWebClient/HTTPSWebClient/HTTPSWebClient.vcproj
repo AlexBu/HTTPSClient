@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			UseOfMFC="2"
+			UseOfMFC="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -49,9 +49,10 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
+				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -197,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\jpg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -216,6 +221,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\ValPic.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -231,6 +240,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\jpg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
@@ -240,6 +253,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ValPic.h"
 				>
 			</File>
 		</Filter>

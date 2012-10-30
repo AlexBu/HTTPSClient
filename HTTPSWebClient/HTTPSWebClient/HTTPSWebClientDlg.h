@@ -3,7 +3,9 @@
 //
 
 #pragma once
+#include "afxwin.h"
 
+#include "ValPic.h"
 
 // CHTTPSWebClientDlg ¶Ô»°¿ò
 class CHTTPSWebClientDlg : public CDialog
@@ -44,4 +46,5 @@ public:
 	afx_msg void OnConnect();
 	afx_msg void OnPost();
 	afx_msg void OnGetValpic();
+	CValPic picFrame;
 };

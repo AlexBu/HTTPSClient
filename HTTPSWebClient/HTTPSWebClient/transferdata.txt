@@ -5,19 +5,23 @@ types:
 https
 
 login page
-GET /otsweb/loginAction.do?method=init
+GET
+/otsweb/loginAction.do?method=init
 
 picture
-GET /otsweb/passCodeAction.do?rand=sjrand
+GET
+/otsweb/passCodeAction.do?rand=sjrand
 
 
-POST /otsweb/loginAction.do?method=loginAysnSuggest
+POST
+/otsweb/loginAction.do?method=loginAysnSuggest
 <content empty>
 
 respond
 {"loginRand":"434","randError":"Y"}
 
-POST /otsweb/loginAction.do?method=login
+POST
+/otsweb/loginAction.do?method=login
 POST data:
 loginRand=434
 &refundLogin=N

@@ -8,6 +8,8 @@
 
 #include "jpeglib.h"
 
+#include "jpg.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -258,6 +260,9 @@ void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 	// Keep checking for data until there is nothing left.
 	if (bResults)
 	{
+		const DWORD MAX_JPG_SIZE = 1024*1024*10;
+		BYTE* jpgBuff = new BYTE[MAX_JPG_SIZE];
+		DWORD jpgSize = 0;
 		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
 		do 
 		{
@@ -286,7 +291,11 @@ void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 				else
 				{
 					// pszOutBuffer stores the jpeg data, convert to plain bitmap
-
+					if(jpgSize + dwSize < MAX_JPG_SIZE)
+					{
+						memcpy(jpgBuff + jpgSize, pszOutBuffer, dwSize);
+						jpgSize += dwSize;
+					}
 				}
 
 				// Free the memory allocated to the buffer.
@@ -294,6 +303,22 @@ void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 			}
 
 		} while (dwSize>0);
+
+		// convert to bmp src
+		BYTE * bmpBuff = NULL;
+		DWORD bmpSize = 0;
+		if(bmpFromJpeg(jpgBuff, jpgSize, bmpBuff, &bmpSize) == 0)
+		{
+			// OK
+			// display on the static control
+			unsigned int bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
+			unsigned int bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
+
+			// release it
+			delete []bmpBuff;	// weired here
+		}
+
+		delete []jpgBuff;
 	}
 
 	// Report any errors.

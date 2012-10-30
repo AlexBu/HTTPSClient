@@ -35,6 +35,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
 	DDX_Text(pDX, IDC_EDIT_SESSION, SESSIONString);
 	DDX_Text(pDX, IDC_EDIT_SITE, AddrString);
+	DDX_Control(pDX, IDC_STATIC_VALICODEPIC, picFrame);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -103,10 +104,14 @@ HCURSOR CHTTPSWebClientDlg::OnQueryDragIcon()
 
 void CHTTPSWebClientDlg::OnGet()
 {
-	//Test_SetURL();
-
 	// check URL and try to connect
 	UpdateData(TRUE);
+
+	//Test_SetURL();
+
+	AddrString = L"dynamic.12306.cn";
+
+	theApp.ConnectToURL(AddrString);
 
 	CheckURL();
 
@@ -131,12 +136,11 @@ void CHTTPSWebClientDlg::Test_SetURL()
 
 void CHTTPSWebClientDlg::OnConnect()
 {
-	AddrString = L"dynamic.12306.cn";
-	//UpdateData(FALSE);
+	//AddrString = L"dynamic.12306.cn";
 	
 	//UpdateData(TRUE);
 	
-	theApp.ConnectToURL(AddrString);
+	//theApp.ConnectToURL(AddrString);
 }
 
 void CHTTPSWebClientDlg::OnPost()
