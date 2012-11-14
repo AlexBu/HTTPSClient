@@ -9,7 +9,7 @@
 
 IMPLEMENT_DYNAMIC(CValPic, CStatic)
 
-CValPic::CValPic()
+CValPic::CValPic():width(0),height(0),picBuff(NULL)
 {
 
 }
@@ -31,18 +31,34 @@ END_MESSAGE_MAP()
 
 void CValPic::OnPaint()
 {
+	if(picBuff == NULL)
+		return;
 	CPaintDC dc(this); // device context for painting
 	// TODO: Add your message handler code here
 	// Do not call CStatic::OnPaint() for painting messages
 
 	CBitmap bitmap;
-	//bitmap.CreateBitmap(240,128,1,1,data);
 
-	CDC memdc;
-	memdc.CreateCompatibleDC(&dc);
-	memdc.SelectObject(&bitmap);
-	dc.StretchBlt(0,0,240,128,&memdc,0,0,240,128,NOTSRCCOPY);
+	bitmap.CreateBitmap(width, height, 1, 24, picBuff);
+
+	CDC memdc, *staticdc;
+	staticdc = GetDC();
+	memdc.CreateCompatibleDC(staticdc);
+	CBitmap* old_bitmap = memdc.SelectObject(&bitmap);
+	staticdc->BitBlt(0,0,width,height,&memdc,0,0,SRCCOPY);
+	memdc.SelectObject(old_bitmap);
 	bitmap.DeleteObject();
-	this->ReleaseDC(&dc);
 	memdc.DeleteDC();
+	ReleaseDC(staticdc);
+}
+
+void CValPic::imageAttrSet( DWORD h, DWORD w )
+{
+	if(h > 0)	height = h;
+	if(w > 0)	width = w;
+}
+
+void CValPic::imageBuffSet( BYTE* buff )
+{
+	if(buff)	picBuff = buff;
 }

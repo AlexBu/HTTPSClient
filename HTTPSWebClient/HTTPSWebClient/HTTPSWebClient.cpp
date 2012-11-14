@@ -63,6 +63,7 @@ BOOL CHTTPSWebClientApp::InitInstance()
 
 	hConnect = NULL;
 	hSession = NULL;
+	picBuff = new BYTE[MAX_JPG_SIZE];
 
 	CHTTPSWebClientDlg dlg;
 	m_pMainWnd = &dlg;
@@ -84,6 +85,8 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	//close previous connections
 	if (hConnect) WinHttpCloseHandle(hConnect);
 	if (hSession) WinHttpCloseHandle(hSession);
+
+	delete []picBuff;
 
 	return FALSE;
 }
@@ -260,7 +263,7 @@ void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 	// Keep checking for data until there is nothing left.
 	if (bResults)
 	{
-		const DWORD MAX_JPG_SIZE = 1024*1024*10;
+		
 		BYTE* jpgBuff = new BYTE[MAX_JPG_SIZE];
 		DWORD jpgSize = 0;
 		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
@@ -305,17 +308,16 @@ void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 		} while (dwSize>0);
 
 		// convert to bmp src
-		BYTE * bmpBuff = NULL;
+		unsigned int bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
+		unsigned int bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
+		unsigned int bmpComp = bmpCompGet(jpgBuff, jpgSize);
 		DWORD bmpSize = 0;
-		if(bmpFromJpeg(jpgBuff, jpgSize, bmpBuff, &bmpSize) == 0)
+		if(bmpFromJpeg(jpgBuff, jpgSize, picBuff, &bmpSize) == 0)
 		{
 			// OK
-			// display on the static control
-			unsigned int bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
-			unsigned int bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
-
-			// release it
-			delete []bmpBuff;	// weired here
+			// set to picture control
+			((CHTTPSWebClientDlg*)m_pMainWnd)->picFrame.imageAttrSet(bmpHeight, bmpWidth);
+			((CHTTPSWebClientDlg*)m_pMainWnd)->picFrame.imageBuffSet(picBuff);			
 		}
 
 		delete []jpgBuff;

@@ -35,6 +35,7 @@ public:
 private:
 	HINTERNET	hSession;
 	HINTERNET	hConnect;
+	BYTE*		picBuff;
 };
 
 extern CHTTPSWebClientApp theApp;

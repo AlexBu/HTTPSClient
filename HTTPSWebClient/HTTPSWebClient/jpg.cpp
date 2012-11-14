@@ -38,7 +38,7 @@ unsigned int bmpWidthGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 	return width;
 }
 
-int bmpFromJpeg(unsigned char* jpeg_buf, unsigned long jpeg_buf_size, unsigned char* bmp_buf, unsigned long* bmp_buf_size)
+unsigned int bmpCompGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 {
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
@@ -49,14 +49,29 @@ int bmpFromJpeg(unsigned char* jpeg_buf, unsigned long jpeg_buf_size, unsigned c
 
 	jpeg_read_header(&cinfo, true);
 
-	*bmp_buf_size = cinfo.image_width*cinfo.image_height*cinfo.num_components;
+	unsigned int comp = cinfo.num_components;
 
-	bmp_buf = new unsigned char[*bmp_buf_size];
+	jpeg_destroy_decompress(&cinfo);
 
+	return comp;
+}
+int bmpFromJpeg(unsigned char* jpeg_buf, unsigned long jpeg_buf_size, unsigned char* bmp_buf, unsigned long* bmp_buf_size)
+{
 	if(bmp_buf == NULL)
 	{
 		return -1;
 	}
+
+	struct jpeg_decompress_struct cinfo;
+	struct jpeg_error_mgr jerr;
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_decompress(&cinfo);
+
+	jpeg_mem_src(&cinfo, jpeg_buf, jpeg_buf_size);
+
+	jpeg_read_header(&cinfo, true);
+
+	*bmp_buf_size = cinfo.image_width*cinfo.image_height*cinfo.num_components;
 
 	jpeg_start_decompress(&cinfo);
 	 
