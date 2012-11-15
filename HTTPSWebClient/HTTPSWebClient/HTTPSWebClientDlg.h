@@ -46,4 +46,5 @@ public:
 	afx_msg void OnPost();
 	afx_msg void OnGetValpic();
 	CValPic picFrame;
+	afx_msg void OnLogin();
 };

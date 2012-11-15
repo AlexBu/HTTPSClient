@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_CONN, &CHTTPSWebClientDlg::OnConnect)
 	ON_BN_CLICKED(IDC_BUTTON_POST, &CHTTPSWebClientDlg::OnPost)
 	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValpic)
+	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
 END_MESSAGE_MAP()
 
 
@@ -158,4 +159,9 @@ void CHTTPSWebClientDlg::OnGetValpic()
 
 	// redraw picture
 	picFrame.InvalidateRect(NULL, FALSE);
+}
+
+void CHTTPSWebClientDlg::OnLogin()
+{
+	// TODO: Add your control notification handler code here
 }
