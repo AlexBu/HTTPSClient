@@ -41,7 +41,6 @@ private:
 public:
 	CString POSTString;
 	CString RespondString;
-	CString SESSIONString;
 	CString AddrString;
 	afx_msg void OnConnect();
 	afx_msg void OnPost();

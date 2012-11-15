@@ -30,12 +30,11 @@ public:
 public:
 	void GetFromURL( const CString& URLString );
 	void ConnectToURL( const CString& URLString );
-	void PostToURL(const CString& URLString, const CString& WebResString, const CString& PostString);
+	void PostToURL(const CString& WebResString, const CString& PostString);
 	void GetValidatePic(const CString& ValPicAddr);
 private:
 	HINTERNET	hSession;
 	HINTERNET	hConnect;
 	BYTE*		picBuff;
 };
-
 extern CHTTPSWebClientApp theApp;

@@ -31,25 +31,44 @@ END_MESSAGE_MAP()
 
 void CValPic::OnPaint()
 {
-	if(picBuff == NULL)
-		return;
 	CPaintDC dc(this); // device context for painting
 	// TODO: Add your message handler code here
 	// Do not call CStatic::OnPaint() for painting messages
 
-	CBitmap bitmap;
+	if(picBuff == NULL)
+		return;
 
-	bitmap.CreateBitmap(width, height, 1, 24, picBuff);
+	CDC memdc;
+	HBITMAP dibHandle;
 
-	CDC memdc, *staticdc;
-	staticdc = GetDC();
-	memdc.CreateCompatibleDC(staticdc);
-	CBitmap* old_bitmap = memdc.SelectObject(&bitmap);
-	staticdc->BitBlt(0,0,width,height,&memdc,0,0,SRCCOPY);
+	BITMAPINFO bminfo;
+	bminfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bminfo.bmiHeader.biWidth = width;
+	bminfo.bmiHeader.biHeight = height;	// top-bottom picture
+	bminfo.bmiHeader.biPlanes = 1;
+	bminfo.bmiHeader.biBitCount = 24;
+	bminfo.bmiHeader.biCompression = BI_RGB;
+	bminfo.bmiHeader.biSizeImage = 0;	// can be 0 if RGB mode	
+	bminfo.bmiHeader.biXPelsPerMeter = 72;	// not used
+	bminfo.bmiHeader.biYPelsPerMeter = 72;	// not used
+	bminfo.bmiHeader.biClrUsed = 0;
+	bminfo.bmiHeader.biClrImportant = 0;
+	memset(bminfo.bmiColors, 0, sizeof(RGBQUAD));
+
+	memdc.CreateCompatibleDC(&dc);
+
+	void* dibBuff = NULL;
+	dibHandle = CreateDIBSection(memdc, &bminfo, DIB_RGB_COLORS, &dibBuff, 0, 0);
+	memcpy(dibBuff, picBuff, width*height*3);
+
+	HBITMAP old_bitmap = (HBITMAP)SelectObject(memdc, dibHandle);
+
+	dc.BitBlt(0,0,width,height,&memdc,0,0,SRCCOPY);
+
 	memdc.SelectObject(old_bitmap);
-	bitmap.DeleteObject();
+	DeleteObject(dibHandle);
 	memdc.DeleteDC();
-	ReleaseDC(staticdc);
+
 }
 
 void CValPic::imageAttrSet( DWORD h, DWORD w )

@@ -21,7 +21,6 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, WebResString(_T(""))
 	, POSTString(_T(""))
 	, RespondString(_T(""))
-	, SESSIONString(_T(""))
 	, AddrString(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -33,7 +32,6 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_URL, WebResString);
 	DDX_Text(pDX, IDC_EDIT_POST, POSTString);
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
-	DDX_Text(pDX, IDC_EDIT_SESSION, SESSIONString);
 	DDX_Text(pDX, IDC_EDIT_SITE, AddrString);
 	DDX_Control(pDX, IDC_STATIC_VALICODEPIC, picFrame);
 }
@@ -115,7 +113,8 @@ void CHTTPSWebClientDlg::OnGet()
 
 	CheckURL();
 
-	theApp.GetFromURL(WebResString);
+	theApp.GetFromURL(_T("/otsweb/loginAction.do?method=init"));
+	//theApp.GetFromURL(WebResString);
 
 	// set GET content
 	UpdateData(FALSE);
@@ -145,11 +144,18 @@ void CHTTPSWebClientDlg::OnConnect()
 
 void CHTTPSWebClientDlg::OnPost()
 {
-	theApp.PostToURL(AddrString, WebResString, POSTString);
+	UpdateData(TRUE);
+	theApp.PostToURL(WebResString, POSTString);
+
+	// set response
+	UpdateData(FALSE);
 }
 
 void CHTTPSWebClientDlg::OnGetValpic()
 {
 	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=sjrand";
 	theApp.GetValidatePic(ValPicAddr);
+
+	// redraw picture
+	picFrame.InvalidateRect(NULL, FALSE);
 }
