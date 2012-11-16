@@ -29,12 +29,21 @@ public:
 	DECLARE_MESSAGE_MAP()
 public:
 	void GetFromURL( const CString& URLString );
-	void ConnectToURL( const CString& URLString );
-	void PostToURL(const CString& WebResString, const CString& PostString);
+	void PostToURL(const CString& webResString, const CString& PostString);
 	void GetValidatePic(const CString& ValPicAddr);
+	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr);
+
+	BOOL ConnectToURL( const CString& URLString );
+	HINTERNET SendRequest(int verb, const CString& webResString, const BYTE* addtionData, const DWORD addtionSize);
+	BOOL GetResponse(HINTERNET hRequest);
+	DWORD GetValidBufferSize();
+	LPVOID GetBufferData();
+
 private:
 	HINTERNET	hSession;
 	HINTERNET	hConnect;
 	BYTE*		picBuff;
+	BYTE*		htmlResponceBuff;
+	DWORD		htmlResponceSize;
 };
 extern CHTTPSWebClientApp theApp;

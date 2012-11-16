@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAX_JPG_SIZE (1024*1024*10)
+#define MAX_JPG_SIZE (1024*1024*1)
 unsigned int bmpCompGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size);
 unsigned int bmpHeightGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size);
 unsigned int bmpWidthGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size);

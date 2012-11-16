@@ -47,4 +47,7 @@ public:
 	afx_msg void OnGetValpic();
 	CValPic picFrame;
 	afx_msg void OnLogin();
+	CString usernameStr;
+	CString passwordStr;
+	CString validateStr;
 };

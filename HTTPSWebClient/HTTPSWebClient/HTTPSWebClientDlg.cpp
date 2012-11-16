@@ -22,6 +22,9 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, POSTString(_T(""))
 	, RespondString(_T(""))
 	, AddrString(_T(""))
+	, usernameStr(_T(""))
+	, passwordStr(_T(""))
+	, validateStr(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -34,6 +37,9 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
 	DDX_Text(pDX, IDC_EDIT_SITE, AddrString);
 	DDX_Control(pDX, IDC_STATIC_VALICODEPIC, picFrame);
+	DDX_Text(pDX, IDC_EDIT_USER, usernameStr);
+	DDX_Text(pDX, IDC_EDIT_PASS, passwordStr);
+	DDX_Text(pDX, IDC_EDIT_VALIPIC, validateStr);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -108,9 +114,9 @@ void CHTTPSWebClientDlg::OnGet()
 
 	//Test_SetURL();
 
-	AddrString = L"dynamic.12306.cn";
+	//AddrString = L"dynamic.12306.cn";
 
-	theApp.ConnectToURL(AddrString);
+	//theApp.ConnectToURL(AddrString);
 
 	CheckURL();
 
@@ -136,16 +142,21 @@ void CHTTPSWebClientDlg::Test_SetURL()
 
 void CHTTPSWebClientDlg::OnConnect()
 {
-	//AddrString = L"dynamic.12306.cn";
+	AddrString = L"dynamic.12306.cn";
 	
-	//UpdateData(TRUE);
+	UpdateData(FALSE);
 	
-	//theApp.ConnectToURL(AddrString);
+	theApp.ConnectToURL(AddrString);
 }
 
 void CHTTPSWebClientDlg::OnPost()
 {
 	UpdateData(TRUE);
+
+	//AddrString = L"dynamic.12306.cn";
+
+	//theApp.ConnectToURL(AddrString);
+
 	theApp.PostToURL(WebResString, POSTString);
 
 	// set response
@@ -164,4 +175,8 @@ void CHTTPSWebClientDlg::OnGetValpic()
 void CHTTPSWebClientDlg::OnLogin()
 {
 	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	theApp.LoginToSite(usernameStr, passwordStr, validateStr);
+	// set response
+	UpdateData(FALSE);
 }

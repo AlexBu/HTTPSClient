@@ -261,24 +261,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
-			<File
-				RelativePath=".\res\HTTPSWebClient.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPSWebClient.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\HTTPSWebClient.rc2"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="ijg"
 			>
 			<File
@@ -317,10 +299,24 @@
 				RelativePath="..\ijg\jversion.h"
 				>
 			</File>
-			<File
-				RelativePath="..\ijg\libjpeg.lib"
+			<Filter
+				Name="Resource Files"
+				Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+				UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 				>
-			</File>
+				<File
+					RelativePath=".\res\HTTPSWebClient.ico"
+					>
+				</File>
+				<File
+					RelativePath=".\HTTPSWebClient.rc"
+					>
+				</File>
+				<File
+					RelativePath=".\res\HTTPSWebClient.rc2"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\transferdata.txt"

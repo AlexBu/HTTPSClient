@@ -26,11 +26,11 @@ POST data:
 loginRand=434
 &refundLogin=N
 &refundFlag=Y
-&loginUser.user_name=bkp84336
+&loginUser.user_name=<user>
 &nameErrorFocus=
-&user.password=bsp2236
+&user.password=<pass>
 &passwordErrorFocus=
-&randCode=HEXK
+&randCode=<vali>
 &randErrorFocus=
 
 respond
