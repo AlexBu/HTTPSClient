@@ -22,6 +22,8 @@ respond
 
 POST
 /otsweb/loginAction.do?method=login
+header
+Content-Type: application/x-www-form-urlencoded
 POST data:
 loginRand=434
 &refundLogin=N
@@ -34,3 +36,125 @@ loginRand=434
 &randErrorFocus=
 
 respond
+<title>系统消息</title>
+
+
+book ticket page
+GET
+/otsweb/loginAction.do?method=login
+
+GET
+/otsweb/order/querySingleAction.do?method=queryLeftTicket
+&orderRequest.train_date=2012-11-18
+&orderRequest.from_station_telecode=NJH
+&orderRequest.to_station_telecode=SHH
+&orderRequest.train_no=
+&trainPassType=QB
+&trainClass=D%23
+&includeStudent=00
+&seatTypeAndNum=
+&orderRequest.start_time_str=00%3A00--24%3A00
+
+header
+x-requested-with: XMLHttpRequest
+Content-Type: application/x-www-form-urlencoded
+单程
+出发地: 南京
+目的地: 上海
+出发日期: 2012-11-18
+出发时间: 00:00-24:00
+动车
+全部(始发/过路)
+二等座
+购票张数0
+
+response
+(second line)
+1,
+<span 
+id='id_54000G703120' 
+class='base_txtdiv' 
+onmouseover=javascript:onStopHover('54000G703120#NJH#SHH') 
+onmouseout='onStopOut()'
+>G7031</span>,
+<img src='/otsweb/images/tips/first.gif'>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+南京
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+05:53,
+<img src='/otsweb/images/tips/last.gif'>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+上海
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+07:41,
+01:48,
+<font color='#008800'>有</font>,
+--,
+<font color='#008800'>有</font>,
+<font color='#008800'>有</font>,
+--,--,--,--,--,
+<font color='#008800'>有</font>,
+--,
+<input 
+type='button' 
+class='yuding_u' 
+onmousemove=this.className='yuding_u_over' 
+onmousedown=this.className='yuding_u_down' 
+onmouseout=this.className='yuding_u' 
+onclick=
+javascript:getSelected(
+'G7031#
+01:48#
+05:53#
+54000G703120#
+NJH#SHH#
+07:41#
+南京#
+上海#
+O*****06219*****0025O*****3176M*****0110#
+16FD07FFF17260ED85F3ACBF68659498DC6E0E388938EAF24A0A0D92') 
+value='预订'>
+</input>
+\n
+
+click book ticket button
+POST
+/otsweb/order/querySingleAction.do?method=submutOrderRequest
+station_train_code=G7031
+&train_date=2012-11-18
+&seattype_num=
+&from_station_telecode=NJH
+&to_station_telecode=SHH
+&include_student=00
+&from_station_telecode_name=%E5%8D%97%E4%BA%AC
+&to_station_telecode_name=%E4%B8%8A%E6%B5%B7
+&round_train_date=2012-11-17
+&round_start_time_str=00%3A00--24%3A00
+&single_round_type=1
+&train_pass_type=QB
+&train_class_arr=D%23
+&start_time_str=00%3A00--24%3A00
+&lishi=01%3A48
+&train_start_time=05%3A53
+&trainno4=54000G703120
+&arrive_time=07%3A41
+&from_station_name=%E5%8D%97%E4%BA%AC
+&to_station_name=%E4%B8%8A%E6%B5%B7
+&ypInfoDetail=O*****06219*****0025O*****3176M*****0110
+&mmStr=16FD07FFF17260ED85F3ACBF68659498DC6E0E388938EAF24A0A0D92
+
+response
+320 move
+Location: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
+
+passenger info page
+GET
+/otsweb/order/confirmPassengerAction.do?method=init
+
+validation picture
+GET
+/otsweb/passCodeAction.do?rand=randp

@@ -34,7 +34,7 @@ public:
 	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr);
 
 	BOOL ConnectToURL( const CString& URLString );
-	HINTERNET SendRequest(int verb, const CString& webResString, const BYTE* addtionData, const DWORD addtionSize);
+	HINTERNET SendRequest(int verb, const CString& refererStr, const CString& acceptTypStr, const CString& webResStr, const BYTE* addtionData, const DWORD addtionSize);
 	BOOL GetResponse(HINTERNET hRequest);
 	DWORD GetValidBufferSize();
 	LPVOID GetBufferData();

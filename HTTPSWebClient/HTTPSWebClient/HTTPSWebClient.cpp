@@ -102,7 +102,7 @@ BOOL CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 	if (hSession) WinHttpCloseHandle(hSession);
 
 	// Use WinHttpOpen to obtain a session handle.
-	hSession = WinHttpOpen( L"WinHTTP Example/1.0",  
+	hSession = WinHttpOpen( L"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",  
 		WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
 		WINHTTP_NO_PROXY_NAME, 
 		WINHTTP_NO_PROXY_BYPASS, 0);
@@ -122,7 +122,10 @@ BOOL CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 
 void CHTTPSWebClientApp::GetFromURL( const CString& webResString )
 {
-	HINTERNET hRequest = SendRequest(0, webResString, NULL, 0);
+	CString refererStr = _T("/otsweb/loginAction.do?method=init");
+	CString acptTypStr = _T("text/html, application/xhtml+xml, */*");
+
+	HINTERNET hRequest = SendRequest(0, refererStr, acptTypStr, webResString, NULL, 0);
 
 	if(hRequest)
 		GetResponse(hRequest);
@@ -163,7 +166,10 @@ void CHTTPSWebClientApp::PostToURL(const CString& webResString, const CString& P
 		WideCharToMultiByte(936, 0, PostString.GetString(), PostString.GetLength(), postData, postDataSize, 0, 0);
 	}
 
-	HINTERNET hRequest = SendRequest(1, webResString, (const BYTE*)postData, postDataSize);
+	CString refererStr = _T("/otsweb/loginAction.do?method=init");
+	CString acptTypStr = _T("text/html, application/xhtml+xml, */*");
+
+	HINTERNET hRequest = SendRequest(1, refererStr, acptTypStr, webResString, (const BYTE*)postData, postDataSize);
 
 	if(hRequest)
 		GetResponse(hRequest);
@@ -200,7 +206,9 @@ void CHTTPSWebClientApp::PostToURL(const CString& webResString, const CString& P
 void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 {
 	// get validation picture data and display it on picture control
-	HINTERNET hRequest = SendRequest(0, ValPicAddr, NULL, 0);
+	CString refererStr = _T("/otsweb/loginAction.do?method=init");
+	CString acptTypStr = _T("image/png, image/svg+xml, image/*;q=0.8, */*;q=0.5");
+	HINTERNET hRequest = SendRequest(0, refererStr, acptTypStr, ValPicAddr, NULL, 0);
 
 	if(hRequest)
 		GetResponse(hRequest);
@@ -233,7 +241,9 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	// post request to get rand number
 	CString requestRandStr = _T("/otsweb/loginAction.do?method=loginAysnSuggest");
 
-	HINTERNET hRequest = SendRequest(1, requestRandStr, NULL, 0);
+	CString refererStr = _T("/otsweb/loginAction.do?method=init");
+	CString acptTypStr = _T("text/html, application/xhtml+xml, */*");
+	HINTERNET hRequest = SendRequest(1, refererStr, acptTypStr, requestRandStr, NULL, 0);
 
 	if(hRequest)
 		GetResponse(hRequest);
@@ -270,7 +280,9 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 		WideCharToMultiByte(936, 0, loginStr.GetString(), loginStr.GetLength(), postData, postDataSize, 0, 0);
 	}
 
-	hRequest = SendRequest(1, loginAdr, (const BYTE*)postData, postDataSize);
+	refererStr = _T("/otsweb/loginAction.do?method=init");
+	acptTypStr = _T("text/html, application/xhtml+xml, */*");
+	hRequest = SendRequest(1, refererStr, acptTypStr, loginAdr, (const BYTE*)postData, postDataSize);
 
 	if(hRequest)
 		GetResponse(hRequest);
@@ -303,7 +315,7 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	return;
 }
 
-HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& webResString, const BYTE* addtionData, const DWORD addtionSize)
+HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, const CString& acceptTypStr, const CString& webResStr, const BYTE* addtionData, const DWORD addtionSize)
 {
 	if (hConnect == NULL)
 		return NULL;
@@ -319,16 +331,24 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& webResString,
 		verbStr = _T("POST");
 
 	// Create an HTTP request handle.
+	LPCTSTR acptTypStrPointer = acceptTypStr;
 	HINTERNET hRequest = WinHttpOpenRequest( hConnect, verbStr,
-			webResString,
-			NULL, WINHTTP_NO_REFERER, 
+			webResStr,
+			NULL, 
+			//refererStr, 
+			//_T("https://dynamic.12306.cn/otsweb/loginAction.do?method=init"),
+			WINHTTP_NO_REFERER,
+			//&acptTypStrPointer,
 			WINHTTP_DEFAULT_ACCEPT_TYPES,
 			WINHTTP_FLAG_SECURE
 			);
 
 	if(hRequest == NULL)
+	{
 		return NULL;
+	}
 
+#if 0
 	DWORD dwFlags;
 	DWORD dwBuffLen = sizeof(dwFlags);
 	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
@@ -337,6 +357,7 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& webResString,
 		WinHttpCloseHandle(hRequest);
 		return NULL;
 	}
+
 	dwFlags |= SECURITY_FLAG_IGNORE_UNKNOWN_CA;
 	dwFlags |= SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
 	dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
@@ -352,6 +373,49 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& webResString,
 		WinHttpCloseHandle(hRequest);
 		return NULL;
 	}
+#endif
+
+	// add additional headers
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Accept-Encoding: gzip, deflate"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//{
+	//	WinHttpCloseHandle(hRequest);
+	//	return NULL;
+	//}
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Cache-Control: no-cache"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//{
+	//	WinHttpCloseHandle(hRequest);
+	//	return NULL;
+	//}
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Accept: text/html, application/xhtml+xml, */*"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//{
+	//	WinHttpCloseHandle(hRequest);
+	//	return NULL;
+	//}
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Accept-Language: zh-CN"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//{
+	//	WinHttpCloseHandle(hRequest);
+	//	return NULL;
+	//}
+	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+		_T("Content-Type: application/x-www-form-urlencoded"),
+		-1,
+		WINHTTP_ADDREQ_FLAG_ADD) )
+	{
+		WinHttpCloseHandle(hRequest);
+		return NULL;
+	}
 
 	// Send a request
 	DWORD reqDataSize = addtionSize;
@@ -360,16 +424,32 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& webResString,
 		reqDataSize = 0;
 	}
 
-	if( TRUE == WinHttpSendRequest( hRequest,
+	if( FALSE == WinHttpSendRequest( hRequest,
 			WINHTTP_NO_ADDITIONAL_HEADERS,
 			0, (LPVOID)addtionData, reqDataSize, 
 			reqDataSize, 0))
-			return hRequest;
-	else
 	{
 		WinHttpCloseHandle(hRequest);
 		return NULL;
 	}
+
+	WINHTTP_CERTIFICATE_INFO certInfo;
+	DWORD certInfoLen = sizeof(certInfo);
+	BOOL res = WinHttpQueryOption(hRequest,
+		WINHTTP_OPTION_SECURITY_CERTIFICATE_STRUCT,
+		&certInfo,
+		&certInfoLen);
+
+	DWORD dwFlags;
+	DWORD dwBuffLen = sizeof(dwFlags);
+	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
+		(LPVOID)&dwFlags, &dwBuffLen))
+	{
+		WinHttpCloseHandle(hRequest);
+		return NULL;
+	}
+
+	return hRequest;
 }
 
 BOOL CHTTPSWebClientApp::GetResponse(HINTERNET hRequest)
