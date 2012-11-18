@@ -37,8 +37,6 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
 	DDX_Text(pDX, IDC_EDIT_SITE, AddrString);
 	DDX_Control(pDX, IDC_STATIC_VALICODEPIC, picFrame);
-	DDX_Text(pDX, IDC_EDIT_USER, usernameStr);
-	DDX_Text(pDX, IDC_EDIT_PASS, passwordStr);
 	DDX_Text(pDX, IDC_EDIT_VALIPIC, validateStr);
 }
 
@@ -112,16 +110,10 @@ void CHTTPSWebClientDlg::OnGet()
 	// check URL and try to connect
 	UpdateData(TRUE);
 
-	//Test_SetURL();
-
-	//AddrString = L"dynamic.12306.cn";
-
-	//theApp.ConnectToURL(AddrString);
-
 	CheckURL();
 
-	theApp.GetFromURL(_T("/otsweb/loginAction.do?method=init"));
-	//theApp.GetFromURL(WebResString);
+	//theApp.GetFromURL(_T("/otsweb/loginAction.do?method=init"));
+	theApp.GetFromURL(WebResString);
 
 	// set GET content
 	UpdateData(FALSE);
@@ -142,6 +134,8 @@ void CHTTPSWebClientDlg::Test_SetURL()
 
 void CHTTPSWebClientDlg::OnConnect()
 {
+	UpdateData(TRUE);
+
 	AddrString = L"dynamic.12306.cn";
 	
 	UpdateData(FALSE);

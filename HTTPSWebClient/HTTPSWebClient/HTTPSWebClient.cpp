@@ -238,6 +238,7 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 									 const CString& passwordStr,
 									 const CString& validateStr)
 {
+
 	// post request to get rand number
 	CString requestRandStr = _T("/otsweb/loginAction.do?method=loginAysnSuggest");
 
@@ -267,7 +268,11 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 		L"&user.password=%s"
 		L"&passwordErrorFocus="
 		L"&randCode=%s"
-		L"&randErrorFocus=", rand, usernameStr, passwordStr, validateStr);
+		L"&randErrorFocus=", 
+		rand, 
+		//usernameStr, passwordStr, 
+		_T("bkp84335"), _T("bsp2236"),
+		validateStr);
 
 	// transform post string to MBCS type
 	char* postData = NULL;
@@ -348,7 +353,7 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 		return NULL;
 	}
 
-#if 0
+#if 1
 	DWORD dwFlags;
 	DWORD dwBuffLen = sizeof(dwFlags);
 	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
@@ -363,9 +368,9 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 	dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
 
 	dwFlags &= ~SECURITY_FLAG_SECURE;
-	dwFlags &= ~SECURITY_FLAG_STRENGTH_WEAK;
-	dwFlags &= ~SECURITY_FLAG_STRENGTH_MEDIUM;
-	dwFlags &= ~SECURITY_FLAG_STRENGTH_STRONG;
+	//dwFlags &= ~SECURITY_FLAG_STRENGTH_WEAK;
+	//dwFlags &= ~SECURITY_FLAG_STRENGTH_MEDIUM;
+	//dwFlags &= ~SECURITY_FLAG_STRENGTH_STRONG;
 
 	if(FALSE == WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
 		&dwFlags, sizeof (dwFlags) ))
@@ -433,21 +438,21 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 		return NULL;
 	}
 
-	WINHTTP_CERTIFICATE_INFO certInfo;
-	DWORD certInfoLen = sizeof(certInfo);
-	BOOL res = WinHttpQueryOption(hRequest,
-		WINHTTP_OPTION_SECURITY_CERTIFICATE_STRUCT,
-		&certInfo,
-		&certInfoLen);
+	//WINHTTP_CERTIFICATE_INFO certInfo;
+	//DWORD certInfoLen = sizeof(certInfo);
+	//BOOL res = WinHttpQueryOption(hRequest,
+	//	WINHTTP_OPTION_SECURITY_CERTIFICATE_STRUCT,
+	//	&certInfo,
+	//	&certInfoLen);
 
-	DWORD dwFlags;
-	DWORD dwBuffLen = sizeof(dwFlags);
-	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
-		(LPVOID)&dwFlags, &dwBuffLen))
-	{
-		WinHttpCloseHandle(hRequest);
-		return NULL;
-	}
+	//DWORD dwFlags;
+	//DWORD dwBuffLen = sizeof(dwFlags);
+	//if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
+	//	(LPVOID)&dwFlags, &dwBuffLen))
+	//{
+	//	WinHttpCloseHandle(hRequest);
+	//	return NULL;
+	//}
 
 	return hRequest;
 }
