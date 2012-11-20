@@ -368,9 +368,9 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 	dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
 
 	dwFlags &= ~SECURITY_FLAG_SECURE;
-	//dwFlags &= ~SECURITY_FLAG_STRENGTH_WEAK;
-	//dwFlags &= ~SECURITY_FLAG_STRENGTH_MEDIUM;
-	//dwFlags &= ~SECURITY_FLAG_STRENGTH_STRONG;
+	dwFlags &= ~SECURITY_FLAG_STRENGTH_WEAK;
+	dwFlags &= ~SECURITY_FLAG_STRENGTH_MEDIUM;
+	dwFlags &= ~SECURITY_FLAG_STRENGTH_STRONG;
 
 	if(FALSE == WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
 		&dwFlags, sizeof (dwFlags) ))
