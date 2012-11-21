@@ -4,6 +4,8 @@
 
 unsigned int bmpHeightGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 {
+	if(jpeg_buf_size == 0)
+		return -1;
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
 	cinfo.err = jpeg_std_error(&jerr);
@@ -22,6 +24,8 @@ unsigned int bmpHeightGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 
 unsigned int bmpWidthGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 {
+	if(jpeg_buf_size == 0)
+		return -1;
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
 	cinfo.err = jpeg_std_error(&jerr);
@@ -40,6 +44,8 @@ unsigned int bmpWidthGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 
 unsigned int bmpCompGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 {
+	if(jpeg_buf_size == 0)
+		return -1;
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
 	cinfo.err = jpeg_std_error(&jerr);
@@ -62,6 +68,8 @@ int bmpFromJpeg(unsigned char* jpeg_buf, unsigned long jpeg_buf_size, unsigned c
 		return -1;
 	}
 
+	if(jpeg_buf_size == 0)
+		return -1;
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
 	cinfo.err = jpeg_std_error(&jerr);
@@ -84,5 +92,6 @@ int bmpFromJpeg(unsigned char* jpeg_buf, unsigned long jpeg_buf_size, unsigned c
 	jpeg_finish_decompress(&cinfo);
 
 	jpeg_destroy_decompress(&cinfo);
+
 	return 0;
 }

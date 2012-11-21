@@ -290,52 +290,6 @@ struct jpeg_color_quantizer {
 #endif
 
 
-/* Short forms of external names for systems with brain-damaged linkers. */
-
-#ifdef NEED_SHORT_EXTERNAL_NAMES
-#define jinit_compress_master	jICompress
-#define jinit_c_master_control	jICMaster
-#define jinit_c_main_controller	jICMainC
-#define jinit_c_prep_controller	jICPrepC
-#define jinit_c_coef_controller	jICCoefC
-#define jinit_color_converter	jICColor
-#define jinit_downsampler	jIDownsampler
-#define jinit_forward_dct	jIFDCT
-#define jinit_huff_encoder	jIHEncoder
-#define jinit_arith_encoder	jIAEncoder
-#define jinit_marker_writer	jIMWriter
-#define jinit_master_decompress	jIDMaster
-#define jinit_d_main_controller	jIDMainC
-#define jinit_d_coef_controller	jIDCoefC
-#define jinit_d_post_controller	jIDPostC
-#define jinit_input_controller	jIInCtlr
-#define jinit_marker_reader	jIMReader
-#define jinit_huff_decoder	jIHDecoder
-#define jinit_arith_decoder	jIADecoder
-#define jinit_inverse_dct	jIIDCT
-#define jinit_upsampler		jIUpsampler
-#define jinit_color_deconverter	jIDColor
-#define jinit_1pass_quantizer	jI1Quant
-#define jinit_2pass_quantizer	jI2Quant
-#define jinit_merged_upsampler	jIMUpsampler
-#define jinit_memory_mgr	jIMemMgr
-#define jdiv_round_up		jDivRound
-#define jround_up		jRound
-#define jzero_far		jZeroFar
-#define jcopy_sample_rows	jCopySamples
-#define jcopy_block_row		jCopyBlocks
-#define jpeg_zigzag_order	jZIGTable
-#define jpeg_natural_order	jZAGTable
-#define jpeg_natural_order7	jZAG7Table
-#define jpeg_natural_order6	jZAG6Table
-#define jpeg_natural_order5	jZAG5Table
-#define jpeg_natural_order4	jZAG4Table
-#define jpeg_natural_order3	jZAG3Table
-#define jpeg_natural_order2	jZAG2Table
-#define jpeg_aritab		jAriTab
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
-
-
 /* On normal machines we can apply MEMCOPY() and MEMZERO() to sample arrays
  * and coefficient-block arrays.  This won't work on 80x86 because the arrays
  * are FAR and we're assuming a small-pointer memory model.  However, some

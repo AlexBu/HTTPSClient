@@ -5,7 +5,7 @@
 #pragma once
 #include "afxwin.h"
 
-#include "ValPic.h"
+#include "ValidatePicture.h"
 
 // CHTTPSWebClientDlg ¶Ô»°¿ò
 class CHTTPSWebClientDlg : public CDialog
@@ -42,12 +42,14 @@ public:
 	CString POSTString;
 	CString RespondString;
 	CString AddrString;
-	afx_msg void OnConnect();
+	void ConnectToSite();
 	afx_msg void OnPost();
-	afx_msg void OnGetValpic();
-	CValPic picFrame;
+	afx_msg void OnGetValLoginPic();
+	CValPic valPicLoginCtrl;
 	afx_msg void OnLogin();
 	CString usernameStr;
 	CString passwordStr;
 	CString validateStr;
+	CValPic valPicBookCtrl;
+	afx_msg void OnGetValBookPic();
 };

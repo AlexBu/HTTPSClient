@@ -860,7 +860,6 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 #endif
 
 
-
 /* Default error-management setup */
 EXTERN(struct jpeg_error_mgr *) jpeg_std_error
 	JPP((struct jpeg_error_mgr * err));

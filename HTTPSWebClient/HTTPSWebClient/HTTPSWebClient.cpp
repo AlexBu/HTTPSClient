@@ -7,7 +7,6 @@
 #include "HTTPSWebClientDlg.h"
 
 #include "jpeglib.h"
-
 #include "jpg.h"
 
 #ifdef _DEBUG
@@ -97,9 +96,6 @@ BOOL CHTTPSWebClientApp::InitInstance()
 
 BOOL CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 {
-	//close previous connections
-	if (hConnect) WinHttpCloseHandle(hConnect);
-	if (hSession) WinHttpCloseHandle(hSession);
 
 	// Use WinHttpOpen to obtain a session handle.
 	hSession = WinHttpOpen( L"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",  
@@ -203,7 +199,7 @@ void CHTTPSWebClientApp::PostToURL(const CString& webResString, const CString& P
 	return;
 }
 
-void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
+BOOL CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl)
 {
 	// get validation picture data and display it on picture control
 	CString refererStr = _T("/otsweb/loginAction.do?method=init");
@@ -213,25 +209,28 @@ void CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr)
 	if(hRequest)
 		GetResponse(hRequest);
 	else
-		return;
+		return FALSE;
 
 	// convert to bmp src
 	BYTE* jpgBuff = (BYTE*)GetBufferData();
 	DWORD jpgSize = GetValidBufferSize();
 
+	if(jpgBuff == NULL || jpgSize == 0)
+		return FALSE;
+
 	unsigned int bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
 	unsigned int bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
 	unsigned int bmpComp = bmpCompGet(jpgBuff, jpgSize);
-	DWORD bmpSize = 0;
-	if(bmpFromJpeg(jpgBuff, jpgSize, picBuff, &bmpSize) == 0)
-	{
-		// OK
-		// set to picture control
-		((CHTTPSWebClientDlg*)m_pMainWnd)->picFrame.imageAttrSet(bmpHeight, bmpWidth);
-		((CHTTPSWebClientDlg*)m_pMainWnd)->picFrame.imageBuffSet(picBuff);
-	}
 
-	return;
+	DWORD bmpSize = 0;
+	if(bmpFromJpeg(jpgBuff, jpgSize, picBuff, &bmpSize))
+		return FALSE;
+
+	// set to picture control
+	picCtrl.imageAttrSet(bmpHeight, bmpWidth);
+	picCtrl.imageBuffSet(picBuff, bmpSize);
+
+	return TRUE;
 }
 
 void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr, 

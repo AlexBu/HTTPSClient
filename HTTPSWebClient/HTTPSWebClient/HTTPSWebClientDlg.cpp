@@ -35,9 +35,9 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_URL, WebResString);
 	DDX_Text(pDX, IDC_EDIT_POST, POSTString);
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
-	DDX_Text(pDX, IDC_EDIT_SITE, AddrString);
-	DDX_Control(pDX, IDC_STATIC_VALICODEPIC, picFrame);
 	DDX_Text(pDX, IDC_EDIT_VALIPIC, validateStr);
+	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_LOGIN, valPicLoginCtrl);
+	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_BOOK, valPicBookCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -45,10 +45,10 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON_GET, &CHTTPSWebClientDlg::OnGet)
-	ON_BN_CLICKED(IDC_BUTTON_CONN, &CHTTPSWebClientDlg::OnConnect)
 	ON_BN_CLICKED(IDC_BUTTON_POST, &CHTTPSWebClientDlg::OnPost)
-	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValpic)
+	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValLoginPic)
 	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
+	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC2, &CHTTPSWebClientDlg::OnGetValBookPic)
 END_MESSAGE_MAP()
 
 
@@ -64,6 +64,9 @@ BOOL CHTTPSWebClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+
+	// connect to site
+	ConnectToSite();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -132,13 +135,9 @@ void CHTTPSWebClientDlg::Test_SetURL()
 	UpdateData(FALSE);
 }
 
-void CHTTPSWebClientDlg::OnConnect()
+void CHTTPSWebClientDlg::ConnectToSite()
 {
-	UpdateData(TRUE);
-
-	AddrString = L"dynamic.12306.cn";
-	
-	UpdateData(FALSE);
+	AddrString = _T("dynamic.12306.cn");
 	
 	theApp.ConnectToURL(AddrString);
 }
@@ -157,13 +156,14 @@ void CHTTPSWebClientDlg::OnPost()
 	UpdateData(FALSE);
 }
 
-void CHTTPSWebClientDlg::OnGetValpic()
+void CHTTPSWebClientDlg::OnGetValLoginPic()
 {
 	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=sjrand";
-	theApp.GetValidatePic(ValPicAddr);
-
-	// redraw picture
-	picFrame.InvalidateRect(NULL, FALSE);
+	if(theApp.GetValidatePic(ValPicAddr, valPicLoginCtrl))
+	{
+		// redraw picture
+		valPicLoginCtrl.InvalidateRect(NULL, TRUE);
+	}
 }
 
 void CHTTPSWebClientDlg::OnLogin()
@@ -173,4 +173,15 @@ void CHTTPSWebClientDlg::OnLogin()
 	theApp.LoginToSite(usernameStr, passwordStr, validateStr);
 	// set response
 	UpdateData(FALSE);
+}
+
+void CHTTPSWebClientDlg::OnGetValBookPic()
+{
+	// TODO: Add your control notification handler code here
+	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=randp";
+	if(theApp.GetValidatePic(ValPicAddr, valPicBookCtrl))
+	{
+		// redraw picture
+		valPicBookCtrl.InvalidateRect(NULL, TRUE);
+	}
 }

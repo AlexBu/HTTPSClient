@@ -9,7 +9,7 @@
 #endif
 
 #include "resource.h"		// 主符号
-
+#include "ValidatePicture.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -30,9 +30,8 @@ public:
 public:
 	void GetFromURL( const CString& URLString );
 	void PostToURL(const CString& webResString, const CString& PostString);
-	void GetValidatePic(const CString& ValPicAddr);
+	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
 	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr);
-
 	BOOL ConnectToURL( const CString& URLString );
 	HINTERNET SendRequest(int verb, const CString& refererStr, const CString& acceptTypStr, const CString& webResStr, const BYTE* addtionData, const DWORD addtionSize);
 	BOOL GetResponse(HINTERNET hRequest);

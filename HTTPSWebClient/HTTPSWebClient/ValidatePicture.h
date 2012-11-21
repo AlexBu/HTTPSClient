@@ -18,9 +18,10 @@ public:
 private:
 	DWORD height, width;
 	BYTE* picBuff;
+	BOOL hasData;
 public:
 	void imageAttrSet(DWORD h, DWORD w);
-	void imageBuffSet(BYTE* buff);
+	void imageBuffSet(BYTE* buff, DWORD size);
 };
 
 

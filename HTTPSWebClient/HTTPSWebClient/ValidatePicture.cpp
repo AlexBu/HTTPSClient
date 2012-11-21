@@ -2,20 +2,23 @@
 //
 
 #include "stdafx.h"
-#include "ValPic.h"
+#include "ValidatePicture.h"
 
+#include "jpg.h"
 
 // CValPic
 
 IMPLEMENT_DYNAMIC(CValPic, CStatic)
 
-CValPic::CValPic():width(0),height(0),picBuff(NULL)
+CValPic::CValPic():width(0),height(0),hasData(FALSE)
 {
-
+	picBuff = new BYTE[SMALL_JPG_SIZE];
 }
 
 CValPic::~CValPic()
 {
+	hasData = FALSE;
+	delete []picBuff;
 }
 
 
@@ -35,7 +38,7 @@ void CValPic::OnPaint()
 	// TODO: Add your message handler code here
 	// Do not call CStatic::OnPaint() for painting messages
 
-	if(picBuff == NULL)
+	if(hasData == FALSE)
 		return;
 
 	CDC memdc;
@@ -77,7 +80,11 @@ void CValPic::imageAttrSet( DWORD h, DWORD w )
 	if(w > 0)	width = w;
 }
 
-void CValPic::imageBuffSet( BYTE* buff )
+void CValPic::imageBuffSet( BYTE* buff, DWORD size )
 {
-	if(buff)	picBuff = buff;
+	if(buff && size < SMALL_JPG_SIZE)
+	{
+		memcpy(picBuff, buff, size);
+		hasData = TRUE;
+	}
 }
