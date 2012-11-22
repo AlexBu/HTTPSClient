@@ -63,7 +63,7 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	// test regex
-	testRegex();
+	//testRegex();
 
 	hConnect = NULL;
 	hSession = NULL;
