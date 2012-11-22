@@ -9,6 +9,8 @@
 #include "jpeglib.h"
 #include "jpg.h"
 
+#include <atlrx.h>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -59,6 +61,9 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
 	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+
+	// test regex
+	testRegex();
 
 	hConnect = NULL;
 	hSession = NULL;
@@ -518,4 +523,38 @@ LPVOID CHTTPSWebClientApp::GetBufferData()
 DWORD CHTTPSWebClientApp::GetValidBufferSize()
 {
 	return htmlResponceSize;
+}
+
+int CHTTPSWebClientApp::testRegex()
+{
+	CAtlRegExp<> reUrl;
+	// five match groups: scheme, authority, path, query, fragment
+	REParseError status = reUrl.Parse(
+		L"({[^:/?#]+}:)?(//{[^/?#]*})?{[^?#]*}(?{[^#]*})?(#{.*})?" );
+	if (REPARSE_ERROR_OK != status)
+	{
+		// Unexpected error.
+		return 0;
+	}
+
+	CAtlREMatchContext<> mcUrl;
+	if (!reUrl.Match(
+		L"http://search.microsoft.com/us/Search.asp?qu=atl&boolean=ALL#results",
+		&mcUrl))
+	{
+		// Unexpected error.
+		return 0;
+	}
+
+	for (UINT nGroupIndex = 0; nGroupIndex < mcUrl.m_uNumGroups;
+		++nGroupIndex)
+	{
+		const CAtlREMatchContext<>::RECHAR* szStart = 0;
+		const CAtlREMatchContext<>::RECHAR* szEnd = 0;
+		mcUrl.GetMatch(nGroupIndex, &szStart, &szEnd);
+
+		ptrdiff_t nLength = szEnd - szStart;
+		printf("%d: \"%.*s\"\n", nGroupIndex, nLength, szStart);
+	}
+	return 0;
 }

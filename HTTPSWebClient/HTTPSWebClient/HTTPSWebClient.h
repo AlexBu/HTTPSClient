@@ -37,7 +37,7 @@ public:
 	BOOL GetResponse(HINTERNET hRequest);
 	DWORD GetValidBufferSize();
 	LPVOID GetBufferData();
-
+	int testRegex();
 private:
 	HINTERNET	hSession;
 	HINTERNET	hConnect;

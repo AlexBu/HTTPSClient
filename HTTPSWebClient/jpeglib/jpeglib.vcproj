@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\inc&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include\jpeg&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\inc&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include\jpeg&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -341,46 +341,42 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\inc\jconfig.h"
+				RelativePath="..\include\jpeg\jconfig.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jdct.h"
+				RelativePath="..\include\jpeg\jdct.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jerror.h"
+				RelativePath="..\include\jpeg\jerror.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jinclude.h"
+				RelativePath="..\include\jpeg\jinclude.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jmemsys.h"
+				RelativePath="..\include\jpeg\jmemsys.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jmorecfg.h"
+				RelativePath="..\include\jpeg\jmorecfg.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jpegint.h"
+				RelativePath="..\include\jpeg\jpegint.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jpeglib.h"
+				RelativePath="..\include\jpeg\jpeglib.h"
 				>
 			</File>
 			<File
-				RelativePath="..\inc\jversion.h"
+				RelativePath="..\include\jpeg\jversion.h"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
