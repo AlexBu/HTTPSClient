@@ -4,9 +4,8 @@
 /HTTPSWebClient/Release
 /HTTPSWebClient/HTTPSWebClient/Debug
 /HTTPSWebClient/HTTPSWebClient/Release
-/HTTPSWebClient/HTTPSWebClient/HTTPSWebClient.aps
-/HTTPSWebClient/HTTPSWebClient/HTTPSWebClient.vcproj.CN001.cn1bk030.user
-/HTTPSWebClient/HTTPSWebClient/HTTPSWebClient.vcproj.SMARTDEV-159A70.Administrator.user
+/HTTPSWebClient/HTTPSWebClient/*.aps
+/HTTPSWebClient/HTTPSWebClient/*.user
 /HTTPSWebClient/jpeglib/Debug
 /HTTPSWebClient/jpeglib/Release
 /HTTPSWebClient/jpeglib/*.user
