@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\regex.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -246,6 +250,10 @@
 			</File>
 			<File
 				RelativePath=".\jpg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\regex.h"
 				>
 			</File>
 			<File
