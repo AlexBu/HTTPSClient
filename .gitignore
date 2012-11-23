@@ -2,10 +2,10 @@
 /HTTPSWebClient/*.ncb
 /HTTPSWebClient/Debug
 /HTTPSWebClient/Release
+/HTTPSWebClient/jpeglib/Debug
+/HTTPSWebClient/jpeglib/Release
+/HTTPSWebClient/jpeglib/*.user
 /HTTPSWebClient/HTTPSWebClient/Debug
 /HTTPSWebClient/HTTPSWebClient/Release
 /HTTPSWebClient/HTTPSWebClient/*.aps
 /HTTPSWebClient/HTTPSWebClient/*.user
-/HTTPSWebClient/jpeglib/Debug
-/HTTPSWebClient/jpeglib/Release
-/HTTPSWebClient/jpeglib/*.user
