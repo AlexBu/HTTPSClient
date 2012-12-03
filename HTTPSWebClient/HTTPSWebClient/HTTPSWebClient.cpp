@@ -357,7 +357,6 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 		return NULL;
 	}
 
-#if 1
 	DWORD dwFlags;
 	DWORD dwBuffLen = sizeof(dwFlags);
 	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
@@ -382,7 +381,6 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 		WinHttpCloseHandle(hRequest);
 		return NULL;
 	}
-#endif
 
 	// add additional headers
 	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
