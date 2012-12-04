@@ -62,12 +62,10 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	// 例如修改为公司或组织名
 	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	// test regex
-	//testRegex();
 
 	hConnect = NULL;
 	hSession = NULL;
-	htmlResponceBuff = new BYTE[MAX_JPG_SIZE];
+	htmlResponseBuff = new BYTE[MAX_JPG_SIZE];
 	picBuff = new BYTE[MAX_JPG_SIZE];
 
 	CHTTPSWebClientDlg dlg;
@@ -94,7 +92,7 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	hSession = NULL;
 
 	delete []picBuff;
-	delete []htmlResponceBuff;
+	delete []htmlResponseBuff;
 
 	return FALSE;
 }
@@ -133,23 +131,9 @@ void CHTTPSWebClientApp::GetFromURL( const CString& webResString )
 	else
 		return;
 
-	if(GetValidBufferSize() == 0)
-	{
-		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
-	}
-	else
-	{
-		LPTSTR unicodeBuf = NULL;
-		int unicodeBufSize = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, 0);
-		if(unicodeBufSize > 0)
-		{
-			unicodeBuf = new TCHAR[unicodeBufSize + 1];
-			ZeroMemory(unicodeBuf, (unicodeBufSize + 1)*sizeof(TCHAR));
-			MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, unicodeBufSize);
-			((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = unicodeBuf;
-			delete []unicodeBuf;
-		}
-	}
+	ConvertToUTF();
+
+	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
 
 	return;
 }
@@ -183,23 +167,9 @@ void CHTTPSWebClientApp::PostToURL(const CString& webResString, const CString& P
 	if(hRequest == NULL)
 		return;
 
-	if(GetValidBufferSize() == 0)
-	{
-		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
-	}
-	else
-	{
-		LPTSTR unicodeBuf = NULL;
-		int unicodeBufSize = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, 0);
-		if(unicodeBufSize > 0)
-		{
-			unicodeBuf = new TCHAR[unicodeBufSize + 1];
-			ZeroMemory(unicodeBuf, (unicodeBufSize + 1)*sizeof(TCHAR));
-			MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, unicodeBufSize);
-			((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = unicodeBuf;
-			delete []unicodeBuf;
-		}
-	}
+	ConvertToUTF();
+
+	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
 
 	return;
 }
@@ -216,19 +186,11 @@ BOOL CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr, CValPic& picC
 	else
 		return FALSE;
 
-	// convert to bmp src
-	BYTE* jpgBuff = (BYTE*)GetBufferData();
-	DWORD jpgSize = GetValidBufferSize();
-
-	if(jpgBuff == NULL || jpgSize == 0)
-		return FALSE;
-
-	unsigned int bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
-	unsigned int bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
-	unsigned int bmpComp = bmpCompGet(jpgBuff, jpgSize);
-
+	unsigned int bmpHeight = 0;
+	unsigned int bmpWidth = 0;
 	DWORD bmpSize = 0;
-	if(bmpFromJpeg(jpgBuff, jpgSize, picBuff, &bmpSize))
+
+	if(!convertToBMP(&bmpWidth, &bmpHeight, &bmpSize))
 		return FALSE;
 
 	// set to picture control
@@ -255,16 +217,19 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	else
 		return;
 
+	ConvertToUTF();
 	// get rand number from response
-	int rand = 0;
-	sscanf_s((char*)GetBufferData(), "{\"loginRand\":\"%d\",\"randError\":\"Y\"}", &rand);
-	if(rand >= 1000 || rand <= 99)
-		return;
+
+	CString pattern = L"{\\d\\d\\d}";
+	regex.patternLoad(pattern);
+	regex.contextMatch(htmlResponseStr);
+	CString rand;
+	regex.matchGet(0, rand);
 
 	// build login string
 	CString loginAdr, loginStr;
 	loginAdr = _T("/otsweb/loginAction.do?method=login");
-	loginStr.Format(L"loginRand=%d"
+	loginStr.Format(L"loginRand=%s"
 		L"&refundLogin=N"
 		L"&refundFlag=Y"
 		L"&loginUser.user_name=%s"
@@ -303,23 +268,9 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 		delete []postData;
 	}
 
-	if(GetValidBufferSize() == 0)
-	{
-		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString.Empty();
-	}
-	else
-	{
-		LPTSTR unicodeBuf = NULL;
-		int unicodeBufSize = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, 0);
-		if(unicodeBufSize > 0)
-		{
-			unicodeBuf = new TCHAR[unicodeBufSize + 1];
-			ZeroMemory(unicodeBuf, (unicodeBufSize + 1)*sizeof(TCHAR));
-			MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, unicodeBufSize);
-			((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = unicodeBuf;
-			delete []unicodeBuf;
-		}
-	}
+	ConvertToUTF();
+
+	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
 
 	return;
 }
@@ -330,8 +281,8 @@ HINTERNET CHTTPSWebClientApp::SendRequest(int verb, const CString& refererStr, c
 		return NULL;
 
 	// clear response buffer first
-	memset(htmlResponceBuff, 0, MAX_JPG_SIZE);
-	htmlResponceSize = 0;
+	memset(htmlResponseBuff, 0, MAX_JPG_SIZE);
+	htmlResponseSize = 0;
 
 	CString verbStr;
 	if(verb == 0)
@@ -494,7 +445,7 @@ BOOL CHTTPSWebClientApp::GetResponse(HINTERNET hRequest)
 		}
 
 		// Read the Data.
-		if (FALSE == WinHttpReadData( hRequest, (LPVOID)(htmlResponceBuff + buffPostion), 
+		if (FALSE == WinHttpReadData( hRequest, (LPVOID)(htmlResponseBuff + buffPostion), 
 			dwSize, &dwDownloaded))
 		{
 			WinHttpCloseHandle(hRequest);
@@ -507,7 +458,7 @@ BOOL CHTTPSWebClientApp::GetResponse(HINTERNET hRequest)
 
 	} while (dwDownloaded > 0);
 
-	htmlResponceSize = buffPostion;
+	htmlResponseSize = buffPostion;
 
 	WinHttpCloseHandle(hRequest);
 	return TRUE;
@@ -515,44 +466,48 @@ BOOL CHTTPSWebClientApp::GetResponse(HINTERNET hRequest)
 
 LPVOID CHTTPSWebClientApp::GetBufferData()
 {
-	return htmlResponceBuff;
+	return htmlResponseBuff;
 }
 
 DWORD CHTTPSWebClientApp::GetValidBufferSize()
 {
-	return htmlResponceSize;
+	return htmlResponseSize;
 }
 
-int CHTTPSWebClientApp::testRegex()
+void CHTTPSWebClientApp::ConvertToUTF()
 {
-	CAtlRegExp<> reUrl;
-	// five match groups: scheme, authority, path, query, fragment
-	REParseError status = reUrl.Parse(
-		L"({[^:/?#]+}:)?(//{[^/?#]*})?{[^?#]*}(?{[^#]*})?(#{.*})?" );
-	if (REPARSE_ERROR_OK != status)
+	htmlResponseStr.Empty();
+	if(GetValidBufferSize() > 0)
 	{
-		// Unexpected error.
-		return 0;
+		LPTSTR unicodeBuf = NULL;
+		int unicodeBufSize = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, 0);
+		if(unicodeBufSize > 0)
+		{
+			LPTSTR unicodeBuf = htmlResponseStr.GetBuffer(unicodeBufSize + 1);
+			MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)GetBufferData(), GetValidBufferSize(), unicodeBuf, unicodeBufSize);
+			htmlResponseStr.ReleaseBuffer(unicodeBufSize);
+		}
 	}
 
-	CAtlREMatchContext<> mcUrl;
-	if (!reUrl.Match(
-		L"http://search.microsoft.com/us/Search.asp?qu=atl&boolean=ALL#results",
-		&mcUrl))
-	{
-		// Unexpected error.
-		return 0;
-	}
+	
+}
 
-	for (UINT nGroupIndex = 0; nGroupIndex < mcUrl.m_uNumGroups;
-		++nGroupIndex)
-	{
-		const CAtlREMatchContext<>::RECHAR* szStart = 0;
-		const CAtlREMatchContext<>::RECHAR* szEnd = 0;
-		mcUrl.GetMatch(nGroupIndex, &szStart, &szEnd);
+BOOL CHTTPSWebClientApp::convertToBMP(unsigned int *bmpWidth,
+									  unsigned int *bmpHeight,
+									  DWORD *bmpSize)
+{
+	// convert to bmp src
+	BYTE* jpgBuff = (BYTE*)GetBufferData();
+	DWORD jpgSize = GetValidBufferSize();
 
-		ptrdiff_t nLength = szEnd - szStart;
-		printf("%d: \"%.*s\"\n", nGroupIndex, nLength, szStart);
-	}
-	return 0;
+	if(jpgBuff == NULL || jpgSize == 0)
+		return FALSE;
+
+	*bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
+	*bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
+
+	if(bmpFromJpeg(jpgBuff, jpgSize, picBuff, bmpSize))
+		return FALSE;
+
+	return TRUE;
 }

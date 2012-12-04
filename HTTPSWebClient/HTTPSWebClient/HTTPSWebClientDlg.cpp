@@ -115,10 +115,19 @@ void CHTTPSWebClientDlg::OnGet()
 
 	CheckURL();
 
-	//theApp.GetFromURL(_T("/otsweb/loginAction.do?method=init"));
 	theApp.GetFromURL(WebResString);
 
 	// set GET content
+	UpdateData(FALSE);
+}
+
+void CHTTPSWebClientDlg::OnPost()
+{
+	UpdateData(TRUE);
+
+	theApp.PostToURL(WebResString, POSTString);
+
+	// set response
 	UpdateData(FALSE);
 }
 
@@ -140,20 +149,6 @@ void CHTTPSWebClientDlg::ConnectToSite()
 	AddrString = _T("dynamic.12306.cn");
 	
 	theApp.ConnectToURL(AddrString);
-}
-
-void CHTTPSWebClientDlg::OnPost()
-{
-	UpdateData(TRUE);
-
-	//AddrString = L"dynamic.12306.cn";
-
-	//theApp.ConnectToURL(AddrString);
-
-	theApp.PostToURL(WebResString, POSTString);
-
-	// set response
-	UpdateData(FALSE);
 }
 
 void CHTTPSWebClientDlg::OnGetValLoginPic()

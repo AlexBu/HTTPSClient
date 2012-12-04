@@ -10,6 +10,7 @@
 
 #include "resource.h"		// 主符号
 #include "ValidatePicture.h"
+#include "regex.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -37,12 +38,16 @@ public:
 	BOOL GetResponse(HINTERNET hRequest);
 	DWORD GetValidBufferSize();
 	LPVOID GetBufferData();
-	int testRegex();
+private:
+	void ConvertToUTF();
+	BOOL convertToBMP(unsigned int *bmpWidth,unsigned int *bmpHeight,DWORD *bmpSize);
 private:
 	HINTERNET	hSession;
 	HINTERNET	hConnect;
 	BYTE*		picBuff;
-	BYTE*		htmlResponceBuff;
-	DWORD		htmlResponceSize;
+	BYTE*		htmlResponseBuff;
+	DWORD		htmlResponseSize;
+	CString		htmlResponseStr;
+	CRegex		regex;
 };
 extern CHTTPSWebClientApp theApp;

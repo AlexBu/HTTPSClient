@@ -12,15 +12,14 @@ public:
 	CRegex();
 	virtual ~CRegex();
 
-	BOOL patternLoad();
+	BOOL patternLoad(CString pattern);
 	CString patternGet();	// maybe no use
-	void contextMatch();
+	BOOL contextMatch(CString context);
 	DWORD matchCount();
-	CString matchGet(DWORD matchIndex);
+	BOOL matchGet(DWORD matchIndex, CString& result);
 
 private:
 	CAtlRegExp<> regularExpression;
 	CAtlREMatchContext<> matchContext;
-	CStringArray matchStrings;
 	CString patternString;
 };
