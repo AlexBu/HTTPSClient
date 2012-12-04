@@ -38,6 +38,7 @@ public:
 	BOOL GetResponse(HINTERNET hRequest);
 	DWORD GetValidBufferSize();
 	LPVOID GetBufferData();
+	void QueryTickets();
 private:
 	void ConvertToUTF();
 	BOOL convertToBMP(unsigned int *bmpWidth,unsigned int *bmpHeight,DWORD *bmpSize);

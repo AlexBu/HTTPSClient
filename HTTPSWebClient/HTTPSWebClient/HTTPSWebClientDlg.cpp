@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValLoginPic)
 	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
 	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC2, &CHTTPSWebClientDlg::OnGetValBookPic)
+	ON_BN_CLICKED(IDC_BUTTON_QUERY, &CHTTPSWebClientDlg::OnQuery)
 END_MESSAGE_MAP()
 
 
@@ -179,4 +180,13 @@ void CHTTPSWebClientDlg::OnGetValBookPic()
 		// redraw picture
 		valPicBookCtrl.InvalidateRect(NULL, TRUE);
 	}
+}
+
+void CHTTPSWebClientDlg::OnQuery()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	theApp.QueryTickets();
+	// set response
+	UpdateData(FALSE);
 }

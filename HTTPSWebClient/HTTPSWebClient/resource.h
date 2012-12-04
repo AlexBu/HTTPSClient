@@ -22,6 +22,8 @@
 #define IDC_EDIT_USER                   1013
 #define IDC_BUTTON_GET_VALPIC2          1013
 #define IDC_EDIT_PASS                   1014
+#define IDC_BUTTON_LOGIN2               1014
+#define IDC_BUTTON_QUERY                1014
 #define IDC_EDIT3                       1015
 #define IDC_EDIT_VALIPIC                1015
 #define IDC_BUTTON2                     1016

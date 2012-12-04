@@ -220,7 +220,7 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	ConvertToUTF();
 	// get rand number from response
 
-	CString pattern = L"{\\d\\d\\d}";
+	CString pattern = L"{\\d+}";
 	regex.patternLoad(pattern);
 	regex.contextMatch(htmlResponseStr);
 	CString rand;
@@ -510,4 +510,58 @@ BOOL CHTTPSWebClientApp::convertToBMP(unsigned int *bmpWidth,
 		return FALSE;
 
 	return TRUE;
+}
+
+void CHTTPSWebClientApp::QueryTickets()
+{
+	// build up a test information
+//		&orderRequest.train_date=2012-12-6
+//		&orderRequest.from_station_telecode=NJH
+//		&orderRequest.to_station_telecode=SHH
+//		&orderRequest.train_no=
+//		&trainPassType=QB
+//		&trainClass=D%23
+//		&includeStudent=00
+//		&seatTypeAndNum=
+//		&orderRequest.start_time_str=00%3A00--24%3A00
+//
+//		header
+//		x-requested-with: XMLHttpRequest
+//		Content-Type: application/x-www-form-urlencoded
+//		单程
+//		出发地: 南京
+//		目的地: 上海
+//		出发日期: 2012-12-6
+//		出发时间: 00:00-24:00
+//		动车
+//		全部(始发/过路)
+//		二等座
+//		购票张数0
+//		
+	CString queryStr = L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
+		L"&orderRequest.train_date=2012-12-6"
+		L"&orderRequest.from_station_telecode=NJH"
+		L"&orderRequest.to_station_telecode=SHH"
+		L"&orderRequest.train_no="
+		L"&trainPassType=QB"
+		L"&trainClass=D%23"
+		L"&includeStudent=00"
+		L"&seatTypeAndNum="
+		L"&orderRequest.start_time_str=00%3A00--24%3A00";
+
+	CString refererStr = _T("/otsweb/loginAction.do?method=init");
+	CString acptTypStr = _T("text/html, application/xhtml+xml, */*");
+
+	HINTERNET hRequest = SendRequest(0, refererStr, acptTypStr, queryStr, NULL, 0);
+
+	if(hRequest)
+		GetResponse(hRequest);
+	else
+		return;
+
+	ConvertToUTF();
+
+	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
+
+	return;
 }

@@ -52,4 +52,5 @@ public:
 	CString validateStr;
 	CValPic valPicBookCtrl;
 	afx_msg void OnGetValBookPic();
+	afx_msg void OnQuery();
 };
