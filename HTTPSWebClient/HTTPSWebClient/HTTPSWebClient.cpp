@@ -539,7 +539,7 @@ void CHTTPSWebClientApp::QueryTickets()
 //		¹ºÆ±ÕÅÊý0
 //		
 	CString queryStr = L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
-		L"&orderRequest.train_date=2012-12-6"
+		L"&orderRequest.train_date=2012-12-26"
 		L"&orderRequest.from_station_telecode=NJH"
 		L"&orderRequest.to_station_telecode=SHH"
 		L"&orderRequest.train_no="
@@ -561,6 +561,7 @@ void CHTTPSWebClientApp::QueryTickets()
 
 	ConvertToUTF();
 
+	// organize the output
 	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
 
 	return;

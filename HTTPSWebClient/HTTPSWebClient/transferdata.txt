@@ -140,6 +140,26 @@ onclick=javascript:getSelected('
 G233#01:07#22:04#490000G23602#NKH#AOH#23:11#南京南#上海虹桥#O*****0134M*****00589*****0022#D6B32D7E8064C166E203BC0452F4C34F951A608486F27CD889CFDE8B
 ') value='预订'></input>
 
+
+17 columns, seperated by comma
+0,
+<span id='id_240000D31307' class='base_txtdiv' onmouseover=javascript:onStopHover('240000D31307#NJH#SHH') onmouseout='onStopOut()'>D313</span>,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;南京&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;04:48,
+<img src='/otsweb/images/tips/last.gif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上海&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;07:15,
+02:27,
+--,
+--,
+--,
+<font color='#008800'>有</font>,
+--,
+<font color='#008800'>有</font>,
+--,
+--,
+--,
+<font color='darkgray'>无</font>,
+--,
+<a name='btn130_2' class='btn130_2' style='text-decoration:none;' onclick=javascript:getSelected('D313#02:27#04:48#240000D31307#NJH#SHH#07:15#南京#上海#02#04#O*****00384*****0036O*****3000#D89A7A67C269BCCCB45005A254F49C92B15F68BBF6BA89B844CF76D4#P2')>预&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订</a>\n
+
 click book ticket button
 POST
 /otsweb/order/querySingleAction.do?method=submutOrderRequest
