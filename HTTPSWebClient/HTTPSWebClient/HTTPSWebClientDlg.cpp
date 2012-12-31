@@ -25,6 +25,7 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, usernameStr(_T(""))
 	, passwordStr(_T(""))
 	, validateStr(_T(""))
+	, dateString(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -38,6 +39,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_VALIPIC, validateStr);
 	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_LOGIN, valPicLoginCtrl);
 	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_BOOK, valPicBookCtrl);
+	DDX_Text(pDX, IDC_EDIT_DATE, dateString);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -186,7 +188,7 @@ void CHTTPSWebClientDlg::OnQuery()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	theApp.QueryTickets();
+	theApp.QueryTickets(dateString);
 	// set response
 	UpdateData(FALSE);
 }

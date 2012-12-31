@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "regex.h"
 
-BOOL CRegex::patternLoad(CString pattern)
+BOOL CRegex::patternLoad(CString& pattern)
 {
 	patternString = pattern;
 	return ( regularExpression.Parse( pattern ) != REPARSE_ERROR_OK ) ? FALSE : TRUE;
@@ -12,9 +12,19 @@ CString CRegex::patternGet()
 	return patternString;
 }
 
-BOOL CRegex::contextMatch(CString context)
+BOOL CRegex::contextMatch(CString& context, CString& rest)
 {
-	return regularExpression.Match( context, &matchContext);
+	LPCTSTR afterMatch = NULL;
+	if(regularExpression.Match( context, &matchContext, &afterMatch))
+	{
+		rest = afterMatch;
+		return TRUE;
+	}
+	else
+	{
+		rest.Empty();
+		return FALSE;
+	}
 }
 
 DWORD CRegex::matchCount()

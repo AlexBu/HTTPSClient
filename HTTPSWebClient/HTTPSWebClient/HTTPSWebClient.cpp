@@ -220,9 +220,10 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	ConvertToUTF();
 	// get rand number from response
 
-	CString pattern = L"{\\d+}";
-	regex.patternLoad(pattern);
-	regex.contextMatch(htmlResponseStr);
+	CString patternRand = L"{\\d+}";
+	regex.patternLoad(patternRand);
+	CString restStr;
+	regex.contextMatch(htmlResponseStr, restStr);
 	CString rand;
 	regex.matchGet(0, rand);
 
@@ -270,7 +271,17 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 
 	ConvertToUTF();
 
-	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
+	CString patternTitle = L"<[tT][iI][tT][lL][eE]>{[^</>]+}</[tT][iI][tT][lL][eE]>";
+	regex.patternLoad(patternTitle);
+	CString restStr2;
+	regex.contextMatch(htmlResponseStr, restStr2);
+	CString titleStr;
+	regex.matchGet(0, titleStr);
+
+	if(titleStr == L"系统消息")
+	{
+		((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = L"log in success!";
+	}
 
 	return;
 }
@@ -512,7 +523,7 @@ BOOL CHTTPSWebClientApp::convertToBMP(unsigned int *bmpWidth,
 	return TRUE;
 }
 
-void CHTTPSWebClientApp::QueryTickets()
+void CHTTPSWebClientApp::QueryTickets(CString& date)
 {
 	// build up a test information
 //		&orderRequest.train_date=2012-12-6
@@ -538,20 +549,21 @@ void CHTTPSWebClientApp::QueryTickets()
 //		二等座
 //		购票张数0
 //		
-	CString queryStr = L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
-		L"&orderRequest.train_date=2012-12-26"
-		L"&orderRequest.from_station_telecode=NJH"
-		L"&orderRequest.to_station_telecode=SHH"
-		L"&orderRequest.train_no="
-		L"&trainPassType=QB"
-		L"&trainClass=D%23"
-		L"&includeStudent=00"
-		L"&seatTypeAndNum="
-		L"&orderRequest.start_time_str=00%3A00--24%3A00";
+	CString queryStr;
 
 	CString refererStr = _T("/otsweb/loginAction.do?method=init");
 	CString acptTypStr = _T("text/html, application/xhtml+xml, */*");
 
+	queryStr.Format( L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
+		L"&orderRequest.train_date=%s"
+		L"&orderRequest.from_station_telecode=NJH"
+		L"&orderRequest.to_station_telecode=SHH"
+		L"&orderRequest.train_no="
+		L"&trainPassType=QB"
+		L"&trainClass=D%%23"
+		L"&includeStudent=00"
+		L"&seatTypeAndNum="
+		L"&orderRequest.start_time_str=00%%3A00--24%%3A00", date);
 	HINTERNET hRequest = SendRequest(0, refererStr, acptTypStr, queryStr, NULL, 0);
 
 	if(hRequest)
@@ -561,8 +573,41 @@ void CHTTPSWebClientApp::QueryTickets()
 
 	ConvertToUTF();
 
+	CString resultStr;
+
+	// split results
+	// "({[^\\,]+},)+"
+	//CString pattern = L"{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},"
+	//				L"{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},"
+	//				L"{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},{[^\\\\,]+},"
+	//				L"{[^\\\\,]+},{[^\\\\,]+}\\\\n";
+	CString pattern = L"javascript:getSelected\\(\\'"
+		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#"
+		L"{[^#]+}#{[^#]+}#{[^#]+}#[^#]+#[^#]+#{[^#]+}#{[^#]+}#[^#]+\\')>";
+	regex.patternLoad(pattern);
+
+	CString restStr;
+	CString matchStr;
+
+	matchStr = htmlResponseStr;
+
+	while(regex.contextMatch(matchStr, restStr))
+	{
+		for(unsigned int i = 0; i < regex.matchCount(); i++)
+		{
+			CString tempStr;
+			regex.matchGet(i, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+		}
+		resultStr += L"\r\n";
+		
+		matchStr = restStr;
+		restStr.Empty();
+	}
+
+
 	// organize the output
-	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
+	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = resultStr;
 
 	return;
 }

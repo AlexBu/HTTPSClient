@@ -38,6 +38,7 @@ public:
 	void CheckURL();
 private:
 	CString WebResString;
+	CString dateString;
 public:
 	CString POSTString;
 	CString RespondString;
@@ -53,4 +54,5 @@ public:
 	CValPic valPicBookCtrl;
 	afx_msg void OnGetValBookPic();
 	afx_msg void OnQuery();
+
 };

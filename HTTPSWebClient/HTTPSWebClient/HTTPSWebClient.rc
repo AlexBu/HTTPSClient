@@ -50,6 +50,7 @@ BEGIN
     CONTROL         "",IDC_STATIC_VALIDATE_PIC_BOOK,"Static",SS_BLACKFRAME | SS_CENTERIMAGE,217,16,48,12
     PUSHBUTTON      "Get book pic",IDC_BUTTON_GET_VALPIC2,358,15,58,14
     PUSHBUTTON      "Query",IDC_BUTTON_QUERY,498,15,54,13
+    EDITTEXT        IDC_EDIT_DATE,568,15,55,13,ES_AUTOHSCROLL
 END
 
 
@@ -75,13 +76,10 @@ BEGIN
     BEGIN
         BLOCK "080403a8"
         BEGIN
-            VALUE "CompanyName", "TODO: <公司名>"
-            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "FileDescription", "HTTPSClient"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "HTTPSWebClient.exe"
-            VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
             VALUE "OriginalFilename", "HTTPSWebClient.exe"
-            VALUE "ProductName", "TODO: <产品名>"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END
