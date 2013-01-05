@@ -231,6 +231,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TicketInfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ValidatePicture.cpp"
 				>
 			</File>
@@ -266,6 +270,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TicketInfo.h"
 				>
 			</File>
 			<File

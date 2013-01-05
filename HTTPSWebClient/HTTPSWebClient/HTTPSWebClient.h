@@ -11,6 +11,7 @@
 #include "resource.h"		// 主符号
 #include "ValidatePicture.h"
 #include "regex.h"
+#include "TicketInfo.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -50,5 +51,6 @@ private:
 	DWORD		htmlResponseSize;
 	CString		htmlResponseStr;
 	CRegex		regex;
+	CTicketInfo	ticketInfo;
 };
 extern CHTTPSWebClientApp theApp;

@@ -592,15 +592,62 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 	matchStr = htmlResponseStr;
 
 	while(regex.contextMatch(matchStr, restStr))
-	{
-		for(unsigned int i = 0; i < regex.matchCount(); i++)
+	{		
+		if(regex.matchCount() == 11)
 		{
 			CString tempStr;
-			regex.matchGet(i, tempStr);
+
+			regex.matchGet(0, tempStr);
 			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.trainCodeSet(tempStr);
+
+			regex.matchGet(1, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.durationSet(tempStr);
+
+			regex.matchGet(2, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.trainStartTimeSet(tempStr);
+
+			regex.matchGet(3, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.trainNoSet(tempStr);
+
+			regex.matchGet(4, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.stationFromCodeSet(tempStr);
+
+			regex.matchGet(5, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.stationToCodeSet(tempStr);
+
+			regex.matchGet(6, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.timeArriveSet(tempStr);
+
+			regex.matchGet(7, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.stationFromTeNameSet(tempStr);
+			ticketInfo.stationFromNameSet(tempStr);
+
+			regex.matchGet(8, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.stationToTeNameSet(tempStr);
+			ticketInfo.stationToNameSet(tempStr);
+
+			regex.matchGet(9, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.infoDetailSet(tempStr);
+
+			regex.matchGet(10, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.mmStrSet(tempStr);
+
+			ticketInfo.strBuild(tempStr);
 		}
+
 		resultStr += L"\r\n";
-		
+
 		matchStr = restStr;
 		restStr.Empty();
 	}
