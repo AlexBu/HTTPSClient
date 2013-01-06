@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
 	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC2, &CHTTPSWebClientDlg::OnGetValBookPic)
 	ON_BN_CLICKED(IDC_BUTTON_QUERY, &CHTTPSWebClientDlg::OnQuery)
+	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
 END_MESSAGE_MAP()
 
 
@@ -189,6 +190,15 @@ void CHTTPSWebClientDlg::OnQuery()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	theApp.QueryTickets(dateString);
+	// set response
+	UpdateData(FALSE);
+}
+
+void CHTTPSWebClientDlg::OnBook()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	theApp.BookTickets(dateString);
 	// set response
 	UpdateData(FALSE);
 }

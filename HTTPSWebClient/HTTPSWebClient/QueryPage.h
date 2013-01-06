@@ -1,10 +1,10 @@
 #pragma once
 
-class CTicketInfo
+class CQueryPage
 {
 public:
-	CTicketInfo(void);
-	virtual ~CTicketInfo(void);
+	CQueryPage(void);
+	virtual ~CQueryPage(void);
 private:
 	//station_train_code=G7031
 	CString trainCode;
@@ -45,10 +45,17 @@ private:
 	CString stationFromName;
 	//	&to_station_name=%E4%B8%8A%E6%B5%B7
 	CString stationToName;
+	//	&from_station_no=02
+	CString stationFromNo;
+	//	&to_station_no=04
+	CString stationToNo;
 	//	&ypInfoDetail=O*****06219*****0025O*****3176M*****0110
 	CString infoDetail;
 	//	&mmStr=16FD07FFF17260ED85F3ACBF68659498DC6E0E388938EAF24A0A0D92
 	CString mmStr;
+	//	&locationCode=P2
+	CString locationCode;
+
 public:
 	//station_train_code=G7031
 	void trainCodeSet(CString&);
@@ -89,10 +96,16 @@ public:
 	void stationFromNameSet(CString&);
 	//	&to_station_name=%E4%B8%8A%E6%B5%B7
 	void stationToNameSet(CString&);
+	//	&from_station_no=02
+	void stationFromNoSet(CString&);
+	//	&to_station_no=04
+	void stationToNoSet(CString&);
 	//	&ypInfoDetail=O*****06219*****0025O*****3176M*****0110
 	void infoDetailSet(CString&);
 	//	&mmStr=16FD07FFF17260ED85F3ACBF68659498DC6E0E388938EAF24A0A0D92
 	void mmStrSet(CString&);
+	//	&locationCode=P2
+	void locationCodeSet(CString&);
 
 	void strBuild(CString&);
 };

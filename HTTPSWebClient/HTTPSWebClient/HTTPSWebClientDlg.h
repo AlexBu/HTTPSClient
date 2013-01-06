@@ -55,4 +55,5 @@ public:
 	afx_msg void OnGetValBookPic();
 	afx_msg void OnQuery();
 
+	afx_msg void OnBook();
 };

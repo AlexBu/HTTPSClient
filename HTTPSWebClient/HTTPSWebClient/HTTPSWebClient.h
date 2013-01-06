@@ -11,7 +11,7 @@
 #include "resource.h"		// 主符号
 #include "ValidatePicture.h"
 #include "regex.h"
-#include "TicketInfo.h"
+#include "QueryPage.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -40,6 +40,8 @@ public:
 	DWORD GetValidBufferSize();
 	LPVOID GetBufferData();
 	void QueryTickets(CString& date);
+	void BookTickets(CString& date);
+
 private:
 	void ConvertToUTF();
 	BOOL convertToBMP(unsigned int *bmpWidth,unsigned int *bmpHeight,DWORD *bmpSize);
@@ -51,6 +53,6 @@ private:
 	DWORD		htmlResponseSize;
 	CString		htmlResponseStr;
 	CRegex		regex;
-	CTicketInfo	ticketInfo;
+	CQueryPage	ticketInfo;
 };
 extern CHTTPSWebClientApp theApp;

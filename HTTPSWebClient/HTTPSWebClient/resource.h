@@ -26,8 +26,9 @@
 #define IDC_EDIT3                       1015
 #define IDC_EDIT_VALIPIC                1015
 #define IDC_BUTTON2                     1016
+#define IDC_BUTTON_QUERY2               1016
+#define IDC_BUTTON_BOOK                 1016
 #define IDC_STATIC_VALIDATE_PIC_BOOK    1017
-#define IDC_EDIT1                       1019
 #define IDC_EDIT_DATE                   1019
 
 // Next default values for new objects

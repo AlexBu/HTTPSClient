@@ -526,29 +526,6 @@ BOOL CHTTPSWebClientApp::convertToBMP(unsigned int *bmpWidth,
 void CHTTPSWebClientApp::QueryTickets(CString& date)
 {
 	// build up a test information
-//		&orderRequest.train_date=2012-12-6
-//		&orderRequest.from_station_telecode=NJH
-//		&orderRequest.to_station_telecode=SHH
-//		&orderRequest.train_no=
-//		&trainPassType=QB
-//		&trainClass=D%23
-//		&includeStudent=00
-//		&seatTypeAndNum=
-//		&orderRequest.start_time_str=00%3A00--24%3A00
-//
-//		header
-//		x-requested-with: XMLHttpRequest
-//		Content-Type: application/x-www-form-urlencoded
-//		单程
-//		出发地: 南京
-//		目的地: 上海
-//		出发日期: 2012-12-6
-//		出发时间: 00:00-24:00
-//		动车
-//		全部(始发/过路)
-//		二等座
-//		购票张数0
-//		
 	CString queryStr;
 
 	CString refererStr = _T("/otsweb/loginAction.do?method=init");
@@ -559,7 +536,7 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 		L"&orderRequest.from_station_telecode=NJH"
 		L"&orderRequest.to_station_telecode=SHH"
 		L"&orderRequest.train_no="
-		L"&trainPassType=QB"
+		L"&trainPassType=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
 		L"&trainClass=D%%23"
 		L"&includeStudent=00"
 		L"&seatTypeAndNum="
@@ -583,7 +560,7 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 	//				L"{[^\\\\,]+},{[^\\\\,]+}\\\\n";
 	CString pattern = L"javascript:getSelected\\(\\'"
 		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#"
-		L"{[^#]+}#{[^#]+}#{[^#]+}#[^#]+#[^#]+#{[^#]+}#{[^#]+}#[^#]+\\')>";
+		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#\\']+}\\')>";
 	regex.patternLoad(pattern);
 
 	CString restStr;
@@ -591,9 +568,10 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 
 	matchStr = htmlResponseStr;
 
+	// get the first record
 	while(regex.contextMatch(matchStr, restStr))
 	{		
-		if(regex.matchCount() == 11)
+		if(regex.matchCount() == 14)
 		{
 			CString tempStr;
 
@@ -637,11 +615,23 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 
 			regex.matchGet(9, tempStr);
 			resultStr.AppendFormat(L"%s\r\n", tempStr);
-			ticketInfo.infoDetailSet(tempStr);
+			ticketInfo.stationFromNoSet(tempStr);
 
 			regex.matchGet(10, tempStr);
 			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.stationToNoSet(tempStr);
+
+			regex.matchGet(11, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.infoDetailSet(tempStr);
+
+			regex.matchGet(12, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
 			ticketInfo.mmStrSet(tempStr);
+
+			regex.matchGet(13, tempStr);
+			resultStr.AppendFormat(L"%s\r\n", tempStr);
+			ticketInfo.locationCodeSet(tempStr);
 
 			CString str(L"");
 			ticketInfo.studentSet(str);
@@ -650,10 +640,9 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 			ticketInfo.passTypeSet(str);
 			ticketInfo.trainClassSet(str);
 			ticketInfo.timeStartStrSet(str);
-			ticketInfo.trainRoundDateSet(str);
-			ticketInfo.trainDateSet(date);
 
-			ticketInfo.strBuild(tempStr);
+			ticketInfo.trainRoundDateSet(date);
+			ticketInfo.trainDateSet(date);
 
 			// test on the first result
 			break;
@@ -666,38 +655,25 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 	}
 
 	// test on the first result
-	// TODO: modify these codes!
 	// build login string
-	CString loginAdr, loginStr;
-	loginAdr = _T("/otsweb/loginAction.do?method=login");
-	loginStr.Format(L"loginRand=%s"
-		L"&refundLogin=N"
-		L"&refundFlag=Y"
-		L"&loginUser.user_name=%s"
-		L"&nameErrorFocus="
-		L"&user.password=%s"
-		L"&passwordErrorFocus="
-		L"&randCode=%s"
-		L"&randErrorFocus=", 
-		rand, 
-		//usernameStr, passwordStr, 
-		_T("bkp84335"), _T("bsp2236"),
-		validateStr);
+	CString bookTrainAdr, bookTrainStr;
+	bookTrainAdr = _T("/otsweb/order/querySingleAction.do?method=submutOrderRequest");
+	ticketInfo.strBuild(bookTrainStr);
 
 	// transform post string to MBCS type
 	char* postData = NULL;
 	int postDataSize = 0;
-	postDataSize = WideCharToMultiByte(936, 0, loginStr.GetString(), loginStr.GetLength(), NULL, 0, 0, 0);
+	postDataSize = WideCharToMultiByte(936, 0, bookTrainStr.GetString(), bookTrainStr.GetLength(), NULL, 0, 0, 0);
 	if(postDataSize > 0)
 	{
 		postData = new char[postDataSize + 1];
 		ZeroMemory(postData, (postDataSize + 1)*sizeof(char));
-		WideCharToMultiByte(936, 0, loginStr.GetString(), loginStr.GetLength(), postData, postDataSize, 0, 0);
+		WideCharToMultiByte(936, 0, bookTrainStr.GetString(), bookTrainStr.GetLength(), postData, postDataSize, 0, 0);
 	}
 
 	refererStr = _T("/otsweb/loginAction.do?method=init");
 	acptTypStr = _T("text/html, application/xhtml+xml, */*");
-	hRequest = SendRequest(1, refererStr, acptTypStr, loginAdr, (const BYTE*)postData, postDataSize);
+	hRequest = SendRequest(1, refererStr, acptTypStr, bookTrainAdr, (const BYTE*)postData, postDataSize);
 
 	if(hRequest)
 		GetResponse(hRequest);
@@ -710,10 +686,16 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 	}
 
 	ConvertToUTF();
-	// TODO: modify these codes!
 
 	// organize the output
-	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = resultStr;
+	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = htmlResponseStr;
 
 	return;
+}
+
+void CHTTPSWebClientApp::BookTickets( CString& date )
+{
+	// currently it must be used after QueryTickets
+
+	// analyze query result page
 }

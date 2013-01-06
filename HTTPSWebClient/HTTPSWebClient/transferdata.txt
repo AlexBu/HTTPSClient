@@ -55,6 +55,31 @@ GET
 &seatTypeAndNum=
 &orderRequest.start_time_str=00%3A00--24%3A00
 
+GET
+/otsweb/order/querySingleAction.do?method=queryLeftTicket
+&orderRequest.train_date=2013-01-07
+&orderRequest.from_station_telecode=NJH
+&orderRequest.to_station_telecode=SHH
+&orderRequest.train_no=240000D31307
+&trainPassType=QB
+&trainClass=D%23
+&includeStudent=00
+&seatTypeAndNum=
+&orderRequest.start_time_str=00%3A00--24%3A00
+
+GET 
+/otsweb/order/querySingleAction.do?method=queryLeftTicket
+&orderRequest.train_date=2013-01-07
+&orderRequest.from_station_telecode=NJH
+&orderRequest.to_station_telecode=SHH
+&orderRequest.train_no=
+&trainPassType=QB
+&trainClass=QB%23D%23Z%23T%23K%23QT%23
+&includeStudent=00
+&seatTypeAndNum=
+&orderRequest.start_time_str=00%3A00--24%3A00
+
+
 header
 x-requested-with: XMLHttpRequest
 Content-Type: application/x-www-form-urlencoded
@@ -163,28 +188,34 @@ G233#01:07#22:04#490000G23602#NKH#AOH#23:11#南京南#上海虹桥#O*****0134M*****0058
 click book ticket button
 POST
 /otsweb/order/querySingleAction.do?method=submutOrderRequest
-station_train_code=G7031
-&train_date=2012-11-18
+
+post data:
+
+station_train_code=D313
+&train_date=2013-01-07
 &seattype_num=
 &from_station_telecode=NJH
 &to_station_telecode=SHH
 &include_student=00
 &from_station_telecode_name=%E5%8D%97%E4%BA%AC
 &to_station_telecode_name=%E4%B8%8A%E6%B5%B7
-&round_train_date=2012-11-17
+&round_train_date=2013-01-07
 &round_start_time_str=00%3A00--24%3A00
 &single_round_type=1
 &train_pass_type=QB
 &train_class_arr=D%23
 &start_time_str=00%3A00--24%3A00
-&lishi=01%3A48
-&train_start_time=05%3A53
-&trainno4=54000G703120
-&arrive_time=07%3A41
+&lishi=02%3A27
+&train_start_time=04%3A48
+&trainno4=240000D31307
+&arrive_time=07%3A15
 &from_station_name=%E5%8D%97%E4%BA%AC
 &to_station_name=%E4%B8%8A%E6%B5%B7
-&ypInfoDetail=O*****06219*****0025O*****3176M*****0110
-&mmStr=16FD07FFF17260ED85F3ACBF68659498DC6E0E388938EAF24A0A0D92
+&from_station_no=02
+&to_station_no=04
+&ypInfoDetail=O*****00354*****0032O*****3000
+&mmStr=D2C97D0945DA6BAD2A5CE98309C7417D667CC38A85EBF9032131D4E5
+&locationCode=P2
 
 station_train_code=G233
 &train_date=2012-11-18
@@ -213,133 +244,89 @@ response
 320 move
 Location: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
 
-passenger info page(automatically, no need to GET)
-GET
-/otsweb/order/confirmPassengerAction.do?method=init
-
-response
-<input type="hidden" name="leftTicketStr" id="left_ticket"
-	value="O013500159M0230000599043000022" />
 
 validation picture
 GET
 /otsweb/passCodeAction.do?rand=randp
 
 
+confirm book button
 
-confirm book page
-GET
-/otsweb/order/confirmPassengerAction.do?method=getQueueCount
-&train_date=2012-11-18
-&station=G233
-&seat=M
-&from=NKH
-&to=AOH
-&ticket=O013500134M0230000589043000022
-
-
-response
-{"countT":0,"count":0,"ticket":58,"op_1":false,"op_2":false}
-
-confirm button
 POST
-/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueueOrder
+/otsweb/order/confirmPassengerAction.do?method=checkOrderInfo
+&rand=x978
 
-org.apache.struts.taglib.html.TOKEN=9d81db17cb535fe088cc794c7fbe6b57
-&leftTicketStr=O013500134M0230000589043000022
+post data
+org.apache.struts.taglib.html.TOKEN=b58b97b8c10ec135c4417f4d5a48777a
+&leftTicketStr=O0087500354018950032O008753000
 &textfield=%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D
-&checkbox0=0
-&orderRequest.train_date=2012-11-18
-&orderRequest.train_no=490000G23602
-&orderRequest.station_train_code=G233
-&orderRequest.from_station_telecode=NKH
-&orderRequest.to_station_telecode=AOH
+//UTF-8 for str "中文或拼音首字母"
+&orderRequest.train_date=2013-01-07
+&orderRequest.train_no=240000D31307
+&orderRequest.station_train_code=D313
+&orderRequest.from_station_telecode=NJH
+&orderRequest.to_station_telecode=SHH
 &orderRequest.seat_type_code=
 &orderRequest.seat_detail_type_code=
 &orderRequest.ticket_type_order_num=
 &orderRequest.bed_level_order_num=000000000000000000000000000000
-&orderRequest.start_time=22%3A04
-&orderRequest.end_time=23%3A11
-&orderRequest.from_station_name=%E5%8D%97%E4%BA%AC%E5%8D%97
-&orderRequest.to_station_name=%E4%B8%8A%E6%B5%B7%E8%99%B9%E6%A1%A5
+&orderRequest.start_time=04%3A48
+&orderRequest.end_time=07%3A15
+&orderRequest.from_station_name=%E5%8D%97%E4%BA%AC
+&orderRequest.to_station_name=%E4%B8%8A%E6%B5%B7
 &orderRequest.cancel_flag=1
 &orderRequest.id_mode=Y
-&passengerTickets=M%2C0%2C1%2C%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X%2C18912952106%2CY
+
+&passengerTickets=O%2C0%2C1%2C%E5%BC%A0%E4%B8%89%2C1%2C32032119831230701x%2C18912952106%2CN
+// last N/Y stand for save to contacts
 &oldPassengers=%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X
-&passenger_1_seat=M
+&passenger_1_seat=O
+// seat type
 &passenger_1_seat_detail=0
 &passenger_1_ticket=1
-&passenger_1_name=%E5%8D%9C%E6%98%86%E9%B9%8F
+// ticket type
+&passenger_1_name=%E5%BC%A0%E4%B8%89
 &passenger_1_cardtype=1
-&passenger_1_cardno=32032119831230701X
+// card type
+&passenger_1_cardno=32032119831230701x
 &passenger_1_mobileno=18912952106
-&checkbox9=Y
+
+&passengerTickets=4%2C0%2C1%2C%E6%9D%8E%E5%9B%9B%2C1%2C43012419860309496X%2C18912952107%2CN
+&oldPassengers=
+&passenger_2_seat=4
+&passenger_2_seat_detail_select=0
+&passenger_2_seat_detail=0
+&passenger_2_ticket=1
+&passenger_2_name=%E6%9D%8E%E5%9B%9B
+&passenger_2_cardtype=1
+&passenger_2_cardno=43012419860309496X
+&passenger_2_mobileno=18912952107
+
 &oldPassengers=
 &checkbox9=Y
 &oldPassengers=
 &checkbox9=Y
-&oldPassengers=
-&checkbox9=Y
-&oldPassengers=
-&checkbox9=Y
-&randCode=wedz
+&randCode=x978
 &orderRequest.reserve_flag=A
+&tFlag=dc
 
 response
-{"errMsg":"输入的验证码不正确！"}
+{"checkHuimd":"Y","check608":"Y","msg":"","errMsg":"Y"}
 
-retrieve validate picture
-GET
-/otsweb/passCodeAction.do?rand=randp&0.30058067906002117
-
-confirm button
-GET
+GET 
 /otsweb/order/confirmPassengerAction.do?method=getQueueCount
-&train_date=2012-11-18
-&station=G233
-&seat=M
-&from=NKH
-&to=AOH
-&ticket=O013500134M0230000589043000022
+&train_date=2013-01-07
+&train_no=240000D31307
+&station=D313
+&seat=O
+&from=NJH
+&to=SHH
+&ticket=O0087500354018950032O008753000
 
 response
-{"countT":0,"count":0,"ticket":58,"op_1":false,"op_2":false}
+{"countT":0,"count":8,"ticket":"O*****00324*****0032O*****3000","op_1":true,"op_2":false}
 
-confirm button
-POST
-/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueueOrder
 
-org.apache.struts.taglib.html.TOKEN=9d81db17cb535fe088cc794c7fbe6b57
-&leftTicketStr=O013500134M0230000589043000022
-&textfield=%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D&checkbox0=0
-&orderRequest.train_date=2012-11-18
-&orderRequest.train_no=490000G23602
-&orderRequest.station_train_code=G233
-&orderRequest.from_station_telecode=NKH
-&orderRequest.to_station_telecode=AOH
-&orderRequest.seat_type_code=
-&orderRequest.seat_detail_type_code=
-&orderRequest.ticket_type_order_num=
-&orderRequest.bed_level_order_num=000000000000000000000000000000
-&orderRequest.start_time=22%3A04
-&orderRequest.end_time=23%3A11
-&orderRequest.from_station_name=%E5%8D%97%E4%BA%AC%E5%8D%97
-&orderRequest.to_station_name=%E4%B8%8A%E6%B5%B7%E8%99%B9%E6%A1%A5
-&orderRequest.cancel_flag=1
-&orderRequest.id_mode=Y
-&passengerTickets=M%2C0%2C1%2C%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X%2C18912952106%2CY
-&oldPassengers=%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X
-&passenger_1_seat=M
-&passenger_1_seat_detail=0
-&passenger_1_ticket=1
-&passenger_1_name=%E5%8D%9C%E6%98%86%E9%B9%8F
-&passenger_1_cardtype=1
-&passenger_1_cardno=32032119831230701X
-&passenger_1_mobileno=18912952106
-&checkbox9=Y&oldPassengers=&checkbox9=Y&oldPassengers=&checkbox9=Y&oldPassengers=&checkbox9=Y
-&oldPassengers=&checkbox9=Y
-&randCode=n86k
-&orderRequest.reserve_flag=A
 
 wait page
 GET

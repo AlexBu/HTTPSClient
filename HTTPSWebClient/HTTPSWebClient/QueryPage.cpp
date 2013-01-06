@@ -1,40 +1,40 @@
 #include "StdAfx.h"
-#include "TicketInfo.h"
+#include "QueryPage.h"
 
-CTicketInfo::CTicketInfo(void)
+CQueryPage::CQueryPage(void)
 {
 }
 
-CTicketInfo::~CTicketInfo(void)
+CQueryPage::~CQueryPage(void)
 {
 }
 
-void CTicketInfo::trainCodeSet( CString& str )
+void CQueryPage::trainCodeSet( CString& str )
 {
 	trainCode = str;
 }
 
-void CTicketInfo::trainDateSet( CString& str )
+void CQueryPage::trainDateSet( CString& str )
 {
 	trainDate = str;
 }
 
-void CTicketInfo::stationFromCodeSet( CString& str )
+void CQueryPage::stationFromCodeSet( CString& str )
 {
 	stationFromCode = str;
 }
 
-void CTicketInfo::stationToCodeSet( CString& str )
+void CQueryPage::stationToCodeSet( CString& str )
 {
 	stationToCode = str;
 }
 
-void CTicketInfo::studentSet( CString& )
+void CQueryPage::studentSet( CString& )
 {
 	student = L"00";
 }
 
-void CTicketInfo::stationFromTeNameSet( CString& str )
+void CQueryPage::stationFromTeNameSet( CString& str )
 {
 	stationFromTeName.Empty();
 
@@ -55,7 +55,7 @@ void CTicketInfo::stationFromTeNameSet( CString& str )
 	}
 }
 
-void CTicketInfo::stationToTeNameSet( CString& str )
+void CQueryPage::stationToTeNameSet( CString& str )
 {
 	stationToTeName.Empty();
 
@@ -76,61 +76,60 @@ void CTicketInfo::stationToTeNameSet( CString& str )
 	}
 }
 
-void CTicketInfo::trainRoundDateSet( CString& )
+void CQueryPage::trainRoundDateSet( CString& str )
 {
-	CTime today = CTime::GetCurrentTime();
-	trainRoundDate = today.Format(L"%Y-%m-%d");
+	trainRoundDate = str;
 }
 
-void CTicketInfo::trainRoundTimeStrSet( CString& )
+void CQueryPage::trainRoundTimeStrSet( CString& )
 {
 	trainRoundTimeStr = L"00%3A00--24%3A00";
 }
 
-void CTicketInfo::roundTypeSet( CString& )
+void CQueryPage::roundTypeSet( CString& )
 {
 	roundType = L"1";
 }
 
-void CTicketInfo::passTypeSet( CString& )
+void CQueryPage::passTypeSet( CString& )
 {
 	passType = L"QB";
 }
 
-void CTicketInfo::trainClassSet( CString& )
+void CQueryPage::trainClassSet( CString& )
 {
-	trainClass = L"D%23";
+	trainClass = L"QB%23D%23Z%23T%23K%23QT%23";
 }
 
-void CTicketInfo::timeStartStrSet( CString& )
+void CQueryPage::timeStartStrSet( CString& )
 {
 	timeStartStr = L"00%3A00--24%3A00";
 }
 
-void CTicketInfo::durationSet( CString& str )
+void CQueryPage::durationSet( CString& str )
 {
 	duration = str;
 	duration.Replace(L":", L"%3A");
 }
 
-void CTicketInfo::trainStartTimeSet( CString& str )
+void CQueryPage::trainStartTimeSet( CString& str )
 {
 	trainStartTime = str;
 	trainStartTime.Replace(L":", L"%3A");
 }
 
-void CTicketInfo::trainNoSet( CString& str )
+void CQueryPage::trainNoSet( CString& str )
 {
 	trainNo = str;
 }
 
-void CTicketInfo::timeArriveSet( CString& str )
+void CQueryPage::timeArriveSet( CString& str )
 {
 	timeArrive = str;
 	timeArrive.Replace(L":", L"%3A");
 }
 
-void CTicketInfo::stationFromNameSet( CString& str )
+void CQueryPage::stationFromNameSet( CString& str )
 {
 	stationFromName.Empty();
 
@@ -151,7 +150,7 @@ void CTicketInfo::stationFromNameSet( CString& str )
 	}
 }
 
-void CTicketInfo::stationToNameSet( CString& str )
+void CQueryPage::stationToNameSet( CString& str )
 {
 	stationToName.Empty();
 
@@ -172,17 +171,32 @@ void CTicketInfo::stationToNameSet( CString& str )
 	}
 }
 
-void CTicketInfo::infoDetailSet( CString& str )
+void CQueryPage::stationFromNoSet( CString& str )
+{
+	stationFromNo = str;
+}
+
+void CQueryPage::stationToNoSet( CString& str )
+{
+	stationToNo = str;
+}
+
+void CQueryPage::infoDetailSet( CString& str )
 {
 	infoDetail = str;
 }
 
-void CTicketInfo::mmStrSet( CString& str )
+void CQueryPage::mmStrSet( CString& str )
 {
 	mmStr = str;
 }
 
-void CTicketInfo::strBuild( CString& str )
+void CQueryPage::locationCodeSet( CString& str )
+{
+	locationCode = str;
+}
+
+void CQueryPage::strBuild( CString& str )
 {
 	str.Format(L"station_train_code=%s"
 		L"&train_date=%s"
@@ -204,8 +218,11 @@ void CTicketInfo::strBuild( CString& str )
 		L"&arrive_time=%s"
 		L"&from_station_name=%s"
 		L"&to_station_name=%s"
+		L"&from_station_no=%s"
+		L"&to_station_no=%s"
 		L"&ypInfoDetail=%s"
-		L"&mmStr=%s",
+		L"&mmStr=%s"
+		L"&locationCode=%s",
 		//station_train_code=G7031
 		trainCode,
 		//	&train_date=2012-11-18
@@ -245,9 +262,15 @@ void CTicketInfo::strBuild( CString& str )
 		stationFromName,
 		//	&to_station_name=%E4%B8%8A%E6%B5%B7
 		stationToName,
+		//	&from_station_no=02
+		stationFromNo,
+		//	&to_station_no=04
+		stationToNo,
 		//	&ypInfoDetail=O*****06219*****0025O*****3176M*****0110
 		infoDetail,
 		//	&mmStr=16FD07FFF17260ED85F3ACBF68659498DC6E0E388938EAF24A0A0D92
-		mmStr
+		mmStr,
+		//	&locationCode=P2
+		locationCode
 		);
 }
