@@ -47,16 +47,33 @@ void CTicketInfo::stationFromTeNameSet( CString& str )
 		buff = new char[buffSize + 1];
 		ZeroMemory(buff, (buffSize + 1)*sizeof(char));
 		WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), buff, buffSize, 0, 0);
-		for(int i = 0; i < buffSize + 1; i++)
+		for(int i = 0; i < buffSize; i++)
 		{
-			stationFromTeName.AppendFormat(L"%%%02X", buff[i]);
+			stationFromTeName.AppendFormat(L"%%%02X", (unsigned char)buff[i]);
 		}
+		delete []buff;
 	}
 }
 
 void CTicketInfo::stationToTeNameSet( CString& str )
 {
-	stationToTeName = str;
+	stationToTeName.Empty();
+
+	// transform post string to MBCS type
+	char* buff = NULL;
+	int buffSize = 0;
+	buffSize = WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), NULL, 0, 0, 0);
+	if(buffSize > 0)
+	{
+		buff = new char[buffSize + 1];
+		ZeroMemory(buff, (buffSize + 1)*sizeof(char));
+		WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), buff, buffSize, 0, 0);
+		for(int i = 0; i < buffSize; i++)
+		{
+			stationToTeName.AppendFormat(L"%%%02X", (unsigned char)buff[i]);
+		}
+		delete []buff;
+	}
 }
 
 void CTicketInfo::trainRoundDateSet( CString& )
@@ -115,12 +132,44 @@ void CTicketInfo::timeArriveSet( CString& str )
 
 void CTicketInfo::stationFromNameSet( CString& str )
 {
-	stationFromName = str;
+	stationFromName.Empty();
+
+	// transform post string to MBCS type
+	char* buff = NULL;
+	int buffSize = 0;
+	buffSize = WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), NULL, 0, 0, 0);
+	if(buffSize > 0)
+	{
+		buff = new char[buffSize + 1];
+		ZeroMemory(buff, (buffSize + 1)*sizeof(char));
+		WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), buff, buffSize, 0, 0);
+		for(int i = 0; i < buffSize; i++)
+		{
+			stationFromName.AppendFormat(L"%%%02X", (unsigned char)buff[i]);
+		}
+		delete []buff;
+	}
 }
 
 void CTicketInfo::stationToNameSet( CString& str )
 {
-	stationToName = str;
+	stationToName.Empty();
+
+	// transform post string to MBCS type
+	char* buff = NULL;
+	int buffSize = 0;
+	buffSize = WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), NULL, 0, 0, 0);
+	if(buffSize > 0)
+	{
+		buff = new char[buffSize + 1];
+		ZeroMemory(buff, (buffSize + 1)*sizeof(char));
+		WideCharToMultiByte(CP_UTF8, 0, str.GetString(), str.GetLength(), buff, buffSize, 0, 0);
+		for(int i = 0; i < buffSize; i++)
+		{
+			stationToName.AppendFormat(L"%%%02X", (unsigned char)buff[i]);
+		}
+		delete []buff;
+	}
 }
 
 void CTicketInfo::infoDetailSet( CString& str )

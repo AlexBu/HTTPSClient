@@ -643,7 +643,20 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 			resultStr.AppendFormat(L"%s\r\n", tempStr);
 			ticketInfo.mmStrSet(tempStr);
 
+			CString str(L"");
+			ticketInfo.studentSet(str);
+			ticketInfo.trainRoundTimeStrSet(str);
+			ticketInfo.roundTypeSet(str);
+			ticketInfo.passTypeSet(str);
+			ticketInfo.trainClassSet(str);
+			ticketInfo.timeStartStrSet(str);
+			ticketInfo.trainRoundDateSet(str);
+			ticketInfo.trainDateSet(date);
+
 			ticketInfo.strBuild(tempStr);
+
+			// test on the first result
+			break;
 		}
 
 		resultStr += L"\r\n";
@@ -652,6 +665,52 @@ void CHTTPSWebClientApp::QueryTickets(CString& date)
 		restStr.Empty();
 	}
 
+	// test on the first result
+	// TODO: modify these codes!
+	// build login string
+	CString loginAdr, loginStr;
+	loginAdr = _T("/otsweb/loginAction.do?method=login");
+	loginStr.Format(L"loginRand=%s"
+		L"&refundLogin=N"
+		L"&refundFlag=Y"
+		L"&loginUser.user_name=%s"
+		L"&nameErrorFocus="
+		L"&user.password=%s"
+		L"&passwordErrorFocus="
+		L"&randCode=%s"
+		L"&randErrorFocus=", 
+		rand, 
+		//usernameStr, passwordStr, 
+		_T("bkp84335"), _T("bsp2236"),
+		validateStr);
+
+	// transform post string to MBCS type
+	char* postData = NULL;
+	int postDataSize = 0;
+	postDataSize = WideCharToMultiByte(936, 0, loginStr.GetString(), loginStr.GetLength(), NULL, 0, 0, 0);
+	if(postDataSize > 0)
+	{
+		postData = new char[postDataSize + 1];
+		ZeroMemory(postData, (postDataSize + 1)*sizeof(char));
+		WideCharToMultiByte(936, 0, loginStr.GetString(), loginStr.GetLength(), postData, postDataSize, 0, 0);
+	}
+
+	refererStr = _T("/otsweb/loginAction.do?method=init");
+	acptTypStr = _T("text/html, application/xhtml+xml, */*");
+	hRequest = SendRequest(1, refererStr, acptTypStr, loginAdr, (const BYTE*)postData, postDataSize);
+
+	if(hRequest)
+		GetResponse(hRequest);
+	else
+		return;
+
+	if(postDataSize > 0)
+	{
+		delete []postData;
+	}
+
+	ConvertToUTF();
+	// TODO: modify these codes!
 
 	// organize the output
 	((CHTTPSWebClientDlg*)m_pMainWnd)->RespondString = resultStr;
