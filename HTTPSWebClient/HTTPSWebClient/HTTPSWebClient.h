@@ -36,7 +36,7 @@ public:
 	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
 	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr, CString& result);
 	void ConnectToURL( const CString& URLString );
-	void QueryTickets(CString& date, CString& train, CString& result);
+	void QueryTickets(CString& date, CString& train, CString& stationFrom, CString& stationTo, CString& result);
 	void BookTickets(CString& date);
 
 private:

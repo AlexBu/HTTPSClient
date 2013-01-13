@@ -64,6 +64,9 @@ private:
 
 	CString trainNo;
 
+	CString stationFrom;
+	CString stationTo;
+
 public:
 	CValPic valPicLoginCtrl;
 	CValPic valPicBookCtrl;

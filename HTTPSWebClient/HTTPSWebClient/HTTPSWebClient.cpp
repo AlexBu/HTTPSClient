@@ -177,7 +177,11 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	return;
 }
 
-void CHTTPSWebClientApp::QueryTickets(CString& date, CString& train, CString& result)
+void CHTTPSWebClientApp::QueryTickets(CString& date, 
+									  CString& train, 
+									  CString& stationFrom, 
+									  CString& stationTo, 
+									  CString& result)
 {
 	// build up a test information
 	CString queryStr;

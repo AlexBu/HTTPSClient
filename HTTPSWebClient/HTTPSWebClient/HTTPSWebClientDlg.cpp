@@ -35,6 +35,8 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, mobileP2(_T(""))
 	, seatTypeP2(_T(""))
 	, trainNo(_T(""))
+	, stationFrom(_T(""))
+	, stationTo(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -60,6 +62,8 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_MOB_P2, mobileP2);
 	DDX_Text(pDX, IDC_EDIT_SEATTYP_P2, seatTypeP2);
 	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
+	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
+	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -174,7 +178,7 @@ void CHTTPSWebClientDlg::OnQuery()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	theApp.QueryTickets(dateString, trainNo, RespondString);
+	theApp.QueryTickets(dateString, trainNo, stationFrom, stationTo, RespondString);
 	// set response
 	UpdateData(FALSE);
 }
