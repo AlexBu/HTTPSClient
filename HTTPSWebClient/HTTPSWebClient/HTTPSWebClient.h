@@ -12,6 +12,7 @@
 #include "ValidatePicture.h"
 #include "regex.h"
 #include "QueryPage.h"
+#include "HTTPContent.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -30,29 +31,17 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	void GetFromURL( const CString& URLString );
-	void PostToURL(const CString& webResString, const CString& PostString);
+	void GetFromURL( const CString& URLString, CString& result );
+	void PostToURL(const CString& webResString, const CString& PostString, CString& result);
 	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
-	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr);
-	BOOL ConnectToURL( const CString& URLString );
-	HINTERNET SendRequest(int verb, const CString& refererStr, const CString& acceptTypStr, const CString& webResStr, const BYTE* addtionData, const DWORD addtionSize);
-	BOOL GetResponse(HINTERNET hRequest);
-	DWORD GetValidBufferSize();
-	LPVOID GetBufferData();
-	void QueryTickets(CString& date);
+	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr, CString& result);
+	void ConnectToURL( const CString& URLString );
+	void QueryTickets(CString& date, CString& train, CString& result);
 	void BookTickets(CString& date);
 
 private:
-	void ConvertToUTF();
-	BOOL convertToBMP(unsigned int *bmpWidth,unsigned int *bmpHeight,DWORD *bmpSize);
-private:
-	HINTERNET	hSession;
-	HINTERNET	hConnect;
-	BYTE*		picBuff;
-	BYTE*		htmlResponseBuff;
-	DWORD		htmlResponseSize;
-	CString		htmlResponseStr;
 	CRegex		regex;
 	CQueryPage	ticketInfo;
+	CHTTPContent httpContent;
 };
 extern CHTTPSWebClientApp theApp;

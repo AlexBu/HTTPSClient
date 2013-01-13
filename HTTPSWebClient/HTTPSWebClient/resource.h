@@ -26,10 +26,24 @@
 #define IDC_EDIT3                       1015
 #define IDC_EDIT_VALIPIC                1015
 #define IDC_BUTTON2                     1016
-#define IDC_BUTTON_QUERY2               1016
 #define IDC_BUTTON_BOOK                 1016
 #define IDC_STATIC_VALIDATE_PIC_BOOK    1017
 #define IDC_EDIT_DATE                   1019
+#define IDC_EDIT_USERNAME               1020
+#define IDC_EDIT_PASSWORD               1021
+#define IDC_EDIT_VAL_PIC_BOOK           1022
+#define IDC_EDIT_NAME_P1                1023
+#define IDC_EDIT_IDTYP_P1               1024
+#define IDC_EDIT_IDNO_P1                1025
+#define IDC_EDIT_MOB_P1                 1026
+#define IDC_EDIT_SEATTYP_P1             1027
+#define IDC_EDIT_NAME_P2                1028
+#define IDC_EDIT_IDTYP_P2               1029
+#define IDC_EDIT_IDNO_P2                1030
+#define IDC_EDIT_MOB_P2                 1031
+#define IDC_EDIT_SEATTYP_P2             1032
+#define IDC_EDIT1                       1033
+#define IDC_EDIT_TRAIN                  1033
 
 // Next default values for new objects
 // 
@@ -37,7 +51,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1020
+#define _APS_NEXT_CONTROL_VALUE         1034
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

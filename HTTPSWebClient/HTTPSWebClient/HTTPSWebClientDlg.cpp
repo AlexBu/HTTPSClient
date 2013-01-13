@@ -18,14 +18,23 @@
 
 CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CHTTPSWebClientDlg::IDD, pParent)
-	, WebResString(_T(""))
-	, POSTString(_T(""))
 	, RespondString(_T(""))
 	, AddrString(_T(""))
 	, usernameStr(_T(""))
 	, passwordStr(_T(""))
 	, validateStr(_T(""))
 	, dateString(_T(""))
+	, nameP1(_T(""))
+	, identityTypeP1(_T(""))
+	, identityNoP1(_T(""))
+	, mobileP1(_T(""))
+	, seatTypeP1(_T(""))
+	, nameP2(_T(""))
+	, identityTypeP2(_T(""))
+	, identityNoP2(_T(""))
+	, mobileP2(_T(""))
+	, seatTypeP2(_T(""))
+	, trainNo(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -33,21 +42,30 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_EDIT_URL, WebResString);
-	DDX_Text(pDX, IDC_EDIT_POST, POSTString);
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
 	DDX_Text(pDX, IDC_EDIT_VALIPIC, validateStr);
 	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_LOGIN, valPicLoginCtrl);
 	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_BOOK, valPicBookCtrl);
 	DDX_Text(pDX, IDC_EDIT_DATE, dateString);
+	DDX_Text(pDX, IDC_EDIT_USERNAME, usernameStr);
+	DDX_Text(pDX, IDC_EDIT_PASSWORD, passwordStr);
+	DDX_Text(pDX, IDC_EDIT_NAME_P1, nameP1);
+	DDX_Text(pDX, IDC_EDIT_IDTYP_P1, identityTypeP1);
+	DDX_Text(pDX, IDC_EDIT_IDNO_P1, identityNoP1);
+	DDX_Text(pDX, IDC_EDIT_MOB_P1, mobileP1);
+	DDX_Text(pDX, IDC_EDIT_SEATTYP_P1, seatTypeP1);
+	DDX_Text(pDX, IDC_EDIT_NAME_P2, nameP2);
+	DDX_Text(pDX, IDC_EDIT_IDTYP_P2, identityTypeP2);
+	DDX_Text(pDX, IDC_EDIT_IDNO_P2, identityNoP2);
+	DDX_Text(pDX, IDC_EDIT_MOB_P2, mobileP2);
+	DDX_Text(pDX, IDC_EDIT_SEATTYP_P2, seatTypeP2);
+	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_BUTTON_GET, &CHTTPSWebClientDlg::OnGet)
-	ON_BN_CLICKED(IDC_BUTTON_POST, &CHTTPSWebClientDlg::OnPost)
 	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValLoginPic)
 	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
 	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC2, &CHTTPSWebClientDlg::OnGetValBookPic)
@@ -68,6 +86,10 @@ BOOL CHTTPSWebClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	InitUserInfo();
+	InitPassengerInfo();
+
+	UpdateData(FALSE);
 
 	// connect to site
 	ConnectToSite();
@@ -111,43 +133,6 @@ HCURSOR CHTTPSWebClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
-void CHTTPSWebClientDlg::OnGet()
-{
-	// check URL and try to connect
-	UpdateData(TRUE);
-
-	CheckURL();
-
-	theApp.GetFromURL(WebResString);
-
-	// set GET content
-	UpdateData(FALSE);
-}
-
-void CHTTPSWebClientDlg::OnPost()
-{
-	UpdateData(TRUE);
-
-	theApp.PostToURL(WebResString, POSTString);
-
-	// set response
-	UpdateData(FALSE);
-}
-
-void CHTTPSWebClientDlg::CheckURL()
-{
-	return;
-}
-
-void CHTTPSWebClientDlg::Test_SetURL()
-{
-	//test: set URL to 12306
-	//URLString = L"www.12306.cn/mormhweb/myfw/";
-	WebResString = L"www.12306.cn";
-	UpdateData(FALSE);
-}
-
 void CHTTPSWebClientDlg::ConnectToSite()
 {
 	AddrString = _T("dynamic.12306.cn");
@@ -169,7 +154,7 @@ void CHTTPSWebClientDlg::OnLogin()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	theApp.LoginToSite(usernameStr, passwordStr, validateStr);
+	theApp.LoginToSite(usernameStr, passwordStr, validateStr, RespondString);
 	// set response
 	UpdateData(FALSE);
 }
@@ -189,7 +174,7 @@ void CHTTPSWebClientDlg::OnQuery()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	theApp.QueryTickets(dateString);
+	theApp.QueryTickets(dateString, trainNo, RespondString);
 	// set response
 	UpdateData(FALSE);
 }
@@ -201,4 +186,27 @@ void CHTTPSWebClientDlg::OnBook()
 	theApp.BookTickets(dateString);
 	// set response
 	UpdateData(FALSE);
+}
+
+void CHTTPSWebClientDlg::InitUserInfo()
+{
+	usernameStr = L"bkp84335";
+	passwordStr = L"bsp2236";
+
+	dateString= L"2013-01-15";
+	trainNo = L"D305";
+}
+
+void CHTTPSWebClientDlg::InitPassengerInfo()
+{
+	nameP1 = L"张三";
+	nameP2 = L"李四";
+	identityTypeP1 = L"0";
+	identityTypeP2 = L"0";
+	identityNoP1 = L"32032119831230701X";
+	identityNoP2 = L"43012419860309496X";
+	mobileP1 = L"18912952107";
+	mobileP2 = L"18912952107";
+	seatTypeP1 = L"O";
+	seatTypeP2 = L"O";
 }

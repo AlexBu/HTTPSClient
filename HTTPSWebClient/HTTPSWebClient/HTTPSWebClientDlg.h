@@ -30,30 +30,42 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnGet();
 
-	void Test_SetURL();
-
-	void CheckURL();
-private:
-	CString WebResString;
-	CString dateString;
-public:
-	CString POSTString;
-	CString RespondString;
-	CString AddrString;
-	void ConnectToSite();
-	afx_msg void OnPost();
+protected:
 	afx_msg void OnGetValLoginPic();
-	CValPic valPicLoginCtrl;
 	afx_msg void OnLogin();
+	afx_msg void OnGetValBookPic();
+	afx_msg void OnQuery();
+	afx_msg void OnBook();
+
+public:
+	void ConnectToSite();
+	void InitUserInfo();
+	void InitPassengerInfo();
+
+private:
+	CString dateString;	
+	CString AddrString;
 	CString usernameStr;
 	CString passwordStr;
 	CString validateStr;
-	CValPic valPicBookCtrl;
-	afx_msg void OnGetValBookPic();
-	afx_msg void OnQuery();
 
-	afx_msg void OnBook();
+	CString nameP1;
+	CString identityTypeP1;
+	CString identityNoP1;
+	CString mobileP1;
+	CString seatTypeP1;
+
+	CString nameP2;
+	CString identityTypeP2;
+	CString identityNoP2;
+	CString mobileP2;
+	CString seatTypeP2;
+
+	CString trainNo;
+
+public:
+	CValPic valPicLoginCtrl;
+	CValPic valPicBookCtrl;
+	CString RespondString;
 };
