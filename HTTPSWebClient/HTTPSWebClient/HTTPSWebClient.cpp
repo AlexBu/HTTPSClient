@@ -11,6 +11,12 @@
 
 #include <atlrx.h>
 
+#include "LoginRandPageIn.h"
+#include "LoginRandPageOut.h"
+#include "LoginRandPage.h"
+
+#include "LoginPage.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -129,11 +135,24 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 									 CString& result)
 {
 	// post request to get rand number
+	CLoginRandPageIn loginRandPageIn;
+	CLoginRandPageOut loginRandPageOut;
+	CLoginRandPage loginRandPage;
+
+	loginRandPage.CollectInput(loginRandPageIn);
+	loginRandPage.GetPageData(httpContent);
+	loginRandPage.ParseOutput(loginRandPageOut);
+
 	CString requestRandStr = _T("/otsweb/loginAction.do?method=loginAysnSuggest");
 	CString loginPageResStr;
 
 	httpContent.SendDatabyGet(requestRandStr);
 	httpContent.GetResponseStr(loginPageResStr);
+
+	CLoginPage loginPage;
+	loginPage.CollectInfoFromResp(loginPageResStr);
+
+	loginPage.BuildRequestString(usernameStr, passwordStr, validateStr);
 
 	// get rand number from response
 	CString patternRand = L"{\\d+}";
@@ -186,9 +205,6 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 	// build up a test information
 	CString queryStr;
 	CString queryRespStr;
-
-	CString refererStr = _T("/otsweb/loginAction.do?method=init");
-	CString acptTypStr = _T("text/html, application/xhtml+xml, */*");
 
 	queryStr.Format( L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
 		L"&orderRequest.train_date=%s"
@@ -303,7 +319,25 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 
 void CHTTPSWebClientApp::BookTickets( CString& date )
 {
-	// currently it must be used after QueryTickets
+	// precondition: login
+	// steps:
+	// 1. query train, with loop format
+	// 2. book ticket
+	// 3. confirm passenger
+	// 4. wait for result
+	// 5. return result
 
-	// analyze query result page
+	//CTestTrainNoInfo test_trainNoInfo;
+	//while(queryTrainNo(test_trainNoInfo) != TRUE)
+	//	;
+
+	//CTestTicketInfo test_ticketInfo;
+
+	//bookTicket(test_ticketInfo)
+
+	//confirmPassenger();
+
+	//waitForResult();
+
+	//returnResult();
 }

@@ -211,7 +211,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoginInfo.cpp"
+				RelativePath=".\LoginPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPageIn.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPageOut.cpp"
 				>
 			</File>
 			<File
@@ -269,7 +281,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoginInfo.h"
+				RelativePath=".\LoginPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPageIn.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPageOut.h"
 				>
 			</File>
 			<File

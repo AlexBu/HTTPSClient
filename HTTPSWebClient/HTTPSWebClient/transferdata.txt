@@ -4,6 +4,29 @@ dynamic.12306.cn
 types:
 https
 
+pages:
+/otsweb/passCodeAction.do?rand=sjrand
+/otsweb/loginAction.do?method=loginAysnSuggest		Post
+/otsweb/loginAction.do?method=login					Post
+/otsweb/passCodeAction.do?rand=randp
+/otsweb/order/querySingleAction.do?method=queryLeftTicket
+/otsweb/order/querySingleAction.do?method=submutOrderRequest	Post
+/otsweb/order/confirmPassengerAction.do?method=checkOrderInfo	Post
+/otsweb/order/confirmPassengerAction.do?method=getQueueCount
+/otsweb/order/myOrderAction.do?method=getOrderWaitTime
+
+CLoginValPic
+CLoginRand
+CLoginPage
+
+CQueryTicket
+COrderTicket
+
+CBookValPic
+CCheckOrder
+CGetQueue
+CWaitTime
+
 login page
 GET
 /otsweb/loginAction.do?method=init
@@ -42,6 +65,7 @@ respond
 book ticket page
 GET
 /otsweb/order/querySingleAction.do?method=init
+deprecated
 
 GET
 /otsweb/order/querySingleAction.do?method=queryLeftTicket
