@@ -15,6 +15,8 @@
 #include "LoginRandPageOut.h"
 #include "LoginRandPage.h"
 
+#include "LoginPageIn.h"
+#include "LoginPageOut.h"
 #include "LoginPage.h"
 
 #ifdef _DEBUG
@@ -143,52 +145,20 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 	loginRandPage.GetPageData(httpContent);
 	loginRandPage.ParseOutput(loginRandPageOut);
 
-	CString requestRandStr = _T("/otsweb/loginAction.do?method=loginAysnSuggest");
-	CString loginPageResStr;
-
-	httpContent.SendDatabyGet(requestRandStr);
-	httpContent.GetResponseStr(loginPageResStr);
-
+	CLoginPageIn loginPageIn;
+	CLoginPageOut loginPageOut;
 	CLoginPage loginPage;
-	loginPage.CollectInfoFromResp(loginPageResStr);
 
-	loginPage.BuildRequestString(usernameStr, passwordStr, validateStr);
+	loginPageIn.usernameSet(usernameStr);
+	loginPageIn.passwordSet(passwordStr);
+	loginPageIn.validateSet(validateStr);
+	loginPageIn.randSet(loginRandPageOut);
 
-	// get rand number from response
-	CString patternRand = L"{\\d+}";
-	regex.patternLoad(patternRand);
-	CString restStr;
-	regex.contextMatch(loginPageResStr, restStr);
-	CString rand;
-	regex.matchGet(0, rand);
+	loginPage.CollectInput(loginPageIn);
+	loginPage.GetPageData(httpContent);
+	loginPage.ParseOutput(loginPageOut);
 
-	// build login string
-	CString loginAdr, loginStr;
-	loginAdr = _T("/otsweb/loginAction.do?method=login");
-	loginStr.Format(L"loginRand=%s"
-		L"&refundLogin=N"
-		L"&refundFlag=Y"
-		L"&loginUser.user_name=%s"
-		L"&nameErrorFocus="
-		L"&user.password=%s"
-		L"&passwordErrorFocus="
-		L"&randCode=%s"
-		L"&randErrorFocus=", 
-		rand, 
-		usernameStr, passwordStr, 
-		validateStr);
-
-	httpContent.SendDatabyPost(loginAdr, loginStr);
-	httpContent.GetResponseStr(loginPageResStr);
-
-	CString patternTitle = L"<[tT][iI][tT][lL][eE]>{[^</>]+}</[tT][iI][tT][lL][eE]>";
-	regex.patternLoad(patternTitle);
-	CString restStr2;
-	regex.contextMatch(loginPageResStr, restStr2);
-	CString titleStr;
-	regex.matchGet(0, titleStr);
-
-	if(titleStr == L"系统消息")
+	if(loginPageOut.loginGet() == TRUE)
 	{
 		result = L"log in success!";
 	}

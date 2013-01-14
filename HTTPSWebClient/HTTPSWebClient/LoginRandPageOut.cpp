@@ -14,3 +14,8 @@ void CLoginRandPageOut::randSet( CString& str )
 {
 	rand = str;
 }
+
+CString CLoginRandPageOut::randGet()
+{
+	return rand;
+}
