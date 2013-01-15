@@ -12,7 +12,14 @@
 #include "ValidatePicture.h"
 #include "regex.h"
 #include "HTTPContent.h"
-#include "TicketInfo.h"
+#include "Info.h"
+#include "LoginRandPage.h"
+#include "LoginPage.h"
+#include "QueryPage.h"
+#include "BookPage.h"
+#include "CheckPage.h"
+#include "ConfirmPage.h"
+#include "WaitPage.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -31,17 +38,25 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	void GetFromURL( const CString& URLString, CString& result );
-	void PostToURL(const CString& webResString, const CString& PostString, CString& result);
 	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
 	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr, CString& result);
 	void ConnectToURL( const CString& URLString );
 	void QueryTickets(CString& date, CString& train, CString& stationFrom, CString& stationTo, CString& result, CString& validateStr);
-	void BookTickets(CString& date);
 
 private:
-	CRegex		regex;
 	CHTTPContent httpContent;
+	LoginInfo loginInfo;
+	CLoginRandPage loginRandPage;
+	CLoginPage loginPage;
+	QueryInfo queryInfo;
+	CQueryPage queryPage;
+	TrainInfo trainInfo;
+	CBookPage bookPage;
+	TicketInfo ticketInfo;
+	CCheckPage checkPage;
+	OrderInfo orderInfo;
+	CConfirmPage confirmPage;
+	CWaitPage waitPage;
 public:
 	PassengerInfo passengerInfo[5];
 };

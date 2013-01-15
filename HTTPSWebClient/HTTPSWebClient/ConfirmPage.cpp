@@ -3,10 +3,8 @@
 #include "regex.h"
 
 CConfirmPage::CConfirmPage(void)
-:reqStr(L"")
-,reqData(L"")
-,respStr(L"")
 {
+	isGet = FALSE;
 }
 
 CConfirmPage::~CConfirmPage(void)
@@ -17,12 +15,6 @@ void CConfirmPage::BuildRequest( OrderInfo& input )
 {
 	reqStr = L"/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueueOrder";
 	reqData = input.orderInfo;
-}
-
-void CConfirmPage::GetPageData( CHTTPContent& content )
-{
-	content.SendDatabyPost(reqStr, reqData);
-	content.GetResponseStr(respStr);
 }
 
 void CConfirmPage::ParseOutput( OrderInfo& output )
@@ -40,8 +32,12 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 	matchStr = restStr;
 	restStr.Empty();
 
-	if(output.errMsg == L"Y")
+	if(output.errMsg == L"\"Y\"")
 	{
-		// return ok status
+		status = 0;
+	}
+	else
+	{
+		status = -1;
 	}
 }

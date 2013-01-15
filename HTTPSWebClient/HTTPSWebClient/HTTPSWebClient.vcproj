@@ -227,31 +227,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoginPageIn.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginPageOut.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LoginRandPage.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\LoginRandPageIn.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginRandPageOut.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\OrderInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\QueryInfo.cpp"
+				RelativePath=".\Page.cpp"
 				>
 			</File>
 			<File
@@ -281,14 +261,6 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\TicketInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TrainInfo.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\Utility.cpp"
@@ -333,6 +305,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Info.h"
+				>
+			</File>
+			<File
 				RelativePath=".\jpg.h"
 				>
 			</File>
@@ -341,31 +317,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoginPageIn.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginPageOut.h"
-				>
-			</File>
-			<File
 				RelativePath=".\LoginRandPage.h"
 				>
 			</File>
 			<File
-				RelativePath=".\LoginRandPageIn.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginRandPageOut.h"
-				>
-			</File>
-			<File
-				RelativePath=".\OrderInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QueryInfo.h"
+				RelativePath=".\Page.h"
 				>
 			</File>
 			<File
@@ -386,14 +342,6 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TicketInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TrainInfo.h"
 				>
 			</File>
 			<File

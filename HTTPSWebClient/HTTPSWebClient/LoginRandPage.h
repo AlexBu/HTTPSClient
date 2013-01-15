@@ -1,20 +1,11 @@
 #pragma once
+#include "Page.h"
 
-#include "LoginRandPageIn.h"
-#include "LoginRandPageOut.h"
-#include "HTTPContent.h"
-
-class CLoginRandPage
+class CLoginRandPage : public CPage
 {
 public:
 	CLoginRandPage(void);
-	virtual ~CLoginRandPage(void);
-	void CollectInput( CLoginRandPageIn& input );
-	void GetPageData(CHTTPContent &content);
-	void ParseOutput( CLoginRandPageOut& output );
-private: 
-	void BuildRequestURL();
-private:
-	CString reqStr;
-	CString respStr;
+	~CLoginRandPage(void);
+	void BuildRequest();
+	void ParseOutput( LoginInfo& output );
 };

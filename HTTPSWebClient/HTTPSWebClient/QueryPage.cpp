@@ -3,8 +3,6 @@
 #include "regex.h"
 
 CQueryPage::CQueryPage(void)
-:reqStr(L"")
-,respStr(L"")
 {
 }
 
@@ -26,12 +24,6 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 		L"&orderRequest.start_time_str=05%%3A00--08%%3A01", input.departDate);
 }
 
-void CQueryPage::GetPageData( CHTTPContent& content )
-{
-	content.SendDatabyGet(reqStr);
-	content.GetResponseStr(respStr);
-}
-
 void CQueryPage::ParseOutput( TrainInfo& output )
 {
 	// split results
@@ -46,7 +38,7 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 
 	matchStr = respStr;
 
-	// get the first record
+	status = -1;
 	while(regex.contextMatch(matchStr, restStr))
 	{
 		if(regex.matchCount() == 14)
@@ -69,9 +61,7 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 				regex.matchGet(12, output.mmStr);
 				regex.matchGet(13, output.locationCode);
 
-				output.stationFromName = output.stationFromTeName;
-				output.stationToName = output.stationToTeName;
-
+				status = 0;
 				break;
 			}
 		}

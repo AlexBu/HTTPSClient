@@ -1,15 +1,12 @@
 #pragma once
-#include "TicketInfo.h"
-#include "OrderInfo.h"
-#include "HTTPContent.h"
+#include "Page.h"
 
-class CCheckPage
+class CCheckPage: public CPage
 {
 public:
 	CCheckPage(void);
 	~CCheckPage(void);
 	void BuildRequest( TicketInfo& input );
-	void GetPageData( CHTTPContent& content );
 	void ParseOutput( OrderInfo& output );
 	CString textfieldGet( TicketInfo& input );
 	CString start_timeGet( TicketInfo& input );
@@ -22,9 +19,4 @@ public:
 	CString seat_detailGet( PassengerInfo& passenger );
 	CString ticketGet( PassengerInfo& passenger );
 	CString nameGet( PassengerInfo& passenger );
-
-private:
-	CString reqStr;
-	CString reqData;
-	CString respStr;
 };

@@ -11,20 +11,6 @@
 
 #include <atlrx.h>
 
-#include "LoginRandPageIn.h"
-#include "LoginRandPageOut.h"
-#include "LoginRandPage.h"
-
-#include "LoginPageIn.h"
-#include "LoginPageOut.h"
-#include "LoginPage.h"
-
-#include "QueryPage.h"
-#include "BookPage.h"
-#include "CheckPage.h"
-#include "ConfirmPage.h"
-#include "WaitPage.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -94,18 +80,6 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 	httpContent.ConnectSite(URLString);
 }
 
-void CHTTPSWebClientApp::GetFromURL( const CString& webResString, CString& result )
-{
-	httpContent.SendDatabyGet(webResString);
-	httpContent.GetResponseStr(result);
-}
-
-void CHTTPSWebClientApp::PostToURL(const CString& webResString, const CString& PostString, CString& result)
-{
-	httpContent.SendDatabyPost(webResString, PostString);
-	httpContent.GetResponseStr(result);
-}
-
 BOOL CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl)
 {
 	// get validation picture data and display it on picture control
@@ -143,32 +117,28 @@ void CHTTPSWebClientApp::LoginToSite(const CString& usernameStr,
 									 CString& result)
 {
 	// post request to get rand number
-	CLoginRandPageIn loginRandPageIn;
-	CLoginRandPageOut loginRandPageOut;
-	CLoginRandPage loginRandPage;
-
-	loginRandPage.CollectInput(loginRandPageIn);
+	loginRandPage.BuildRequest();
 	loginRandPage.GetPageData(httpContent);
-	loginRandPage.ParseOutput(loginRandPageOut);
+	loginRandPage.ParseOutput(loginInfo);
 
-	CLoginPageIn loginPageIn;
-	CLoginPageOut loginPageOut;
-	CLoginPage loginPage;
-
-	loginPageIn.usernameSet(usernameStr);
-	loginPageIn.passwordSet(passwordStr);
-	loginPageIn.validateSet(validateStr);
-	loginPageIn.randSet(loginRandPageOut);
-
-	loginPage.CollectInput(loginPageIn);
-	loginPage.GetPageData(httpContent);
-	loginPage.ParseOutput(loginPageOut);
-
-	if(loginPageOut.loginGet() == TRUE)
+	if(loginRandPage.GetStatus() != 0)
 	{
-		result = L"log in success!";
+		result = L"log in failed: retrieve rand error.";
+		return;
 	}
 
+	loginInfo.username = usernameStr;
+	loginInfo.password = passwordStr;
+	loginInfo.validate = validateStr;
+
+	loginPage.BuildRequest(loginInfo);
+	loginPage.GetPageData(httpContent);
+	loginPage.ParseOutput();
+
+	if(loginPage.GetStatus() == 0)
+		result = L"log in success!";
+	else
+		result.Format(L"login failed: error code %d", loginPage.GetStatus());
 	return;
 }
 
@@ -179,11 +149,7 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 									  CString& result,
 									  CString& validateStr)
 {
-	QueryInfo queryInfo;
-	CQueryPage queryPage;
-	TrainInfo trainInfo;
-
-	result += L"\rquerying train...";
+	result += L"\r\nquerying train...";
 
 	queryInfo.departDate = date;
 	trainInfo.trainCode = train;
@@ -191,10 +157,13 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 	queryPage.GetPageData(httpContent);
 	queryPage.ParseOutput(trainInfo);
 
-	result += L"\rbooking tickets...";
+	if(queryPage.GetStatus() != 0)
+	{
+		result.Format(L"query failed: error code %d", queryPage.GetStatus());
+		return;
+	}
 
-	CBookPage bookPage;
-	TicketInfo ticketInfo;
+	result += L"\r\nbooking tickets...";
 
 	trainInfo.trainDate = date;
 	trainInfo.trainRoundDate = date;
@@ -202,10 +171,13 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 	bookPage.GetPageData(httpContent);
 	bookPage.ParseOutput(ticketInfo);
 
-	result += L"\rchecking order...";
+	if(bookPage.GetStatus() != 0)
+	{
+		result.Format(L"book failed: error code %d", bookPage.GetStatus());
+		return;
+	}
+	result += L"\r\nchecking order...";
 
-	CCheckPage checkPage;
-	OrderInfo orderInfo;
 
 	ticketInfo.randCode =  validateStr;
 	ticketInfo.passengers[0].seat = passengerInfo[0].seat;
@@ -227,53 +199,48 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 	checkPage.GetPageData(httpContent);
 	checkPage.ParseOutput(orderInfo);
 
-	result += L"\rconfirming order...";
+	if(checkPage.GetStatus() != 0)
+	{
+		result.Format(L"check failed: error code %d", checkPage.GetStatus());
+		return;
+	}
 
-	CConfirmPage confirmPage;
+	result += L"\r\nconfirming order...";
+
 	confirmPage.BuildRequest(orderInfo);
 	confirmPage.GetPageData(httpContent);
 	confirmPage.ParseOutput(orderInfo);
 
-	result += L"\rwaiting for result...";
+	if(confirmPage.GetStatus() != 0)
+	{
+		result.Format(L"confirm failed: error code %d", confirmPage.GetStatus());
+		return;
+	}
 
-	CWaitPage waitPage;
+	result += L"\r\nwaiting for result...";
+
 	waitPage.BuildRequest(orderInfo);
 	waitPage.GetPageData(httpContent);
 	waitPage.ParseOutput(orderInfo);
 
+	if(waitPage.GetStatus() != 0)
+	{
+		result.Format(L"wait failed: error code %d", waitPage.GetStatus());
+		return;
+	}
 	Sleep(5 * 1000);
 
 	waitPage.BuildRequest(orderInfo);
 	waitPage.GetPageData(httpContent);
 	waitPage.ParseOutput(orderInfo);
 
-	// organize the output
-	result.AppendFormat(L"\rorder no = %s", orderInfo.orderNo);
-
-	return;
-}
-
-void CHTTPSWebClientApp::BookTickets( CString& date )
-{
-	// precondition: login
-	// steps:
-	// 1. query train, with loop format
-	// 2. book ticket
-	// 3. confirm passenger
-	// 4. wait for result
-	// 5. return result
-
-	//CTestTrainNoInfo test_trainNoInfo;
-	//while(queryTrainNo(test_trainNoInfo) != TRUE)
-	//	;
-
-	//CTestTicketInfo test_ticketInfo;
-
-	//bookTicket(test_ticketInfo)
-
-	//confirmPassenger();
-
-	//waitForResult();
-
-	//returnResult();
+	if(waitPage.GetStatus() != 0)
+	{
+		result.Format(L"wait failed: error code %d", waitPage.GetStatus());
+		return;
+	}
+	else
+	{
+		result.AppendFormat(L"\r\norder no = %s", orderInfo.orderNo);
+	}
 }

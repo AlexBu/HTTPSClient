@@ -1,24 +1,11 @@
 #pragma once
-#include "LoginPageIn.h"
-#include "LoginPageOut.h"
-#include "HTTPContent.h"
+#include "Page.h"
 
-class CLoginPage
+class CLoginPage : public CPage
 {
 public:
 	CLoginPage(void);
 	~CLoginPage(void);
-	void BuildRequestURL();
-	void CollectInput( CLoginPageIn& loginPageIn );
-	void GetPageData( CHTTPContent& httpContent );
-	void ParseOutput( CLoginPageOut& loginPageOut );
-private:
-	CString reqStr;
-	CString respStr;
-	CString reqData;
-
-	CString username;
-	CString password;
-	CString rand;
-	CString validate;
+	void BuildRequest( LoginInfo& input );
+	void ParseOutput();
 };

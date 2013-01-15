@@ -1,16 +1,11 @@
 #pragma once
-#include "OrderInfo.h"
-#include "HTTPContent.h"
+#include "Page.h"
 
-class CWaitPage
+class CWaitPage : public CPage
 {
 public:
 	CWaitPage(void);
 	~CWaitPage(void);
 	void BuildRequest( OrderInfo& input );
-	void GetPageData( CHTTPContent& content );
 	void ParseOutput( OrderInfo& output );
-private:
-	CString reqStr;
-	CString respStr;
 };

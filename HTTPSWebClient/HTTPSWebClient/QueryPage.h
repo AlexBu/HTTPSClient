@@ -1,17 +1,11 @@
 #pragma once
-#include "QueryInfo.h"
-#include "TrainInfo.h"
-#include "HTTPContent.h"
+#include "Page.h"
 
-class CQueryPage
+class CQueryPage : public CPage
 {
 public:
 	CQueryPage(void);
 	~CQueryPage(void);
 	void BuildRequest( QueryInfo& input );
-	void GetPageData( CHTTPContent& content );
 	void ParseOutput( TrainInfo& output );
-private:
-	CString reqStr;
-	CString respStr;
 };

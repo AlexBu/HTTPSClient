@@ -4,10 +4,8 @@
 #include "Utility.h"
 
 CCheckPage::CCheckPage(void)
-:reqStr(L"")
-,reqData(L"")
-,respStr(L"")
 {
+	isGet = FALSE;
 }
 
 CCheckPage::~CCheckPage(void)
@@ -102,12 +100,6 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		);
 }
 
-void CCheckPage::GetPageData( CHTTPContent& content )
-{
-	content.SendDatabyPost(reqStr, reqData);
-	content.GetResponseStr(respStr);
-}
-
 void CCheckPage::ParseOutput( OrderInfo& output )
 {
 	// split results
@@ -126,7 +118,7 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 	matchStr = restStr;
 	restStr.Empty();
 
-	if(output.errMsg == L"Y")
+	if(output.errMsg == L"\"Y\"")
 	{
 		// remove last part of str
 		pattern = L"{.*}&tFlag=.*$";
@@ -134,6 +126,11 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		regex.patternLoad(pattern);
 		regex.contextMatch(matchStr, restStr);
 		regex.matchGet(0, output.orderInfo);
+		status = 0;
+	}
+	else
+	{
+		status = -1;
 	}
 }
 

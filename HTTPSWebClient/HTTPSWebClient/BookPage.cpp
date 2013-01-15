@@ -4,10 +4,8 @@
 #include "Utility.h"
 
 CBookPage::CBookPage(void)
-:reqStr(L"")
-,reqData(L"")
-,respStr(L"")
 {
+	isGet = FALSE;
 }
 
 CBookPage::~CBookPage(void)
@@ -69,12 +67,6 @@ void CBookPage::BuildRequest( TrainInfo& input )
  		);
 }
 
-void CBookPage::GetPageData( CHTTPContent& content )
-{
-	content.SendDatabyPost(reqStr, reqData);
-	content.GetResponseStr(respStr);
-}
-
 void CBookPage::ParseOutput( TicketInfo& output )
 {
 	// split results
@@ -86,6 +78,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"org\\.apache\\.struts\\.taglib\\.html\\.TOKEN\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.token);
 	matchStr = restStr;
 	restStr.Empty();
@@ -93,6 +90,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"left_ticket\\\"\\b*\\n\\b*value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.leftTicketStr);
 	matchStr = restStr;
 	restStr.Empty();
@@ -100,6 +102,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.train_date\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.train_date);
 	matchStr = restStr;
 	restStr.Empty();
@@ -107,6 +114,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.train_no\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.train_no);
 	matchStr = restStr;
 	restStr.Empty();
@@ -114,6 +126,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.station_train_code\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.station_train_code);
 	matchStr = restStr;
 	restStr.Empty();
@@ -121,6 +138,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.from_station_telecode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.from_station_telecode);
 	matchStr = restStr;
 	restStr.Empty();
@@ -128,6 +150,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.to_station_telecode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.to_station_telecode);
 	matchStr = restStr;
 	restStr.Empty();
@@ -135,6 +162,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.bed_level_order_num\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.bed_level_order_num);
 	matchStr = restStr;
 	restStr.Empty();
@@ -142,6 +174,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.start_time\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.start_time);
 	matchStr = restStr;
 	restStr.Empty();
@@ -149,6 +186,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.end_time\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.end_time);
 	matchStr = restStr;
 	restStr.Empty();
@@ -156,6 +198,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.from_station_name\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.from_station_name);
 	matchStr = restStr;
 	restStr.Empty();
@@ -163,6 +210,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.to_station_name\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.to_station_name);
 	matchStr = restStr;
 	restStr.Empty();
@@ -170,6 +222,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.cancel_flag\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.cancel_flag);
 	matchStr = restStr;
 	restStr.Empty();
@@ -177,6 +234,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"orderRequest\\.id_mode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.id_mode);
 	matchStr = restStr;
 	restStr.Empty();
@@ -184,9 +246,16 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	pattern = L"submit_form_confirm\\(\\\'confirmPassenger\\\',\\\'{[^\\\']+}\\\'";
 	regex.patternLoad(pattern);
 	regex.contextMatch(matchStr, restStr);
+	if(regex.matchCount() == 0)
+	{
+		status = -1;
+		return;
+	}
 	regex.matchGet(0, output.tFlag);
 	matchStr = restStr;
 	restStr.Empty();
+
+	status = 0;
 }
 
 CString CBookPage::studentGet( TrainInfo& input )
@@ -252,10 +321,10 @@ CString CBookPage::timeArriveGet( TrainInfo& input )
 
 CString CBookPage::stationFromNameGet( TrainInfo& input )
 {
-	return GetUTF8Str(input.stationFromName);
+	return GetUTF8Str(input.stationFromTeName);
 }
 
 CString CBookPage::stationToNameGet( TrainInfo& input )
 {
-	return GetUTF8Str(input.stationToName);
+	return GetUTF8Str(input.stationToTeName);
 }
