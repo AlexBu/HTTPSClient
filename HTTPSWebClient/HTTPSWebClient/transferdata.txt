@@ -79,6 +79,8 @@ GET
 &seatTypeAndNum=
 &orderRequest.start_time_str=00%3A00--24%3A00
 
+tip: time period can be tuned, 05:23-06:34
+
 GET
 /otsweb/order/querySingleAction.do?method=queryLeftTicket
 &orderRequest.train_date=2013-01-07
@@ -306,9 +308,15 @@ org.apache.struts.taglib.html.TOKEN=b58b97b8c10ec135c4417f4d5a48777a
 &oldPassengers=%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X
 &passenger_1_seat=O
 // seat type
+// O: 二等座
+// 4: 软卧
 &passenger_1_seat_detail=0
 &passenger_1_ticket=1
 // ticket type
+// 1: 成人票
+// 2: 儿童票
+// 3: 学生票
+// 4: 残军票
 &passenger_1_name=%E5%BC%A0%E4%B8%89
 &passenger_1_cardtype=1
 // card type
@@ -337,7 +345,7 @@ org.apache.struts.taglib.html.TOKEN=b58b97b8c10ec135c4417f4d5a48777a
 response
 {"checkHuimd":"Y","check608":"Y","msg":"","errMsg":"Y"}
 
-GET 
+GET
 /otsweb/order/confirmPassengerAction.do?method=getQueueCount
 &train_date=2013-01-07
 &train_no=240000D31307
@@ -350,16 +358,58 @@ GET
 response
 {"countT":0,"count":8,"ticket":"O*****00324*****0032O*****3000","op_1":true,"op_2":false}
 
+confirm page again
 
+POST
+/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueueOrder
+
+post data
+org.apache.struts.taglib.html.TOKEN=f0c3344bed3e521b72e78c60f783bc0c
+&leftTicketStr=O0087500314018950035O008753000
+&textfield=%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D
+&checkbox0=0
+&orderRequest.train_date=2013-01-17
+&orderRequest.train_no=240000D31307
+&orderRequest.station_train_code=D313
+&orderRequest.from_station_telecode=NJH
+&orderRequest.to_station_telecode=SHH
+&orderRequest.seat_type_code=
+&orderRequest.ticket_type_order_num=
+&orderRequest.bed_level_order_num=000000000000000000000000000000
+&orderRequest.start_time=04%3A48
+&orderRequest.end_time=07%3A15
+&orderRequest.from_station_name=%E5%8D%97%E4%BA%AC
+&orderRequest.to_station_name=%E4%B8%8A%E6%B5%B7
+&orderRequest.cancel_flag=1
+&orderRequest.id_mode=Y
+&passengerTickets=O%2Cundefined%2C1%2C%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X%2C18912952106%2CN
+&oldPassengers=%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X
+&passenger_1_seat=O
+&passenger_1_ticket=1
+&passenger_1_name=%E5%8D%9C%E6%98%86%E9%B9%8F
+&passenger_1_cardtype=1
+&passenger_1_cardno=32032119831230701X
+&passenger_1_mobileno=18912952106
+&oldPassengers=&checkbox9=Y
+&oldPassengers=&checkbox9=Y
+&oldPassengers=&checkbox9=Y
+&oldPassengers=&checkbox9=Y
+&randCode=hr99
+&orderRequest.reserve_flag=A
+
+response
+{"errMsg":"Y"}
 
 wait page
 GET
-/otsweb/order/myOrderAction.do?method=getOrderWaitTime&tourFlag=dc
+/otsweb/order/myOrderAction.do?method=getOrderWaitTime
+&tourFlag=dc
 response
 {"tourFlag":"dc","waitTime":5,"waitCount":1,"requestId":5675794260170519399,"count":0}
 
 GET
-/otsweb/order/myOrderAction.do?method=getOrderWaitTime&tourFlag=dc
+/otsweb/order/myOrderAction.do?method=getOrderWaitTime
+&tourFlag=dc
 response
 {"tourFlag":"dc","waitTime":-1,"waitCount":0,"orderId":"E299152467","requestId":5675794260170519399,"count":0}
 
@@ -368,20 +418,62 @@ order page
 POST
 /otsweb/order/confirmPassengerAction.do?method=payOrder&orderSequence_no=E299152467
 org.apache.struts.taglib.html.TOKEN=9d81db17cb535fe088cc794c7fbe6b57
-&leftTicketStr=O013500134M0230000589043000022&textfield=%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D
-&checkbox0=0&orderRequest.train_date=2012-11-18&orderRequest.train_no=490000G23602
-&orderRequest.station_train_code=G233&orderRequest.from_station_telecode=NKH
-&orderRequest.to_station_telecode=AOH&orderRequest.seat_type_code=&orderRequest.seat_detail_type_code=
-&orderRequest.ticket_type_order_num=&orderRequest.bed_level_order_num=000000000000000000000000000000
-&orderRequest.start_time=22%3A04&orderRequest.end_time=23%3A11&orderRequest.from_station_name=%E5%8D%97%E4%BA%AC%E5%8D%97
-&orderRequest.to_station_name=%E4%B8%8A%E6%B5%B7%E8%99%B9%E6%A1%A5&orderRequest.cancel_flag=1
-&orderRequest.id_mode=Y&passengerTickets=M%2C0%2C1%2C%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X%2C18912952106%2CY
-&oldPassengers=%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X&passenger_1_seat=M
-&passenger_1_seat_detail=0&passenger_1_ticket=1&passenger_1_name=%E5%8D%9C%E6%98%86%E9%B9%8F
-&passenger_1_cardtype=1&passenger_1_cardno=32032119831230701X&passenger_1_mobileno=18912952106
-&checkbox9=Y&oldPassengers=&checkbox9=Y&oldPassengers=&checkbox9=Y&oldPassengers=&checkbox9=Y
-&oldPassengers=&checkbox9=Y&randCode=n86k&orderRequest.reserve_flag=A
+&leftTicketStr=O013500134M0230000589043000022
+&textfield=%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D
+&checkbox0=0&orderRequest.train_date=2012-11-18
+&orderRequest.train_no=490000G23602
+&orderRequest.station_train_code=G233
+&orderRequest.from_station_telecode=NKH
+&orderRequest.to_station_telecode=AOH
+&orderRequest.seat_type_code=
+&orderRequest.seat_detail_type_code=
+&orderRequest.ticket_type_order_num=
+&orderRequest.bed_level_order_num=000000000000000000000000000000
+&orderRequest.start_time=22%3A04
+&orderRequest.end_time=23%3A11
+&orderRequest.from_station_name=%E5%8D%97%E4%BA%AC%E5%8D%97
+&orderRequest.to_station_name=%E4%B8%8A%E6%B5%B7%E8%99%B9%E6%A1%A5
+&orderRequest.cancel_flag=1
+&orderRequest.id_mode=Y
+&passengerTickets=M%2C0%2C1%2C%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X%2C18912952106%2CY
+&oldPassengers=%E5%8D%9C%E6%98%86%E9%B9%8F%2C1%2C32032119831230701X
+&passenger_1_seat=M
+&passenger_1_seat_detail=0
+&passenger_1_ticket=1
+&passenger_1_name=%E5%8D%9C%E6%98%86%E9%B9%8F
+&passenger_1_cardtype=1
+&passenger_1_cardno=32032119831230701X
+&passenger_1_mobileno=18912952106
+&checkbox9=Y&oldPassengers=
+&checkbox9=Y&oldPassengers=
+&checkbox9=Y&oldPassengers=
+&checkbox9=Y&oldPassengers=
+&checkbox9=Y
+&randCode=n86k
+&orderRequest.reserve_flag=A
 
+cancel order
+POST
+/otsweb/order/payConfirmOnlineSingleAction.do?method=cancelOrder
+
+post data
+org.apache.struts.taglib.html.TOKEN=a4b7e00d7dfadb1ace58fe8d3aca592f
+&sequence_no=E220615759
+&batch_no=1%23
+&orderRequest.train_date=
+&orderRequest.train_no=
+&orderRequest.station_train_code=
+&orderRequest.from_station_telecode=
+&orderRequest.to_station_telecode=
+&orderRequest.seat_type_code=
+&orderRequest.ticket_type_order_num=
+&orderRequest.bed_level_order_num=000000000000000000000000000000
+&orderRequest.start_time=
+&orderRequest.end_time=
+&orderRequest.from_station_name=
+&orderRequest.to_station_name=
+&orderRequest.cancel_flag=2
+&orderRequest.id_mode=
 
 validation picture(?)
 GET

@@ -42,6 +42,7 @@ public:
 	void ConnectToSite();
 	void InitUserInfo();
 	void InitPassengerInfo();
+	void GetPassengerInfo();
 
 private:
 	CString dateString;	
@@ -49,6 +50,7 @@ private:
 	CString usernameStr;
 	CString passwordStr;
 	CString validateStr;
+	CString validateBookStr;
 
 	CString nameP1;
 	CString identityTypeP1;
@@ -71,4 +73,5 @@ public:
 	CValPic valPicLoginCtrl;
 	CValPic valPicBookCtrl;
 	CString RespondString;
+
 };

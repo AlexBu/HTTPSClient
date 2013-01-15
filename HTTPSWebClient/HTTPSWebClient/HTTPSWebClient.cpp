@@ -17,6 +17,12 @@
 
 #include "LoginPage.h"
 
+#include "QueryPage.h"
+#include "BookPage.h"
+#include "CheckPage.h"
+#include "ConfirmPage.h"
+#include "WaitPage.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -200,119 +206,79 @@ void CHTTPSWebClientApp::QueryTickets(CString& date,
 									  CString& train, 
 									  CString& stationFrom, 
 									  CString& stationTo, 
-									  CString& result)
+									  CString& result,
+									  CString& validateStr)
 {
-	// build up a test information
-	CString queryStr;
-	CString queryRespStr;
+	QueryInfo queryInfo;
+	CQueryPage queryPage;
+	TrainInfo trainInfo;
 
-	queryStr.Format( L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
-		L"&orderRequest.train_date=%s"
-		L"&orderRequest.from_station_telecode=NJH"
-		L"&orderRequest.to_station_telecode=SHH"
-		L"&orderRequest.train_no="
-		L"&trainPassType=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
-		L"&trainClass=D%%23"
-		L"&includeStudent=00"
-		L"&seatTypeAndNum="
-		L"&orderRequest.start_time_str=00%%3A00--24%%3A00", date);
+	result += L"\rquerying train...";
 
-	httpContent.SendDatabyGet(queryStr);
-	httpContent.GetResponseStr(queryRespStr);
+	queryInfo.departDate = date;
+	trainInfo.trainCode = train;
+	queryPage.BuildRequest(queryInfo);
+	queryPage.GetPageData(httpContent);
+	queryPage.ParseOutput(trainInfo);
 
-	// split results
-	CString pattern = L"javascript:getSelected\\(\\'"
-		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#"
-		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#\\']+}\\')>";
-	regex.patternLoad(pattern);
+	result += L"\rbooking tickets...";
 
-	CString restStr;
-	CString matchStr;
+	CBookPage bookPage;
+	TicketInfo ticketInfo;
 
-	matchStr = queryRespStr;
+	trainInfo.trainDate = date;
+	trainInfo.trainRoundDate = date;
+	bookPage.BuildRequest(trainInfo);
+	bookPage.GetPageData(httpContent);
+	bookPage.ParseOutput(ticketInfo);
 
-	// get the first record
-	while(regex.contextMatch(matchStr, restStr))
-	{
-		if(regex.matchCount() == 14)
-		{
-			CString tempStr;
+	result += L"\rchecking order...";
 
-			regex.matchGet(0, tempStr);
-			if(tempStr == train)
-				break;
+	CCheckPage checkPage;
+	OrderInfo orderInfo;
 
-			ticketInfo.trainCodeSet(tempStr);
+	ticketInfo.randCode =  validateStr;
+	ticketInfo.passengers[0].seat = passengerInfo[0].seat;
+	ticketInfo.passengers[0].seat_detail = passengerInfo[0].seat_detail;
+	ticketInfo.passengers[0].ticket = passengerInfo[0].ticket;
+	ticketInfo.passengers[0].name = passengerInfo[0].name;
+	ticketInfo.passengers[0].cardtype = passengerInfo[0].cardtype;
+	ticketInfo.passengers[0].cardno = passengerInfo[0].cardno;
+	ticketInfo.passengers[0].mobileno = passengerInfo[0].mobileno;
+	ticketInfo.passengers[1].seat = passengerInfo[1].seat;
+	ticketInfo.passengers[1].seat_detail = passengerInfo[1].seat_detail;
+	ticketInfo.passengers[1].ticket = passengerInfo[1].ticket;
+	ticketInfo.passengers[1].name = passengerInfo[1].name;
+	ticketInfo.passengers[1].cardtype = passengerInfo[1].cardtype;
+	ticketInfo.passengers[1].cardno = passengerInfo[1].cardno;
+	ticketInfo.passengers[1].mobileno = passengerInfo[1].mobileno;
 
-			regex.matchGet(1, tempStr);
-			ticketInfo.durationSet(tempStr);
+	checkPage.BuildRequest(ticketInfo);
+	checkPage.GetPageData(httpContent);
+	checkPage.ParseOutput(orderInfo);
 
-			regex.matchGet(2, tempStr);
-			ticketInfo.trainStartTimeSet(tempStr);
+	result += L"\rconfirming order...";
 
-			regex.matchGet(3, tempStr);
-			ticketInfo.trainNoSet(tempStr);
+	CConfirmPage confirmPage;
+	confirmPage.BuildRequest(orderInfo);
+	confirmPage.GetPageData(httpContent);
+	confirmPage.ParseOutput(orderInfo);
 
-			regex.matchGet(4, tempStr);
-			ticketInfo.stationFromCodeSet(tempStr);
+	result += L"\rwaiting for result...";
 
-			regex.matchGet(5, tempStr);
-			ticketInfo.stationToCodeSet(tempStr);
+	CWaitPage waitPage;
+	waitPage.BuildRequest(orderInfo);
+	waitPage.GetPageData(httpContent);
+	waitPage.ParseOutput(orderInfo);
 
-			regex.matchGet(6, tempStr);
-			ticketInfo.timeArriveSet(tempStr);
+	Sleep(5 * 1000);
 
-			regex.matchGet(7, tempStr);
-			ticketInfo.stationFromTeNameSet(tempStr);
-			ticketInfo.stationFromNameSet(tempStr);
-
-			regex.matchGet(8, tempStr);
-			ticketInfo.stationToTeNameSet(tempStr);
-			ticketInfo.stationToNameSet(tempStr);
-
-			regex.matchGet(9, tempStr);
-			ticketInfo.stationFromNoSet(tempStr);
-
-			regex.matchGet(10, tempStr);
-			ticketInfo.stationToNoSet(tempStr);
-
-			regex.matchGet(11, tempStr);
-			ticketInfo.infoDetailSet(tempStr);
-
-			regex.matchGet(12, tempStr);
-			ticketInfo.mmStrSet(tempStr);
-
-			regex.matchGet(13, tempStr);
-			ticketInfo.locationCodeSet(tempStr);
-
-			CString str(L"");
-			ticketInfo.studentSet(str);
-			ticketInfo.trainRoundTimeStrSet(str);
-			ticketInfo.roundTypeSet(str);
-			ticketInfo.passTypeSet(str);
-			ticketInfo.trainClassSet(str);
-			ticketInfo.timeStartStrSet(str);
-
-			ticketInfo.trainRoundDateSet(date);
-			ticketInfo.trainDateSet(date);
-
-		}
-
-		matchStr = restStr;
-		restStr.Empty();
-	}
-
-	// test on the first result
-	// build login string
-	CString bookTrainAdr, bookTrainStr;
-	bookTrainAdr = _T("/otsweb/order/querySingleAction.do?method=submutOrderRequest");
-	ticketInfo.strBuild(bookTrainStr);
-
-	httpContent.SendDatabyPost(bookTrainAdr, bookTrainStr);
-	httpContent.GetResponseStr(queryRespStr);
+	waitPage.BuildRequest(orderInfo);
+	waitPage.GetPageData(httpContent);
+	waitPage.ParseOutput(orderInfo);
 
 	// organize the output
-	result = queryRespStr;
+	result.AppendFormat(L"\rorder no = %s", orderInfo.orderNo);
 
 	return;
 }

@@ -11,8 +11,8 @@
 #include "resource.h"		// 主符号
 #include "ValidatePicture.h"
 #include "regex.h"
-#include "QueryPage.h"
 #include "HTTPContent.h"
+#include "TicketInfo.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -36,12 +36,13 @@ public:
 	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
 	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr, CString& result);
 	void ConnectToURL( const CString& URLString );
-	void QueryTickets(CString& date, CString& train, CString& stationFrom, CString& stationTo, CString& result);
+	void QueryTickets(CString& date, CString& train, CString& stationFrom, CString& stationTo, CString& result, CString& validateStr);
 	void BookTickets(CString& date);
 
 private:
 	CRegex		regex;
-	CQueryPage	ticketInfo;
 	CHTTPContent httpContent;
+public:
+	PassengerInfo passengerInfo[5];
 };
 extern CHTTPSWebClientApp theApp;
