@@ -64,6 +64,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
+	DDX_Text(pDX, IDC_EDIT_VAL_PIC_BOOK, validateBookStr);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -158,6 +159,9 @@ void CHTTPSWebClientDlg::OnLogin()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
+
+	// fill up passengers info
+	GetPassengerInfo();
 	theApp.LoginToSite(usernameStr, passwordStr, validateStr, RespondString);
 	// set response
 	UpdateData(FALSE);
@@ -178,7 +182,7 @@ void CHTTPSWebClientDlg::OnQuery()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	theApp.QueryTickets(dateString, trainNo, stationFrom, stationTo, RespondString);
+	theApp.QueryTickets(dateString, trainNo, stationFrom, stationTo, RespondString, validateBookStr);
 	// set response
 	UpdateData(FALSE);
 }
@@ -197,20 +201,35 @@ void CHTTPSWebClientDlg::InitUserInfo()
 	usernameStr = L"bkp84335";
 	passwordStr = L"bsp2236";
 
-	dateString= L"2013-01-15";
+	dateString= L"2013-01-17";
 	trainNo = L"D305";
 }
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
-	nameP1 = L"张三";
-	nameP2 = L"李四";
-	identityTypeP1 = L"0";
-	identityTypeP2 = L"0";
+	nameP1 = L"卜昆鹏";
+	nameP2 = L"喻娟";
+	identityTypeP1 = L"1";	// 1 for identify card
+	identityTypeP2 = L"1";
 	identityNoP1 = L"32032119831230701X";
 	identityNoP2 = L"43012419860309496X";
 	mobileP1 = L"18912952107";
 	mobileP2 = L"18912952107";
-	seatTypeP1 = L"O";
+	seatTypeP1 = L"O";	// big O for second class seat
 	seatTypeP2 = L"O";
+}
+
+void CHTTPSWebClientDlg::GetPassengerInfo()
+{
+	theApp.passengerInfo[0].seat = seatTypeP1;
+	theApp.passengerInfo[0].name = nameP1;
+	theApp.passengerInfo[0].cardtype = identityTypeP1;
+	theApp.passengerInfo[0].cardno = identityNoP1;
+	theApp.passengerInfo[0].mobileno = mobileP1;
+
+	theApp.passengerInfo[1].seat = seatTypeP2;
+	theApp.passengerInfo[1].name = nameP2;
+	theApp.passengerInfo[1].cardtype = identityTypeP2;
+	theApp.passengerInfo[1].cardno = identityNoP2;
+	theApp.passengerInfo[1].mobileno = mobileP2;
 }

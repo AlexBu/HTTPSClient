@@ -195,6 +195,18 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BookPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CheckPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ConfirmPage.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HTTPContent.cpp"
 				>
 			</File>
@@ -235,6 +247,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OrderInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QueryInfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\QueryPage.cpp"
 				>
 			</File>
@@ -263,7 +283,23 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TicketInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TrainInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ValidatePicture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WaitPage.cpp"
 				>
 			</File>
 		</Filter>
@@ -272,6 +308,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\BookPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CheckPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ConfirmPage.h"
+				>
+			</File>
 			<File
 				RelativePath=".\HTTPContent.h"
 				>
@@ -313,6 +361,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OrderInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QueryInfo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\QueryPage.h"
 				>
 			</File>
@@ -333,7 +389,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TicketInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TrainInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ValidatePicture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WaitPage.h"
 				>
 			</File>
 		</Filter>
