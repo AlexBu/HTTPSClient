@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "ConfirmPage.h"
 #include "regex.h"
+#include "Log.h"
 
 CConfirmPage::CConfirmPage(void)
 {
@@ -19,6 +20,8 @@ void CConfirmPage::BuildRequest( OrderInfo& input )
 
 void CConfirmPage::ParseOutput( OrderInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// split results
 	CRegex regex;
 	CString pattern, restStr, matchStr;
@@ -34,10 +37,17 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 
 	if(output.errMsg == L"\"Y\"")
 	{
-		status = 0;
+		status = ERROR_OK;
+	}
+	else if(output.errMsg.Find(L"·Ç·¨") != -1)
+	{
+		// logic error
+		CLog::GetLog().AddLog(respStr);
+		status = ERROR_LOGIC;
 	}
 	else
 	{
-		status = -1;
+		CLog::GetLog().AddLog(respStr);
+		status = ERROR_GENERAL;
 	}
 }

@@ -18,20 +18,28 @@ CPage::~CPage(void)
 void CPage::GetPageData( CHTTPContent& content )
 {
 	CLog& log = CLog::GetLog();
+	BOOL sendResult;
 
 	if(isGet)
 	{
-		content.SendDatabyGet(reqStr);
+		sendResult = content.SendDatabyGet(reqStr);
 		log.AddLog(reqStr);
 	}
 	else
 	{
-		content.SendDatabyPost(reqStr, reqData);
+		sendResult = content.SendDatabyPost(reqStr, reqData);
 		log.AddLog(reqStr);
 		log.AddLog(reqData);
 	}
-	content.GetResponseStr(respStr);
-	log.AddLog(respStr);
+	if(sendResult == TRUE)
+	{
+		content.GetResponseStr(respStr);
+	}
+	else
+	{
+		status = ERROR_HTTP;
+		log.AddLog(L"send data failed.");
+	}
 }
 
 int CPage::GetStatus()

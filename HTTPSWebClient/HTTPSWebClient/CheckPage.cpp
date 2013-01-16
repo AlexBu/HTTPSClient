@@ -2,6 +2,7 @@
 #include "CheckPage.h"
 #include "regex.h"
 #include "Utility.h"
+#include "Log.h"
 
 CCheckPage::CCheckPage(void)
 {
@@ -100,6 +101,8 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 
 void CCheckPage::ParseOutput( OrderInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// split results
 	CRegex regex;
 	CString pattern, restStr, matchStr;
@@ -124,11 +127,18 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		regex.patternLoad(pattern);
 		regex.contextMatch(matchStr, restStr);
 		regex.matchGet(0, output.orderInfo);
-		status = 0;
+		status = ERROR_OK;
+	}
+	else if(output.errMsg.Find(L"·Ç·¨") != -1)
+	{
+		// logic error
+		CLog::GetLog().AddLog(respStr);
+		status = ERROR_LOGIC;
 	}
 	else
 	{
-		status = -1;
+		CLog::GetLog().AddLog(respStr);
+		status = ERROR_GENERAL;
 	}
 }
 

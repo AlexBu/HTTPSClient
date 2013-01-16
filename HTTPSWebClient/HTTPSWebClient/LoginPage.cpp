@@ -31,6 +31,8 @@ void CLoginPage::BuildRequest( LoginInfo& input )
 
 void CLoginPage::ParseOutput( )
 {
+	if(status == ERROR_HTTP)
+		return;
 	CRegex regex;
 	CString patternTitle = L"<[tT][iI][tT][lL][eE]>{[^</>]+}</[tT][iI][tT][lL][eE]>";
 	regex.patternLoad(patternTitle);
@@ -40,10 +42,10 @@ void CLoginPage::ParseOutput( )
 
 	if(titleStr == L"系统消息")
 	{
-		status = 0;
+		status = ERROR_OK;
 	}
 	else
 	{
-		status = -1;
+		status = ERROR_GENERAL;
 	}
 }

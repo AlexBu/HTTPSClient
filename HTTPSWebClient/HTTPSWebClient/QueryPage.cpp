@@ -31,6 +31,8 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 
 void CQueryPage::ParseOutput( TrainInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// split results
 	CRegex regex;
 	CString pattern = L"javascript:getSelected\\(\\'"

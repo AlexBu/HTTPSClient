@@ -137,28 +137,14 @@ void CHTTPSWebClientApp::LoginToSite(CString& result)
 
 void CHTTPSWebClientApp::BookTickets(CString& result)
 {
-	int retry_count = 0;
-
 	result += L"\r\nquerying train...";
-
 	queryPage.BuildRequest(queryInfo);
-
-//QUERY:
-	do 
-	{
+	do{
 		queryPage.GetPageData(httpContent);
 		queryPage.ParseOutput(trainInfo);
 	} while (queryPage.GetStatus() != 0);
 
-
-	//if(queryPage.GetStatus() != 0)
-	//{
-	//	result.AppendFormat(L"query failed: error code %d", queryPage.GetStatus());
-	//	return;
-	//}
-
 	result += L"\r\nbooking tickets...";
-
 	bookPage.BuildRequest(trainInfo);
 	bookPage.GetPageData(httpContent);
 	bookPage.ParseOutput(ticketInfo);
@@ -166,13 +152,10 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(bookPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nbook failed: error code %d", bookPage.GetStatus());
-		result += bookPage.GetResponse();
-		//if(retry_count++ > 500)
-			return;
-		//goto QUERY;
+		return;
 	}
-	result += L"\r\nchecking order...";
 
+	result += L"\r\nchecking order...";
 	checkPage.BuildRequest(ticketInfo);
 	checkPage.GetPageData(httpContent);
 	checkPage.ParseOutput(orderInfo);
@@ -180,14 +163,10 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(checkPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\ncheck failed: error code %d", checkPage.GetStatus());
-		result += checkPage.GetResponse();
-		//if(retry_count++ > 500)
-			return;
-		//goto QUERY;
+		return;
 	}
 
 	result += L"\r\nconfirming order...";
-
 	queuePage.BuildRequest(ticketInfo);
 	queuePage.GetPageData(httpContent);
 	queuePage.ParseOutput(orderInfo);
@@ -195,14 +174,10 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(queuePage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nqueue failed: error code %d", queuePage.GetStatus());
-		result += queuePage.GetResponse();
-		//if(retry_count++ > 500)
 		return;
-		//goto QUERY;
 	}
 
 	result += L"\r\nqueueing order...";
-
 	confirmPage.BuildRequest(orderInfo);
 	confirmPage.GetPageData(httpContent);
 	confirmPage.ParseOutput(orderInfo);
@@ -210,14 +185,10 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(confirmPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmPage.GetStatus());
-		result += confirmPage.GetResponse();
-		//if(retry_count++ > 500)
-			return;
-		//goto QUERY;
+		return;
 	}
 
 	result += L"\r\nwaiting for result...";
-
 	waitPage.BuildRequest(orderInfo);
 	waitPage.GetPageData(httpContent);
 	waitPage.ParseOutput(orderInfo);
@@ -231,19 +202,4 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	{
 		result += L"\r\nbuy ticket success!";
 	}
-	//Sleep(5 * 1000);
-
-	//waitPage.BuildRequest(orderInfo);
-	//waitPage.GetPageData(httpContent);
-	//waitPage.ParseOutput(orderInfo);
-
-	//if(waitPage.GetStatus() != 0)
-	//{
-	//	result.AppendFormat(L"\r\nwait failed: error code %d", waitPage.GetStatus());
-	//	return;
-	//}
-	//else
-	//{
-	//	result.AppendFormat(L"\r\norder no = %s", orderInfo.orderNo);
-	//}
 }

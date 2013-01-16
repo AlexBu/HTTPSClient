@@ -32,6 +32,8 @@ void CQueuePage::BuildRequest( TicketInfo& input )
 
 void CQueuePage::ParseOutput( OrderInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// split results
 	CRegex regex;
 	CString pattern, restStr, matchStr;

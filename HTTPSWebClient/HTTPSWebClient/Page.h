@@ -2,6 +2,11 @@
 #include "Info.h"
 #include "HTTPContent.h"
 
+#define ERROR_OK		(0)
+#define ERROR_GENERAL	(-1)
+#define ERROR_HTTP		(-2)
+#define ERROR_LOGIC		(-3)
+
 class CPage
 {
 public:

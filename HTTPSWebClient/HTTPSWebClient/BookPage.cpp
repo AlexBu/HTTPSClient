@@ -2,6 +2,7 @@
 #include "BookPage.h"
 #include "regex.h"
 #include "Utility.h"
+#include "Log.h"
 
 CBookPage::CBookPage(void)
 {
@@ -69,6 +70,8 @@ void CBookPage::BuildRequest( TrainInfo& input )
 
 void CBookPage::ParseOutput( TicketInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// split results
 	CRegex regex;
 	CString pattern, restStr, matchStr;
@@ -80,6 +83,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -92,6 +96,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -104,6 +109,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -116,6 +122,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -128,6 +135,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -140,6 +148,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -152,6 +161,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -164,6 +174,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -176,6 +187,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -188,6 +200,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -200,6 +213,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -212,6 +226,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -224,6 +239,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -236,6 +252,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}
@@ -248,6 +265,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	regex.contextMatch(matchStr, restStr);
 	if(regex.matchCount() == 0)
 	{
+		CLog::GetLog().AddLog(respStr);
 		status = -1;
 		return;
 	}

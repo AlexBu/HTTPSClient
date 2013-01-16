@@ -17,6 +17,8 @@ void CWaitPage::BuildRequest( OrderInfo& input )
 
 void CWaitPage::ParseOutput( OrderInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// split results
 	CRegex regex;
 	CString pattern, restStr;

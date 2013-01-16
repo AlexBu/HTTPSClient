@@ -17,6 +17,8 @@ void CLoginRandPage::BuildRequest()
 
 void CLoginRandPage::ParseOutput( LoginInfo& output )
 {
+	if(status == ERROR_HTTP)
+		return;
 	// get rand number from response
 	CRegex regex;
 	CString patternRand = L"{\\d+}";
