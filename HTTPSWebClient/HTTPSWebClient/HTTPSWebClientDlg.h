@@ -43,6 +43,7 @@ public:
 	void InitUserInfo();
 	void InitPassengerInfo();
 	void GetPassengerInfo();
+	void GetUserInfo();
 
 private:
 	CString dateString;	

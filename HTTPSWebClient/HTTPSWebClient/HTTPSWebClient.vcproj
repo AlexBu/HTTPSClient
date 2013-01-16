@@ -223,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Log.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LoginPage.cpp"
 				>
 			</File>
@@ -236,6 +240,10 @@
 			</File>
 			<File
 				RelativePath=".\QueryPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QueuePage.cpp"
 				>
 			</File>
 			<File
@@ -313,6 +321,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Log.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LoginPage.h"
 				>
 			</File>
@@ -326,6 +338,10 @@
 			</File>
 			<File
 				RelativePath=".\QueryPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QueuePage.h"
 				>
 			</File>
 			<File

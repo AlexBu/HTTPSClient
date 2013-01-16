@@ -21,12 +21,13 @@ void CWaitPage::ParseOutput( OrderInfo& output )
 	CRegex regex;
 	CString pattern, restStr;
 
-	pattern = L"\\\"orderId\\\":{\\q}";
+	pattern = L"\\\"waitTime\\\":\\d+";
 	regex.patternLoad(pattern);
 	regex.contextMatch(respStr, restStr);
-	regex.matchGet(0, output.orderNo);
+	regex.matchGet(0, output.waitTime);
+	long time = _ttol(output.waitTime);
 
-	if(output.orderNo.GetLength() > 0)
+	if(time > 0)
 	{
 		status = 0;
 	}

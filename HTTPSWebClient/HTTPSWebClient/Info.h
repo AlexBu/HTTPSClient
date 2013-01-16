@@ -14,6 +14,7 @@ struct OrderInfo
 	CString orderInfo;
 	CString waitTime;
 	CString orderNo;
+	CString ticketStr;
 };
 
 struct QueryInfo
@@ -21,6 +22,21 @@ struct QueryInfo
 	CString departDate;
 	CString fromStation;
 	CString toStation;
+};
+
+enum SeatType
+{
+	BUSI_SEAT = '9',
+	SUPER_SEAT = 'P',
+	FIRST_SEAT = 'M',
+	SECOND_SEAT = 'O',
+	SUPER_SOFT_SLEEPER = '6',
+	SOFT_SLEEPER= '4',
+	HARD_SLEEPER = '3',
+	SOFT_SEAT = '2',
+	HARD_SEAT = '1',
+	NO_SEAT = 'X',	// not sure
+	OTHER = 'Z'		// not sure
 };
 
 struct PassengerInfo

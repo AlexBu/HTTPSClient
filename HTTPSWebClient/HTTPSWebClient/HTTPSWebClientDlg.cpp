@@ -159,9 +159,9 @@ void CHTTPSWebClientDlg::OnLogin()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 
-	// fill up passengers info
-	GetPassengerInfo();
-	theApp.LoginToSite(usernameStr, passwordStr, validateStr, RespondString);
+	// fill up user info
+	GetUserInfo();
+	theApp.LoginToSite(RespondString);
 	// set response
 	UpdateData(FALSE);
 }
@@ -181,7 +181,9 @@ void CHTTPSWebClientDlg::OnBook()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	theApp.QueryTickets(dateString, trainNo, stationFrom, stationTo, RespondString, validateBookStr);
+	// fill up passengers info
+	GetPassengerInfo();
+	theApp.BookTickets(RespondString);
 	// set response
 	UpdateData(FALSE);
 }
@@ -190,36 +192,55 @@ void CHTTPSWebClientDlg::InitUserInfo()
 {
 	usernameStr = L"bkp84335";
 	passwordStr = L"bsp2236";
-
-	dateString= L"2013-01-17";
-	trainNo = L"D305";
 }
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
+	dateString= L"2013-01-17";
+	trainNo = L"G7123";
+	stationFrom = L"南京";
+	stationTo = L"上海";
+
 	nameP1 = L"卜昆鹏";
 	nameP2 = L"喻娟";
 	identityTypeP1 = L"1";	// 1 for identify card
 	identityTypeP2 = L"1";
 	identityNoP1 = L"32032119831230701X";
 	identityNoP2 = L"43012419860309496X";
-	mobileP1 = L"18912952107";
-	mobileP2 = L"18912952107";
+	mobileP1 = L"18912952106";
+	mobileP2 = L"18912952106";
 	seatTypeP1 = L"O";	// big O for second class seat
 	seatTypeP2 = L"O";
 }
 
 void CHTTPSWebClientDlg::GetPassengerInfo()
 {
-	theApp.passengerInfo[0].seat = seatTypeP1;
-	theApp.passengerInfo[0].name = nameP1;
-	theApp.passengerInfo[0].cardtype = identityTypeP1;
-	theApp.passengerInfo[0].cardno = identityNoP1;
-	theApp.passengerInfo[0].mobileno = mobileP1;
+	theApp.ticketInfo.randCode =  validateBookStr;
 
-	theApp.passengerInfo[1].seat = seatTypeP2;
-	theApp.passengerInfo[1].name = nameP2;
-	theApp.passengerInfo[1].cardtype = identityTypeP2;
-	theApp.passengerInfo[1].cardno = identityNoP2;
-	theApp.passengerInfo[1].mobileno = mobileP2;
+	theApp.ticketInfo.passengers[0].seat = seatTypeP1;
+	theApp.ticketInfo.passengers[0].name = nameP1;
+	theApp.ticketInfo.passengers[0].cardtype = identityTypeP1;
+	theApp.ticketInfo.passengers[0].cardno = identityNoP1;
+	theApp.ticketInfo.passengers[0].mobileno = mobileP1;
+	theApp.ticketInfo.passengers[1].seat = seatTypeP2;
+	theApp.ticketInfo.passengers[1].name = nameP2;
+	theApp.ticketInfo.passengers[1].cardtype = identityTypeP2;
+	theApp.ticketInfo.passengers[1].cardno = identityNoP2;
+	theApp.ticketInfo.passengers[1].mobileno = mobileP2;
+
+	theApp.queryInfo.departDate = dateString;
+	theApp.queryInfo.fromStation = stationFrom;
+	theApp.queryInfo.toStation = stationTo;
+	theApp.trainInfo.stationFromTeName = stationFrom;
+	theApp.trainInfo.stationToTeName = stationTo;
+	theApp.trainInfo.trainCode = trainNo;
+	theApp.trainInfo.trainDate = dateString;
+	theApp.trainInfo.trainRoundDate = dateString;
+}
+
+void CHTTPSWebClientDlg::GetUserInfo()
+{
+	theApp.loginInfo.username = usernameStr;
+	theApp.loginInfo.password = passwordStr;
+	theApp.loginInfo.validate = validateStr;
 }

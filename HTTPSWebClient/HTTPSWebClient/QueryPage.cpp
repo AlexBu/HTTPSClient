@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "QueryPage.h"
 #include "regex.h"
+#include "Utility.h"
 
 CQueryPage::CQueryPage(void)
 {
@@ -14,14 +15,18 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 {
 	reqStr.Format( L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
 		L"&orderRequest.train_date=%s"
-		L"&orderRequest.from_station_telecode=NJH"
-		L"&orderRequest.to_station_telecode=SHH"
+		L"&orderRequest.from_station_telecode=%s"
+		L"&orderRequest.to_station_telecode=%s"
 		L"&orderRequest.train_no="
-		L"&trainPassType=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
-		L"&trainClass=D%%23"
+		L"&trainPassType=QB"
+		L"&trainClass=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
 		L"&includeStudent=00"
 		L"&seatTypeAndNum="
-		L"&orderRequest.start_time_str=05%%3A00--08%%3A01", input.departDate);
+		L"&orderRequest.start_time_str=00%%3A00--24%%3A00",
+		input.departDate,
+		from_station_telecodeGet(input),
+		to_station_telecodeGet(input)
+		);
 }
 
 void CQueryPage::ParseOutput( TrainInfo& output )
@@ -53,8 +58,8 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 				regex.matchGet(4, output.stationFromCode);
 				regex.matchGet(5, output.stationToCode);
 				regex.matchGet(6, output.timeArrive);
-				regex.matchGet(7, output.stationFromTeName);
-				regex.matchGet(8, output.stationToTeName);
+				regex.matchGet(7, output.stationFromName);
+				regex.matchGet(8, output.stationToName);
 				regex.matchGet(9, output.stationFromNo);
 				regex.matchGet(10, output.stationToNo);
 				regex.matchGet(11, output.infoDetail);
@@ -68,4 +73,14 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 		matchStr = restStr;
 		restStr.Empty();
 	}
+}
+
+CString CQueryPage::from_station_telecodeGet( QueryInfo& input )
+{
+	return getTeleCodebyName(input.fromStation);
+}
+
+CString CQueryPage::to_station_telecodeGet( QueryInfo& input )
+{
+	return getTeleCodebyName(input.toStation);
 }

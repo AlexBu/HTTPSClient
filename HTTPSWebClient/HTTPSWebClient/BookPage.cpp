@@ -265,7 +265,7 @@ CString CBookPage::studentGet( TrainInfo& input )
 
 CString CBookPage::stationFromTeNameGet( TrainInfo& input )
 {
-	return GetUTF8Str(input.stationFromName);
+	return GetUTF8Str(input.stationFromTeName);
 }
 
 CString CBookPage::stationToTeNameGet( TrainInfo& input )
@@ -321,10 +321,10 @@ CString CBookPage::timeArriveGet( TrainInfo& input )
 
 CString CBookPage::stationFromNameGet( TrainInfo& input )
 {
-	return GetUTF8Str(input.stationFromTeName);
+	return GetUTF8Str(input.stationFromName);
 }
 
 CString CBookPage::stationToNameGet( TrainInfo& input )
 {
-	return GetUTF8Str(input.stationToTeName);
+	return GetUTF8Str(input.stationToName);
 }

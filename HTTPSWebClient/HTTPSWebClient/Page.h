@@ -9,6 +9,7 @@ public:
 	~CPage(void);
 	void GetPageData( CHTTPContent& content );
 	int GetStatus();
+	CString GetResponse();
 protected:
 	CString reqStr;
 	CString reqData;

@@ -27,6 +27,15 @@ CCheckOrder
 CGetQueue
 CWaitTime
 
+stations
+/otsweb/js/common/station_name.js?version=5.42
+format:
+var station_names =
+'
+@bjb|北京北|VAP|beijingbei|bjb|0
+@bjd|北京东|BOP|beijingdong|bjd|1
+...';
+
 login page
 GET
 /otsweb/loginAction.do?method=init
@@ -344,6 +353,19 @@ org.apache.struts.taglib.html.TOKEN=b58b97b8c10ec135c4417f4d5a48777a
 
 response
 {"checkHuimd":"Y","check608":"Y","msg":"","errMsg":"Y"}
+
+GET
+/otsweb/order/confirmPassengerAction.do?method=getQueueCount
+&train_date=2013-01-17
+&train_no=5l000G712320
+&station=G7123
+&seat=O
+&from=NKH
+&to=AOH
+&ticket=O0144505089031650027O014453000M022950142
+
+response
+{"countT":0,"count":23,"ticket":"O0144505089031650027O014453000M022950142","op_1":true,"op_2":false}
 
 GET
 /otsweb/order/confirmPassengerAction.do?method=getQueueCount

@@ -18,8 +18,10 @@
 #include "QueryPage.h"
 #include "BookPage.h"
 #include "CheckPage.h"
+#include "QueuePage.h"
 #include "ConfirmPage.h"
 #include "WaitPage.h"
+#include "Log.h"
 
 // CHTTPSWebClientApp:
 // 有关此类的实现，请参阅 HTTPSWebClient.cpp
@@ -39,25 +41,25 @@ public:
 	DECLARE_MESSAGE_MAP()
 public:
 	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
-	void LoginToSite(const CString& usernameStr, const CString& passwordStr, const CString& validateStr, CString& result);
+	void LoginToSite(CString& result);
 	void ConnectToURL( const CString& URLString );
-	void QueryTickets(CString& date, CString& train, CString& stationFrom, CString& stationTo, CString& result, CString& validateStr);
+	void BookTickets(CString& result);
 
 private:
 	CHTTPContent httpContent;
-	LoginInfo loginInfo;
 	CLoginRandPage loginRandPage;
 	CLoginPage loginPage;
-	QueryInfo queryInfo;
 	CQueryPage queryPage;
-	TrainInfo trainInfo;
 	CBookPage bookPage;
-	TicketInfo ticketInfo;
 	CCheckPage checkPage;
-	OrderInfo orderInfo;
+	CQueuePage queuePage;
 	CConfirmPage confirmPage;
 	CWaitPage waitPage;
 public:
-	PassengerInfo passengerInfo[5];
+	LoginInfo loginInfo;
+	QueryInfo queryInfo;
+	TrainInfo trainInfo;
+	TicketInfo ticketInfo;
+	OrderInfo orderInfo;
 };
 extern CHTTPSWebClientApp theApp;
