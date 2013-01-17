@@ -24,6 +24,7 @@ struct QueryInfo
 	CString toStation;
 };
 
+//O, M, 9, 3, 4, 2, 1
 enum SeatType
 {
 	BUSI_SEAT = '9',

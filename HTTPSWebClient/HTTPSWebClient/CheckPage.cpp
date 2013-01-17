@@ -1,8 +1,5 @@
 #include "StdAfx.h"
 #include "CheckPage.h"
-#include "regex.h"
-#include "Utility.h"
-#include "Log.h"
 
 CCheckPage::CCheckPage(void)
 {
@@ -53,10 +50,22 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		L"&passenger_2_cardtype=%s"
 		L"&passenger_2_cardno=%s"
 		L"&passenger_2_mobileno=%s"
-		L"&oldPassengers="
-		L"&checkbox9=Y"
-		L"&oldPassengers="
-		L"&checkbox9=Y"
+		L"&passengerTickets=%s"
+		L"&oldPassengers=%s"
+		L"&passenger_3_seat=%s"
+		L"&passenger_3_ticket=%s"
+		L"&passenger_3_name=%s"
+		L"&passenger_3_cardtype=%s"
+		L"&passenger_3_cardno=%s"
+		L"&passenger_3_mobileno=%s"
+		L"&passengerTickets=%s"
+		L"&oldPassengers=%s"
+		L"&passenger_4_seat=%s"
+		L"&passenger_4_ticket=%s"
+		L"&passenger_4_name=%s"
+		L"&passenger_4_cardtype=%s"
+		L"&passenger_4_cardno=%s"
+		L"&passenger_4_mobileno=%s"
 		L"&oldPassengers="
 		L"&checkbox9=Y"
 		L"&randCode=%s"
@@ -93,6 +102,22 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		,input.passengers[1].cardtype
 		,input.passengers[1].cardno
 		,input.passengers[1].mobileno
+		,passengerTicketsGet(input.passengers[2])
+		,oldPassengersGet(input.passengers[2])
+		,input.passengers[2].seat
+		,ticketGet(input.passengers[2])
+		,nameGet(input.passengers[2])
+		,input.passengers[2].cardtype
+		,input.passengers[2].cardno
+		,input.passengers[2].mobileno
+		,passengerTicketsGet(input.passengers[3])
+		,oldPassengersGet(input.passengers[3])
+		,input.passengers[3].seat
+		,ticketGet(input.passengers[3])
+		,nameGet(input.passengers[3])
+		,input.passengers[3].cardtype
+		,input.passengers[3].cardno
+		,input.passengers[3].mobileno
 		,input.randCode
 		,reserve_flagGet(input)
 		,input.tFlag
@@ -127,17 +152,23 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		regex.patternLoad(pattern);
 		regex.contextMatch(matchStr, restStr);
 		regex.matchGet(0, output.orderInfo);
+		CLog::GetLog().AddLog(L"check page success!");
 		status = ERROR_OK;
 	}
 	else if(output.errMsg.Find(L"非法") != -1)
 	{
 		// logic error
-		CLog::GetLog().AddLog(respStr);
+		CLog::GetLog().AddLog(L"illegal request!");
 		status = ERROR_LOGIC;
+	}
+	else if(output.errMsg.Find(L"输入的验证码不正确") != -1)
+	{
+		CLog::GetLog().AddLog(L"wrong validate code!");
+		status = ERROR_VALIDATE;
 	}
 	else
 	{
-		CLog::GetLog().AddLog(respStr);
+		CLog::GetLog().AddLog(L"general error!");
 		status = ERROR_GENERAL;
 	}
 }

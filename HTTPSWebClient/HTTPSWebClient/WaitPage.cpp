@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "WaitPage.h"
-#include "regex.h"
 
 CWaitPage::CWaitPage(void)
 {
@@ -23,18 +22,19 @@ void CWaitPage::ParseOutput( OrderInfo& output )
 	CRegex regex;
 	CString pattern, restStr;
 
-	pattern = L"\\\"waitTime\\\":\\d+";
+	pattern = L"\\\"waitTime\\\":{-?\\d+}";
 	regex.patternLoad(pattern);
 	regex.contextMatch(respStr, restStr);
-	regex.matchGet(0, output.waitTime);
-	long time = _ttol(output.waitTime);
-
-	if(time > 0)
+	if(regex.matchCount() == 1)
 	{
+		regex.matchGet(0, output.waitTime);
 		status = 0;
+		CLog::GetLog().AddLog(L"wait page success!");
+		CLog::GetLog().AddLog(output.waitTime);
 	}
 	else
 	{
 		status = -1;
+		CLog::GetLog().AddLog(L"general error!");
 	}
 }

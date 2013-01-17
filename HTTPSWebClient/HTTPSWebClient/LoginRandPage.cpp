@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "LoginRandPage.h"
-#include "regex.h"
 
 CLoginRandPage::CLoginRandPage(void)
 {
@@ -28,10 +27,12 @@ void CLoginRandPage::ParseOutput( LoginInfo& output )
 	if(regex.matchCount() == 1)
 	{
 		regex.matchGet(0, output.rand);
+		CLog::GetLog().AddLog(L"login rand page success!");
 		status = 0;
 	}
 	else
 	{
+		CLog::GetLog().AddLog(L"general error!");
 		status = -1;
 	}	
 }

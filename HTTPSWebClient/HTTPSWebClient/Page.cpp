@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Page.h"
-#include "Log.h"
 
 CPage::CPage(void)
 :reqStr(L"")

@@ -24,15 +24,14 @@ void CLog::AddLog( CString content )
 {
 	// format
 	// <timestamp>
-	// [process id]:[date]:[time]
+	// 2013.01.01 12:59:59
 	// </timestamp>
 	// <content>
 	// log content
 	// </content>
-	CString str;
-	str.Format(L"<timestamp>\r\n[%x]:",GetCurrentProcessId());
+	CString str = L"<timestamp>\r\n";
 	CTime currentTime = CTime::GetCurrentTime();
-	str += currentTime.Format(L"[%Y-%m-%d]:[%H-%M-%S]\r\n");
+	str += currentTime.Format(L"%Y.%m.%d %H:%M:%S\r\n");
 	str += L"</timestamp>\r\n<content>\r\n";
 	logFile.Write(str.GetString(), str.GetLength()*sizeof(TCHAR));
 	logFile.Write(content.GetString(), content.GetLength()*sizeof(TCHAR));

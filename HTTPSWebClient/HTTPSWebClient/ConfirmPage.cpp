@@ -1,7 +1,5 @@
 #include "StdAfx.h"
 #include "ConfirmPage.h"
-#include "regex.h"
-#include "Log.h"
 
 CConfirmPage::CConfirmPage(void)
 {
@@ -37,17 +35,12 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 
 	if(output.errMsg == L"\"Y\"")
 	{
+		CLog::GetLog().AddLog(L"confirm page success!");
 		status = ERROR_OK;
-	}
-	else if(output.errMsg.Find(L"·Ç·¨") != -1)
-	{
-		// logic error
-		CLog::GetLog().AddLog(respStr);
-		status = ERROR_LOGIC;
 	}
 	else
 	{
-		CLog::GetLog().AddLog(respStr);
+		CLog::GetLog().AddLog(output.errMsg);
 		status = ERROR_GENERAL;
 	}
 }

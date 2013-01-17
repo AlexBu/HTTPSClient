@@ -47,6 +47,16 @@
 #define IDC_EDIT_STATION_FROM           1034
 #define IDC_EDIT4                       1035
 #define IDC_EDIT_STATION_TO             1035
+#define IDC_EDIT_NAME_P3                1036
+#define IDC_EDIT_IDTYP_P3               1037
+#define IDC_EDIT_IDNO_P3                1038
+#define IDC_EDIT_MOB_P3                 1039
+#define IDC_EDIT_SEATTYP_P3             1040
+#define IDC_EDIT_NAME_P4                1041
+#define IDC_EDIT_IDTYP_P4               1042
+#define IDC_EDIT_IDNO_P4                1043
+#define IDC_EDIT_MOB_P4                 1044
+#define IDC_EDIT_SEATTYP_P4             1045
 
 // Next default values for new objects
 // 

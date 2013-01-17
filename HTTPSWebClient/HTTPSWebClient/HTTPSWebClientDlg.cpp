@@ -34,6 +34,16 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, identityNoP2(_T(""))
 	, mobileP2(_T(""))
 	, seatTypeP2(_T(""))
+	, nameP3(_T(""))
+	, identityTypeP3(_T(""))
+	, identityNoP3(_T(""))
+	, mobileP3(_T(""))
+	, seatTypeP3(_T(""))
+	, nameP4(_T(""))
+	, identityTypeP4(_T(""))
+	, identityNoP4(_T(""))
+	, mobileP4(_T(""))
+	, seatTypeP4(_T(""))
 	, trainNo(_T(""))
 	, stationFrom(_T(""))
 	, stationTo(_T(""))
@@ -61,6 +71,16 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_IDNO_P2, identityNoP2);
 	DDX_Text(pDX, IDC_EDIT_MOB_P2, mobileP2);
 	DDX_Text(pDX, IDC_EDIT_SEATTYP_P2, seatTypeP2);
+	DDX_Text(pDX, IDC_EDIT_NAME_P3, nameP3);
+	DDX_Text(pDX, IDC_EDIT_IDTYP_P3, identityTypeP3);
+	DDX_Text(pDX, IDC_EDIT_IDNO_P3, identityNoP3);
+	DDX_Text(pDX, IDC_EDIT_MOB_P3, mobileP3);
+	DDX_Text(pDX, IDC_EDIT_SEATTYP_P3, seatTypeP3);
+	DDX_Text(pDX, IDC_EDIT_NAME_P4, nameP4);
+	DDX_Text(pDX, IDC_EDIT_IDTYP_P4, identityTypeP4);
+	DDX_Text(pDX, IDC_EDIT_IDNO_P4, identityNoP4);
+	DDX_Text(pDX, IDC_EDIT_MOB_P4, mobileP4);
+	DDX_Text(pDX, IDC_EDIT_SEATTYP_P4, seatTypeP4);
 	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
@@ -196,21 +216,34 @@ void CHTTPSWebClientDlg::InitUserInfo()
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
-	dateString= L"2013-01-17";
-	trainNo = L"G7123";
+	dateString= L"2013-02-05";
+	trainNo = L"D3003";
 	stationFrom = L"ÄÏ¾©";
-	stationTo = L"ÉÏº£";
+	stationTo = L"Îäºº";
 
 	nameP1 = L"²·À¥Åô";
-	nameP2 = L"Ó÷¾ê";
 	identityTypeP1 = L"1";	// 1 for identify card
-	identityTypeP2 = L"1";
 	identityNoP1 = L"32032119831230701X";
-	identityNoP2 = L"43012419860309496X";
 	mobileP1 = L"18912952106";
-	mobileP2 = L"18912952106";
 	seatTypeP1 = L"O";	// big O for second class seat
+
+	nameP2 = L"Ó÷¾ê";
+	identityTypeP2 = L"1";
+	identityNoP2 = L"43012419860309496X";
+	mobileP2 = L"18912952106";
 	seatTypeP2 = L"O";
+
+	nameP3 = L"»ÆÊ¥¾ý";
+	identityTypeP3 = L"1";	// 1 for identify card
+	identityNoP3 = L"430124198711255011";
+	mobileP3 = L"18912952106";
+	seatTypeP3 = L"O";	// big O for second class seat
+
+	nameP4 = L"Ð»ÎÄÐË";
+	identityTypeP4 = L"1";
+	identityNoP4 = L"430124198710013328";
+	mobileP4 = L"18912952106";
+	seatTypeP4 = L"O";
 }
 
 void CHTTPSWebClientDlg::GetPassengerInfo()
@@ -227,6 +260,17 @@ void CHTTPSWebClientDlg::GetPassengerInfo()
 	theApp.ticketInfo.passengers[1].cardtype = identityTypeP2;
 	theApp.ticketInfo.passengers[1].cardno = identityNoP2;
 	theApp.ticketInfo.passengers[1].mobileno = mobileP2;
+
+	theApp.ticketInfo.passengers[2].seat = seatTypeP3;
+	theApp.ticketInfo.passengers[2].name = nameP3;
+	theApp.ticketInfo.passengers[2].cardtype = identityTypeP3;
+	theApp.ticketInfo.passengers[2].cardno = identityNoP3;
+	theApp.ticketInfo.passengers[2].mobileno = mobileP3;
+	theApp.ticketInfo.passengers[3].seat = seatTypeP4;
+	theApp.ticketInfo.passengers[3].name = nameP4;
+	theApp.ticketInfo.passengers[3].cardtype = identityTypeP4;
+	theApp.ticketInfo.passengers[3].cardno = identityNoP4;
+	theApp.ticketInfo.passengers[3].mobileno = mobileP4;
 
 	theApp.queryInfo.departDate = dateString;
 	theApp.queryInfo.fromStation = stationFrom;

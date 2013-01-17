@@ -1,7 +1,5 @@
 #include "StdAfx.h"
 #include "QueryPage.h"
-#include "regex.h"
-#include "Utility.h"
 
 CQueryPage::CQueryPage(void)
 {
@@ -74,6 +72,14 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 		}
 		matchStr = restStr;
 		restStr.Empty();
+	}
+	if(status == ERROR_OK)
+	{
+		CLog::GetLog().AddLog(L"query page success!");
+	}
+	else
+	{
+		CLog::GetLog().AddLog(L"general error!");
 	}
 }
 

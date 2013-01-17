@@ -65,6 +65,18 @@ private:
 	CString mobileP2;
 	CString seatTypeP2;
 
+	CString nameP3;
+	CString identityTypeP3;
+	CString identityNoP3;
+	CString mobileP3;
+	CString seatTypeP3;
+
+	CString nameP4;
+	CString identityTypeP4;
+	CString identityNoP4;
+	CString mobileP4;
+	CString seatTypeP4;
+
 	CString trainNo;
 
 	CString stationFrom;

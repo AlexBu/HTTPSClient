@@ -139,9 +139,16 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 {
 	result += L"\r\nquerying train...";
 	queryPage.BuildRequest(queryInfo);
+
+QUERY:
 	do{
 		queryPage.GetPageData(httpContent);
 		queryPage.ParseOutput(trainInfo);
+		if(queryPage.GetStatus() == ERROR_HTTP)
+		{
+			result += L"\r\nquery page: http connection failed!";
+			return;
+		}
 	} while (queryPage.GetStatus() != 0);
 
 	result += L"\r\nbooking tickets...";
@@ -152,7 +159,7 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(bookPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nbook failed: error code %d", bookPage.GetStatus());
-		return;
+		goto QUERY;
 	}
 
 	result += L"\r\nchecking order...";
@@ -163,7 +170,7 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(checkPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\ncheck failed: error code %d", checkPage.GetStatus());
-		return;
+		goto QUERY;
 	}
 
 	result += L"\r\nconfirming order...";
@@ -174,7 +181,7 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(queuePage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nqueue failed: error code %d", queuePage.GetStatus());
-		return;
+		goto QUERY;
 	}
 
 	result += L"\r\nqueueing order...";
@@ -185,7 +192,7 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(confirmPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmPage.GetStatus());
-		return;
+		goto QUERY;
 	}
 
 	result += L"\r\nwaiting for result...";
@@ -196,7 +203,6 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	if(waitPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nwait failed: error code %d", waitPage.GetStatus());
-		return;
 	}
 	else
 	{

@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "QueuePage.h"
-#include "regex.h"
 
 CQueuePage::CQueuePage(void)
 {
@@ -47,10 +46,12 @@ void CQueuePage::ParseOutput( OrderInfo& output )
 	{
 		status = 0;
 		regex.matchGet(0, output.ticketStr);
+		CLog::GetLog().AddLog(L"queue page success!");
 	}
 	else
 	{
 		status = -1;
+		CLog::GetLog().AddLog(L"general error!");
 	}
 	matchStr = restStr;
 	restStr.Empty();
