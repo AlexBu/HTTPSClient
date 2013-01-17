@@ -319,6 +319,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 		{
 			// oops, can't find a proper seat
 			CLog::GetLog().AddLog(L"cannot find a proper seat!");
+			CLog::GetLog().AddLog(seatOptions);
 			status = ERROR_NOSEAT;
 			return;
 		}

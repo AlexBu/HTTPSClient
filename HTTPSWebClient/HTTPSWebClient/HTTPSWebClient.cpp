@@ -161,6 +161,7 @@ QUERY:
 	if(bookPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nbook failed: error code %d", bookPage.GetStatus());
+		Sleep(1 * 1000);
 		goto QUERY;
 	}
 
@@ -172,6 +173,7 @@ QUERY:
 	if(checkPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\ncheck failed: error code %d", checkPage.GetStatus());
+		Sleep(1 * 1000);
 		goto QUERY;
 	}
 
@@ -183,6 +185,7 @@ QUERY:
 	if(queuePage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nqueue failed: error code %d", queuePage.GetStatus());
+		Sleep(1 * 1000);
 		goto QUERY;
 	}
 
@@ -194,7 +197,10 @@ QUERY:
 	if(confirmPage.GetStatus() != 0)
 	{
 		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmPage.GetStatus());
-		goto QUERY;
+		result += L"\r\re-enter validation code";
+		Sleep(1 * 1000);
+		// resend from here will need validate code!
+		return;
 	}
 
 	result += L"\r\nwaiting for result...";

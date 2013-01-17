@@ -15,11 +15,14 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 	reqStr.Format(L"/otsweb/order/confirmPassengerAction.do?"
 		L"method=checkOrderInfo&rand=%s"
 		, input.randCode);
+
 	reqData.Format(L"org.apache.struts.taglib.html.TOKEN=%s"
 		L"&leftTicketStr=%s"
 		L"&textfield=%s"
 		L"&checkbox0=0"
 		L"&checkbox2=2"
+		L"&checkbox4=4"
+		L"&checkbox5=5"
 		L"&orderRequest.train_date=%s"
 		L"&orderRequest.train_no=%s"
 		L"&orderRequest.station_train_code=%s"
