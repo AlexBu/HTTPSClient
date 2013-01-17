@@ -140,7 +140,6 @@ void CHTTPSWebClientApp::BookTickets(CString& result)
 	result += L"\r\nquerying train...";
 	queryPage.BuildRequest(queryInfo);
 
-QUERY:
 	do{
 		queryPage.GetPageData(httpContent);
 		queryPage.ParseOutput(trainInfo);
@@ -149,12 +148,14 @@ QUERY:
 			result += L"\r\nquery page: http connection failed!";
 			return;
 		}
-		// add delay
-		Sleep(1 * 1000);
+		// add query delay
+		Sleep(QUERY_DELAY * 1000);
 	} while (queryPage.GetStatus() != 0);
+
 
 	result += L"\r\nbooking tickets...";
 	bookPage.BuildRequest(trainInfo);
+BOOK:
 	bookPage.GetPageData(httpContent);
 	bookPage.ParseOutput(ticketInfo);
 
@@ -162,11 +163,12 @@ QUERY:
 	{
 		result.AppendFormat(L"\r\nbook failed: error code %d", bookPage.GetStatus());
 		Sleep(1 * 1000);
-		goto QUERY;
+		goto BOOK;
 	}
 
 	result += L"\r\nchecking order...";
 	checkPage.BuildRequest(ticketInfo);
+CHECK:
 	checkPage.GetPageData(httpContent);
 	checkPage.ParseOutput(orderInfo);
 
@@ -174,11 +176,12 @@ QUERY:
 	{
 		result.AppendFormat(L"\r\ncheck failed: error code %d", checkPage.GetStatus());
 		Sleep(1 * 1000);
-		goto QUERY;
+		goto CHECK;
 	}
 
 	result += L"\r\nconfirming order...";
 	queuePage.BuildRequest(ticketInfo);
+QUEUE:
 	queuePage.GetPageData(httpContent);
 	queuePage.ParseOutput(orderInfo);
 	
@@ -186,21 +189,36 @@ QUERY:
 	{
 		result.AppendFormat(L"\r\nqueue failed: error code %d", queuePage.GetStatus());
 		Sleep(1 * 1000);
-		goto QUERY;
+		goto QUEUE;
 	}
 
 	result += L"\r\nqueueing order...";
 	confirmPage.BuildRequest(orderInfo);
+CONFIRM:
 	confirmPage.GetPageData(httpContent);
 	confirmPage.ParseOutput(orderInfo);
 
-	if(confirmPage.GetStatus() != 0)
+	int confirmStatus = confirmPage.GetStatus();
+	if(confirmStatus == ERROR_VALIDATE)
 	{
-		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmPage.GetStatus());
-		result += L"\r\re-enter validation code";
-		Sleep(1 * 1000);
+		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmStatus);
+		result += L"\r\re-enter validation code!";
 		// resend from here will need validate code!
 		return;
+	}
+	else if(confirmStatus == ERROR_LOGIC)
+	{
+		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmStatus);
+		result += L"\r\retry";
+		Sleep(1 * 1000);
+		goto CONFIRM;
+	}
+	else
+	{
+		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmStatus);
+		result += L"\r\retry";
+		Sleep(1 * 1000);
+		goto CONFIRM;
 	}
 
 	result += L"\r\nwaiting for result...";

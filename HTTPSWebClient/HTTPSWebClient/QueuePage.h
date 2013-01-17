@@ -1,6 +1,7 @@
 #pragma once
 #include "Page.h"
 
+#define QUERY_DELAY		(3)
 class CQueuePage : public CPage
 {
 public:

@@ -216,34 +216,34 @@ void CHTTPSWebClientDlg::InitUserInfo()
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
-	dateString= L"2013-02-05";
-	trainNo = L"D3003";
-	stationFrom = L"南京";
-	stationTo = L"武汉";
+	dateString= L"2013-02-06";
+	trainNo = L"T43";
+	stationFrom = L"北京";
+	stationTo = L"西安";
 
 	nameP1 = L"卜昆鹏";
 	identityTypeP1 = L"1";	// 1 for identify card
 	identityNoP1 = L"32032119831230701X";
 	mobileP1 = L"18912952106";
-	seatTypeP1 = L"O";	// big O for second class seat
+	seatTypeP1 = L"3";	// big O for second class seat
 
 	nameP2 = L"喻娟";
 	identityTypeP2 = L"1";
 	identityNoP2 = L"43012419860309496X";
 	mobileP2 = L"18912952106";
-	seatTypeP2 = L"O";
+	seatTypeP2 = L"3";
 
 	nameP3 = L"黄圣君";
 	identityTypeP3 = L"1";	// 1 for identify card
 	identityNoP3 = L"430124198711255011";
 	mobileP3 = L"18912952106";
-	seatTypeP3 = L"O";	// big O for second class seat
+	seatTypeP3 = L"3";	// big O for second class seat
 
 	nameP4 = L"谢文兴";
 	identityTypeP4 = L"1";
 	identityNoP4 = L"430124198710013328";
 	mobileP4 = L"18912952106";
-	seatTypeP4 = L"O";
+	seatTypeP4 = L"3";
 }
 
 void CHTTPSWebClientDlg::GetPassengerInfo()

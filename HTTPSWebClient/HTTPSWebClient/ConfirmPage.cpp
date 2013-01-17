@@ -38,6 +38,17 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 		CLog::GetLog().AddLog(L"confirm page success!");
 		status = ERROR_OK;
 	}
+	else if(output.errMsg.Find(L"非法") != -1)
+	{
+		// logic error
+		CLog::GetLog().AddLog(L"illegal request!");
+		status = ERROR_LOGIC;
+	}
+	else if(output.errMsg.Find(L"输入的验证码不正确") != -1)
+	{
+		CLog::GetLog().AddLog(L"wrong validate code!");
+		status = ERROR_VALIDATE;
+	}
 	else
 	{
 		CLog::GetLog().AddLog(output.errMsg);
