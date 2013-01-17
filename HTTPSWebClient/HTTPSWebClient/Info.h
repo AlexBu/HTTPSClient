@@ -36,6 +36,7 @@ enum SeatType
 	HARD_SLEEPER = '3',
 	SOFT_SEAT = '2',
 	HARD_SEAT = '1',
+	SUPER_SOFT_SEAT = 'E',
 	NO_SEAT = 'X',	// not sure
 	OTHER = 'Z'		// not sure
 };

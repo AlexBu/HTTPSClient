@@ -23,19 +23,12 @@ CLog::~CLog(void)
 void CLog::AddLog( CString content )
 {
 	// format
-	// <timestamp>
-	// 2013.01.01 12:59:59
-	// </timestamp>
-	// <content>
-	// log content
-	// </content>
-	CString str = L"<timestamp>\r\n";
+	// [2013.01.01 12:59:59] <log content>
 	CTime currentTime = CTime::GetCurrentTime();
-	str += currentTime.Format(L"%Y.%m.%d %H:%M:%S\r\n");
-	str += L"</timestamp>\r\n<content>\r\n";
+	CString str = currentTime.Format(L"[%Y.%m.%d %H:%M:%S] ");
 	logFile.Write(str.GetString(), str.GetLength()*sizeof(TCHAR));
 	logFile.Write(content.GetString(), content.GetLength()*sizeof(TCHAR));
-	str = L"\r\n</content>\r\n\r\n";
+	str = L"\r\n";
 	logFile.Write(str.GetString(), str.GetLength()*sizeof(TCHAR));
 }
 

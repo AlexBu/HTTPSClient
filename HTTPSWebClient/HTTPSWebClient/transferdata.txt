@@ -252,6 +252,8 @@ station_train_code=D313
 &mmStr=D2C97D0945DA6BAD2A5CE98309C7417D667CC38A85EBF9032131D4E5
 &locationCode=P2
 
+1*****3ÎŞ×ù4*****0ÈíÎÔ1*****0Ó²×ù3*****0Ó²ÎÔ???
+
 station_train_code=G233
 &train_date=2012-11-18
 &seattype_num=

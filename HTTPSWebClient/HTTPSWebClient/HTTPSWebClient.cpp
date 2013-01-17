@@ -149,6 +149,8 @@ QUERY:
 			result += L"\r\nquery page: http connection failed!";
 			return;
 		}
+		// add delay
+		Sleep(1 * 1000);
 	} while (queryPage.GetStatus() != 0);
 
 	result += L"\r\nbooking tickets...";
