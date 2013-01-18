@@ -63,6 +63,7 @@ void CBookPage::BuildRequest( TrainInfo& input )
  		input.mmStr,
  		input.locationCode
  		);
+	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/querySingleAction.do?method=init";
 }
 
 void CBookPage::ParseOutput( TicketInfo& output )
@@ -77,8 +78,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"org\\.apache\\.struts\\.taglib\\.html\\.TOKEN\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -90,8 +90,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"left_ticket\\\"\\b*\\n\\b*value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -103,8 +102,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.train_date\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -116,8 +114,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.train_no\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -129,8 +126,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.station_train_code\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -142,8 +138,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.from_station_telecode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -155,8 +150,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.to_station_telecode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -168,8 +162,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.bed_level_order_num\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -181,8 +174,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.start_time\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -194,8 +186,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.end_time\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -207,8 +198,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.from_station_name\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -220,8 +210,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.to_station_name\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -233,8 +222,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.cancel_flag\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -246,8 +234,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"orderRequest\\.id_mode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -260,8 +247,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	// add seat type select logic
 	pattern = L"id=\"passenger_1_seat\">{.+?}</select>";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;
@@ -327,8 +313,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"submit_form_confirm\\(\\\'confirmPassenger\\\',\\\'{[^\\\']+}\\\'";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 0)
+	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = -1;

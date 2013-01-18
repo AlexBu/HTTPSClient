@@ -22,7 +22,6 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, AddrString(_T(""))
 	, usernameStr(_T(""))
 	, passwordStr(_T(""))
-	, validateStr(_T(""))
 	, dateString(_T(""))
 	, nameP1(_T(""))
 	, identityTypeP1(_T(""))
@@ -55,9 +54,6 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
-	DDX_Text(pDX, IDC_EDIT_VALIPIC, validateStr);
-	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_LOGIN, valPicLoginCtrl);
-	DDX_Control(pDX, IDC_STATIC_VALIDATE_PIC_BOOK, valPicBookCtrl);
 	DDX_Text(pDX, IDC_EDIT_DATE, dateString);
 	DDX_Text(pDX, IDC_EDIT_USERNAME, usernameStr);
 	DDX_Text(pDX, IDC_EDIT_PASSWORD, passwordStr);
@@ -84,16 +80,16 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
-	DDX_Text(pDX, IDC_EDIT_VAL_PIC_BOOK, validateBookStr);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
+	//AFX_MSG_MAP{{(CHTTPSWebClientDlg)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(WM_SETSTR, CHTTPSWebClientDlg::OnSetStr)
+	ON_MESSAGE(WM_FINISH, CHTTPSWebClientDlg::OnFinish)
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC, &CHTTPSWebClientDlg::OnGetValLoginPic)
 	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
-	ON_BN_CLICKED(IDC_BUTTON_GET_VALPIC2, &CHTTPSWebClientDlg::OnGetValBookPic)
 	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
 END_MESSAGE_MAP()
 
@@ -164,16 +160,6 @@ void CHTTPSWebClientDlg::ConnectToSite()
 	theApp.ConnectToURL(AddrString);
 }
 
-void CHTTPSWebClientDlg::OnGetValLoginPic()
-{
-	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=sjrand";
-	if(theApp.GetValidatePic(ValPicAddr, valPicLoginCtrl))
-	{
-		// redraw picture
-		valPicLoginCtrl.InvalidateRect(NULL, TRUE);
-	}
-}
-
 void CHTTPSWebClientDlg::OnLogin()
 {
 	// TODO: Add your control notification handler code here
@@ -184,17 +170,6 @@ void CHTTPSWebClientDlg::OnLogin()
 	theApp.LoginToSite(RespondString);
 	// set response
 	UpdateData(FALSE);
-}
-
-void CHTTPSWebClientDlg::OnGetValBookPic()
-{
-	// TODO: Add your control notification handler code here
-	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=randp";
-	if(theApp.GetValidatePic(ValPicAddr, valPicBookCtrl))
-	{
-		// redraw picture
-		valPicBookCtrl.InvalidateRect(NULL, TRUE);
-	}
 }
 
 void CHTTPSWebClientDlg::OnBook()
@@ -248,7 +223,7 @@ void CHTTPSWebClientDlg::InitPassengerInfo()
 
 void CHTTPSWebClientDlg::GetPassengerInfo()
 {
-	theApp.ticketInfo.randCode =  validateBookStr;
+	//theApp.ticketInfo.randCode =  validateBookStr;
 
 	theApp.ticketInfo.passengers[0].seat = seatTypeP1;
 	theApp.ticketInfo.passengers[0].name = nameP1;
@@ -286,5 +261,22 @@ void CHTTPSWebClientDlg::GetUserInfo()
 {
 	theApp.loginInfo.username = usernameStr;
 	theApp.loginInfo.password = passwordStr;
-	theApp.loginInfo.validate = validateStr;
+}
+
+LRESULT CHTTPSWebClientDlg::OnSetStr( WPARAM wParam, LPARAM lParam )
+{
+	// wParam:
+	// high word: thread count
+	// low word: stage
+	// lParam: data
+	return 1;
+}
+
+LRESULT CHTTPSWebClientDlg::OnFinish( WPARAM wParam, LPARAM lParam )
+{
+	// wParam:
+	// high word: thread count
+	// low word: stage
+	// lParam: data
+	return 1;
 }

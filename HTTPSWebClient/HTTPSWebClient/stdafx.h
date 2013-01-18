@@ -39,9 +39,9 @@
 
 #include <winhttp.h>
 
-
-
-
+// customized message
+#define WM_SETSTR	(WM_USER + 1)
+#define WM_FINISH	(WM_USER + 2)
 
 
 #ifdef _UNICODE

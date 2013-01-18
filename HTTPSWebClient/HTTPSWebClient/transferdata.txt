@@ -586,3 +586,8 @@ org.apache.struts.taglib.html.TOKEN=1c8318257d5e839228f64506f20c8c68
 &batch_no=1%23
 &isSendMsg=Y
 
+
+[web update]
+2013.1.18
+1.check order validate code no longer be preset before query ticket
+2.login add reference field check mechanism

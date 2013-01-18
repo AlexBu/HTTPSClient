@@ -12,6 +12,7 @@ CWaitPage::~CWaitPage(void)
 void CWaitPage::BuildRequest( OrderInfo& input )
 {
 	reqStr = L"/otsweb/order/myOrderAction.do?method=getOrderWaitTime";
+	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
 }
 
 void CWaitPage::ParseOutput( OrderInfo& output )
@@ -24,8 +25,7 @@ void CWaitPage::ParseOutput( OrderInfo& output )
 
 	pattern = L"\\\"waitTime\\\":{-?\\d+}";
 	regex.patternLoad(pattern);
-	regex.contextMatch(respStr, restStr);
-	if(regex.matchCount() == 1)
+	if( (regex.contextMatch(respStr, restStr) == TRUE) && (regex.matchCount() == 1) )
 	{
 		regex.matchGet(0, output.waitTime);
 		status = 0;

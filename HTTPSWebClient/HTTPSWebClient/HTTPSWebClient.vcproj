@@ -195,59 +195,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BookPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CheckPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ConfirmPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPContent.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\HTTPSWebClient.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPSWebClientDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\jpg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Log.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginRandPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Page.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\QueryPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\QueuePage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\regex.cpp"
 				>
 			</File>
 			<File
@@ -270,18 +218,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\Utility.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ValidatePicture.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\WaitPage.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -289,87 +225,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BookPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CheckPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ConfirmPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HTTPContent.h"
-				>
-			</File>
-			<File
 				RelativePath=".\HTTPSWebClient.h"
 				>
 			</File>
 			<File
-				RelativePath=".\HTTPSWebClientDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Info.h"
-				>
-			</File>
-			<File
-				RelativePath=".\jpg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Log.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginRandPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Page.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QueryPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QueuePage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\regex.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Utility.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ValidatePicture.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WaitPage.h"
 				>
 			</File>
 		</Filter>
@@ -390,11 +250,179 @@
 				RelativePath=".\res\HTTPSWebClient.rc2"
 				>
 			</File>
+			<File
+				RelativePath=".\Resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\transferdata.txt"
+				>
+			</File>
 		</Filter>
-		<File
-			RelativePath=".\transferdata.txt"
+		<Filter
+			Name="Pages"
 			>
-		</File>
+			<File
+				RelativePath=".\BookPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BookPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CheckPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CheckPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ConfirmPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ConfirmPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginRandPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginValPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoginValPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Page.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Page.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QueryPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QueryPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QueuePage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QueuePage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WaitPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WaitPage.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="GUI"
+			>
+			<File
+				RelativePath=".\HTTPSWebClientDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HTTPSWebClientDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ValidationCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ValidationCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ValidationDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ValidationDialog.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Utilities"
+			>
+			<File
+				RelativePath=".\HTTPContent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HTTPContent.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Info.h"
+				>
+			</File>
+			<File
+				RelativePath=".\jpg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jpg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Log.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Log.h"
+				>
+			</File>
+			<File
+				RelativePath=".\regex.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\regex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 		<Global

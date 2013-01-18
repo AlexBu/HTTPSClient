@@ -12,6 +12,7 @@ CLoginRandPage::~CLoginRandPage(void)
 void CLoginRandPage::BuildRequest()
 {
 	reqStr = L"/otsweb/loginAction.do?method=loginAysnSuggest";
+	refStr = L"Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init";
 }
 
 void CLoginRandPage::ParseOutput( LoginInfo& output )
@@ -23,8 +24,8 @@ void CLoginRandPage::ParseOutput( LoginInfo& output )
 	CString patternRand = L"{\\d+}";
 	regex.patternLoad(patternRand);
 	CString restStr;
-	regex.contextMatch(respStr, restStr);
-	if(regex.matchCount() == 1)
+
+	if( (regex.contextMatch(respStr, restStr) == TRUE) && (regex.matchCount() == 1) )
 	{
 		regex.matchGet(0, output.rand);
 		CLog::GetLog().AddLog(L"login rand page success!");

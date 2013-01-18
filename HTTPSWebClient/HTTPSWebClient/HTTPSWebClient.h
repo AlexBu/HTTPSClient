@@ -9,7 +9,7 @@
 #endif
 
 #include "resource.h"		// Ö÷·ûºÅ
-#include "ValidatePicture.h"
+#include "ValidationCtrl.h"
 #include "regex.h"
 #include "HTTPContent.h"
 #include "Info.h"
@@ -21,6 +21,8 @@
 #include "QueuePage.h"
 #include "ConfirmPage.h"
 #include "WaitPage.h"
+#include "LoginValPage.h"
+
 #include "Log.h"
 
 // CHTTPSWebClientApp:
@@ -40,7 +42,7 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	BOOL GetValidatePic(const CString& ValPicAddr, CValPic& picCtrl);
+	BOOL GetValidatePic(const CString& ValPicAddr, CValPicCtrl& picCtrl);
 	void LoginToSite(CString& result);
 	void ConnectToURL( const CString& URLString );
 	void BookTickets(CString& result);
@@ -55,11 +57,14 @@ private:
 	CQueuePage queuePage;
 	CConfirmPage confirmPage;
 	CWaitPage waitPage;
+	CLoginValPage loginValPage;
 public:
 	LoginInfo loginInfo;
 	QueryInfo queryInfo;
 	TrainInfo trainInfo;
 	TicketInfo ticketInfo;
 	OrderInfo orderInfo;
+private:
+	//CLoginRandThread loginRandThread;
 };
 extern CHTTPSWebClientApp theApp;

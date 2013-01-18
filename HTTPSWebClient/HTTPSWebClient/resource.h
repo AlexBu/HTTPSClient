@@ -4,6 +4,7 @@
 //
 #define IDD_HTTPSWEBCLIENT_DIALOG       102
 #define IDR_MAINFRAME                   128
+#define IDD_DIALOG_VALIDATE_CODE        129
 #define IDC_EDIT_URL                    1000
 #define IDC_EDIT_POST                   1001
 #define IDC_EDIT_GET                    1002
@@ -44,10 +45,12 @@
 #define IDC_EDIT_SEATTYP_P2             1032
 #define IDC_EDIT1                       1033
 #define IDC_EDIT_TRAIN                  1033
+#define IDC_EDIT_CODE                   1033
 #define IDC_EDIT_STATION_FROM           1034
 #define IDC_EDIT4                       1035
 #define IDC_EDIT_STATION_TO             1035
 #define IDC_EDIT_NAME_P3                1036
+#define IDC_STATIC_VALIDATE_DISPLAY     1036
 #define IDC_EDIT_IDTYP_P3               1037
 #define IDC_EDIT_IDNO_P3                1038
 #define IDC_EDIT_MOB_P3                 1039
@@ -62,9 +65,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        129
+#define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1036
+#define _APS_NEXT_CONTROL_VALUE         1037
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

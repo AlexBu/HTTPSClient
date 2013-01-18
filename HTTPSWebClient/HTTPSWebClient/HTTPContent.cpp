@@ -70,6 +70,21 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 		&queryFlags, sizeof (flagSize) ))
 		goto SENDGETDATAFAIL;
 
+	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+		_T("Cache-Control: no-cache"),
+		-1,
+		WINHTTP_ADDREQ_FLAG_ADD) )
+		goto SENDGETDATAFAIL;
+
+	if(refStr.IsEmpty() == FALSE)
+	{
+		if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+			refStr,
+			-1,
+			WINHTTP_ADDREQ_FLAG_ADD) )
+			goto SENDGETDATAFAIL;
+	}
+
 	// Send a request
 	if( FALSE == WinHttpSendRequest( hRequest,
 			WINHTTP_NO_ADDITIONAL_HEADERS,
@@ -165,6 +180,50 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 		-1,
 		WINHTTP_ADDREQ_FLAG_ADD) )
 		goto SENDGETDATAFAIL;
+
+	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+		_T("Cache-Control: no-cache"),
+		-1,
+		WINHTTP_ADDREQ_FLAG_ADD) )
+		goto SENDGETDATAFAIL;
+
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("x-requested-with: XMLHttpRequest"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//	goto SENDGETDATAFAIL;
+
+	// Accept: image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Accept: image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//	goto SENDGETDATAFAIL;
+
+	// Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init
+	if(refStr.IsEmpty() == FALSE)
+	{
+		if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+			refStr,
+			-1,
+			WINHTTP_ADDREQ_FLAG_ADD) )
+			goto SENDGETDATAFAIL;
+	}
+	
+
+	// Accept-Language: en-us
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Accept-Language: en-us"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//	goto SENDGETDATAFAIL;
+
+	// Accept-Encoding: gzip, deflate
+	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+	//	_T("Accept-Encoding: gzip, deflate"),
+	//	-1,
+	//	WINHTTP_ADDREQ_FLAG_ADD) )
+	//	goto SENDGETDATAFAIL;
 
 	// transform post string to MBCS type
 	char* postData = NULL;
@@ -276,4 +335,9 @@ void CHTTPContent::ConnectSite( const CString& site )
 		status = -1;
 
 	status = 1;
+}
+
+void CHTTPContent::SetRefStr( CString& str )
+{
+	refStr = str;
 }

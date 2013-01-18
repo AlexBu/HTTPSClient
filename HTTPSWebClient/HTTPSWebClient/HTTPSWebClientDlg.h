@@ -5,7 +5,7 @@
 #pragma once
 #include "afxwin.h"
 
-#include "ValidatePicture.h"
+#include "ValidationCtrl.h"
 
 // CHTTPSWebClientDlg ¶Ô»°¿ò
 class CHTTPSWebClientDlg : public CDialog
@@ -29,13 +29,12 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg LRESULT OnSetStr(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnFinish(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 
 protected:
-	afx_msg void OnGetValLoginPic();
 	afx_msg void OnLogin();
-	afx_msg void OnGetValBookPic();
-	afx_msg void OnQuery();
 	afx_msg void OnBook();
 
 public:
@@ -50,8 +49,6 @@ private:
 	CString AddrString;
 	CString usernameStr;
 	CString passwordStr;
-	CString validateStr;
-	CString validateBookStr;
 
 	CString nameP1;
 	CString identityTypeP1;
@@ -83,8 +80,6 @@ private:
 	CString stationTo;
 
 public:
-	CValPic valPicLoginCtrl;
-	CValPic valPicBookCtrl;
 	CString RespondString;
 
 };

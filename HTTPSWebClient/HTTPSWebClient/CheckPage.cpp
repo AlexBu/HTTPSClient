@@ -125,6 +125,8 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		,reserve_flagGet(input)
 		,input.tFlag
 		);
+
+		refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
 }
 
 void CCheckPage::ParseOutput( OrderInfo& output )
@@ -139,8 +141,7 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 
 	pattern = L"\\{\\\"checkHuimd\\\":{\\q},\\\"check608\\\":{\\q},\\\"msg\\\":{\\q},\\\"errMsg\\\":{\\q}\\}";
 	regex.patternLoad(pattern);
-	regex.contextMatch(matchStr, restStr);
-	if(regex.matchCount() == 4)
+	if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 4))
 	{
 		regex.matchGet(3, output.errMsg);
 	}
@@ -153,10 +154,17 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		pattern = L"{.*}&tFlag=.*$";
 		matchStr = reqData;
 		regex.patternLoad(pattern);
-		regex.contextMatch(matchStr, restStr);
-		regex.matchGet(0, output.orderInfo);
-		CLog::GetLog().AddLog(L"check page success!");
-		status = ERROR_OK;
+		if(regex.contextMatch(matchStr, restStr) == TRUE)
+		{
+			regex.matchGet(0, output.orderInfo);
+			CLog::GetLog().AddLog(L"check page success!");
+			status = ERROR_OK;
+		}
+		else
+		{
+			CLog::GetLog().AddLog(L"parse confirm string failed!");
+			status = ERROR_GENERAL;
+		}
 	}
 	else if(output.errMsg.Find(L"·Ç·¨") != -1)
 	{
