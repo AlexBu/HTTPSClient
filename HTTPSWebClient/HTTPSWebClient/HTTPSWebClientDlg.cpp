@@ -191,10 +191,10 @@ void CHTTPSWebClientDlg::InitUserInfo()
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
-	dateString= L"2013-02-06";
-	trainNo = L"T43";
-	stationFrom = L"北京";
-	stationTo = L"西安";
+	dateString= L"2013-01-20";
+	trainNo = L"D305";
+	stationFrom = L"南京";
+	stationTo = L"上海";
 
 	nameP1 = L"卜昆鹏";
 	identityTypeP1 = L"1";	// 1 for identify card

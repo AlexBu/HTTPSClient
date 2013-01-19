@@ -589,5 +589,8 @@ org.apache.struts.taglib.html.TOKEN=1c8318257d5e839228f64506f20c8c68
 
 [web update]
 2013.1.18
-1.check order validate code no longer be preset before query ticket
-2.login add reference field check mechanism
+1.check order validate code no longer be preset before query ticket, implemented
+2.login add reference field check mechanism, implemented
+2013.1.19
+1.confirm page uses ticket str from queue page as left ticket, not implemented
+2.passenger info can only submit passengerticket field, not implemented
