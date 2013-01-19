@@ -252,7 +252,7 @@ station_train_code=D313
 &mmStr=D2C97D0945DA6BAD2A5CE98309C7417D667CC38A85EBF9032131D4E5
 &locationCode=P2
 
-1*****3无座4*****0软卧1*****0硬座3*****0硬卧???
+
 
 station_train_code=G233
 &train_date=2012-11-18
@@ -355,6 +355,11 @@ org.apache.struts.taglib.html.TOKEN=b58b97b8c10ec135c4417f4d5a48777a
 
 response
 {"checkHuimd":"Y","check608":"Y","msg":"","errMsg":"Y"}
+
+checkHuimd:
+N:	取消次数过多
+check608:
+N:	实名制列车, 一日一车一证一票制度
 
 GET
 /otsweb/order/confirmPassengerAction.do?method=getQueueCount
@@ -587,6 +592,72 @@ org.apache.struts.taglib.html.TOKEN=1c8318257d5e839228f64506f20c8c68
 &isSendMsg=Y
 
 
+confirmPassengerAction.do?method=checkOrderInfo
+at save_passenger_info.js?version=5.45
+at submit_form_confirm()
+
+confirmPassengerAction.do?method=getQueueCount
+at save_passenger_info.js?version=5.45
+at showOrderDialog()
+
+count:	deprecated
+op_1:	deprecated
+countT:
+queue number
+ticket: show ticket number and must be used in later query
+
+op_2:
+true:					queue number > left ticket number
+false && countT > 0:	queue number < left ticket number
+
+tourFlag:	dc, 单程
+waitTime:	negative means wait complete
+waitCount:	number of people in queue, 0 means in turn
+requestId:	request id
+errorcode:	error code
+msg:		show msg
+count:		deprecated?
+
+
+seat type:
+length = 10
+1:		[seat type]
+2-6:	[place holders]
+7:		[no seat flag, 3=no seat]
+8-10:	[]
+1 ***** 3 无座
+4 ***** 0 软卧
+1 ***** 0 硬座
+3 ***** 0 硬卧
+
+O XXXXX 0 二等
+M XXXXX 0 一等
+9 XXXXX 0 商务
+
+O 01345 0 035
+M 02295 0 020
+9 04295 0 002
+
+O ***** 0 017
+4 ***** 0 046
+
+O0134
+50035	二等: 35
+M0229
+50020	一等: 20
+90429
+50002	商务: 2
+
+
+40: 软卧
+10: 硬座
+13: 硬座无座
+30: 硬卧
+O0: 二等
+O3: 二等无座
+M0: 一等
+90: 商务
+	
 [web update]
 2013.1.18
 1.check order validate code no longer be preset before query ticket, implemented

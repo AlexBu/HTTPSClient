@@ -1,0 +1,6 @@
+1. this algorithm has nothing to do with the rand number posted to server!
+2. use formula to transform color picture into grey picture
+formula:
+Gray = (R*19595 + G*38469 + B*7472) >> 16
+then into binary picture
+threshold = 170
