@@ -665,3 +665,7 @@ M0: Ò»µÈ
 2013.1.19
 1.confirm page uses ticket str from queue page as left ticket, not implemented
 2.passenger info can only submit passengerticket field, not implemented
+2013.1.20
+confirmSingleForQueueOrder change to confirmSingleForQueue, but can only be used at
+ https://www.12306.cn
+getOrderWaitTime change to queryOrderWaitTime

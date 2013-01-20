@@ -29,6 +29,8 @@ void CLoginValPage::BuildRequest()
 
 void CLoginValPage::ParseOutput()
 {
+	if(status == ERROR_HTTP)
+		return;
 	// transform into bmp format
 	height = bmpHeightGet(buff, size);
 	width = bmpWidthGet(buff, size);

@@ -11,7 +11,7 @@ CWaitPage::~CWaitPage(void)
 
 void CWaitPage::BuildRequest( OrderInfo& input )
 {
-	reqStr = L"/otsweb/order/myOrderAction.do?method=getOrderWaitTime";
+	reqStr = L"/otsweb/order/myOrderAction.do?method=queryOrderWaitTime";
 	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
 }
 

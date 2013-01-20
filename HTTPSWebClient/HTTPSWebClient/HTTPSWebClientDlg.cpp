@@ -88,6 +88,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(WM_SETSTR, CHTTPSWebClientDlg::OnSetStr)
 	ON_MESSAGE(WM_FINISH, CHTTPSWebClientDlg::OnFinish)
+	ON_MESSAGE(WM_GETCODE, CHTTPSWebClientDlg::OnGetCode)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
 	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
@@ -269,6 +270,10 @@ LRESULT CHTTPSWebClientDlg::OnSetStr( WPARAM wParam, LPARAM lParam )
 	// high word: thread count
 	// low word: stage
 	// lParam: data
+	
+	RespondString += (LPCTSTR)lParam;
+	RespondString += L"\r\n";
+	UpdateData(FALSE);
 	return 1;
 }
 
@@ -278,5 +283,18 @@ LRESULT CHTTPSWebClientDlg::OnFinish( WPARAM wParam, LPARAM lParam )
 	// high word: thread count
 	// low word: stage
 	// lParam: data
+	return 1;
+}
+
+LRESULT CHTTPSWebClientDlg::OnGetCode( WPARAM wParam, LPARAM lParam )
+{
+	// wParam:
+	// high word: thread count
+	// low word: stage
+	// lParam: data
+	
+	// show validate picture
+	theApp.GetValidationCode();
+
 	return 1;
 }

@@ -31,6 +31,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg LRESULT OnSetStr(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnFinish(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGetCode(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 
 protected:

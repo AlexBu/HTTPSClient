@@ -23,6 +23,8 @@
 #include "WaitPage.h"
 #include "LoginValPage.h"
 
+#include "ValidationDialog.h"
+
 #include "Log.h"
 
 // CHTTPSWebClientApp:
@@ -64,7 +66,16 @@ public:
 	TrainInfo trainInfo;
 	TicketInfo ticketInfo;
 	OrderInfo orderInfo;
+public:
+	CValidationDialog validationDialog;
 private:
-	//CLoginRandThread loginRandThread;
+	CEvent valEvent;
+public:
+	static UINT AFX_CDECL loginWorker(LPVOID param);
+
+	void SendString(CString &msg);
+
+	void PrepareValidationDialog();
+	void GetValidationCode();
 };
 extern CHTTPSWebClientApp theApp;

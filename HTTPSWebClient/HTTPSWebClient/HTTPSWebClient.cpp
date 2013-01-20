@@ -11,7 +11,6 @@
 
 #include <atlrx.h>
 
-#include "ValidationDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -115,10 +114,11 @@ BOOL CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr, CValPicCtrl& 
 
 void CHTTPSWebClientApp::LoginToSite(CString& result)
 {
+	// try to create a thread to do login things
+	CWinThread* loginThread = AfxBeginThread(loginWorker, this);
+	return;
 	// get validation code for login action
 	CValidationDialog dlg;
-	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=sjrand";
-	//GetValidatePic(ValPicAddr, dlg.pic);
 	loginValPage.BuildRequest();
 	loginValPage.GetPageData(httpContent);
 	loginValPage.ParseOutput();
@@ -347,4 +347,102 @@ CONFIRM:
 	{
 		result.AppendFormat(L"\r\nwait failed: error code %d", waitStatus);
 	}
+}
+
+UINT CHTTPSWebClientApp::loginWorker( LPVOID param )
+{
+	CString statusMsg;
+
+	CHTTPSWebClientApp* app = (CHTTPSWebClientApp*)param;
+	CWnd* gui = app->m_pMainWnd;
+
+	statusMsg.Format(L"request validation picture");
+	app->SendString(statusMsg);
+
+	app->loginValPage.BuildRequest();
+	app->loginValPage.GetPageData(app->httpContent);
+	app->loginValPage.ParseOutput();
+
+	// send message to gui to get validation code from user input
+	app->PrepareValidationDialog();
+
+	gui->SendMessage(WM_GETCODE, 0, 0);
+
+	// wait for validation code to be retrieved
+	WaitForSingleObject(app->valEvent, INFINITE);
+
+	// check result
+	if(app->loginInfo.validate.IsEmpty())
+	{
+		statusMsg.Format(L"user canceled this request, login abort");
+		app->SendString(statusMsg);
+		return 0;
+	}
+
+	statusMsg.Format(L"get validation code: %s.", app->loginInfo.validate);
+	gui->SendMessage(WM_SETSTR, 0, (LPARAM)(LPCTSTR)statusMsg);
+
+	statusMsg.Format(L"request login random number");
+	app->SendString(statusMsg);
+
+	// post request to get rand number
+	app->loginRandPage.BuildRequest();
+	app->loginRandPage.GetPageStr(app->httpContent);
+	app->loginRandPage.ParseOutput(app->loginInfo);
+
+	if(app->loginRandPage.GetStatus() != 0)
+	{
+		statusMsg.Format(L"request login rand failed, error code: %d", app->loginRandPage.GetStatus());
+		app->SendString(statusMsg);
+		return 0;
+	}
+
+	statusMsg.Format(L"send login request");
+	app->SendString(statusMsg);
+
+	app->loginPage.BuildRequest(app->loginInfo);
+	app->loginPage.GetPageStr(app->httpContent);
+	app->loginPage.ParseOutput();
+
+	if(app->loginPage.GetStatus() == 0)
+	{
+		statusMsg.Format(L"login success!");
+		app->SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"login failed, error code: %d", app->loginPage.GetStatus());
+		app->SendString(statusMsg);
+	}
+
+	return 0;
+}
+
+void CHTTPSWebClientApp::PrepareValidationDialog()
+{
+	validationDialog.pic.imageAttrSet(loginValPage.height, loginValPage.width);
+	validationDialog.pic.imageBuffSet(loginValPage.bmpbuff, loginValPage.bmpsize);
+}
+
+void CHTTPSWebClientApp::GetValidationCode()
+{
+	if(validationDialog.DoModal() == IDOK)
+	{
+		// OK, get code
+		loginInfo.validate = validationDialog.code;
+	}
+	else
+	{
+		// cancel, quit
+		loginInfo.validate.Empty();
+		CLog::GetLog().AddLog(L"user cancel validation code input, quit login\r\n");
+		return;
+	}
+	// notify worker thread things have been complete
+	SetEvent(valEvent);
+}
+
+void CHTTPSWebClientApp::SendString( CString &msg )
+{
+	m_pMainWnd->SendMessage(WM_SETSTR, 0, (LPARAM)(LPCTSTR)msg);
 }
