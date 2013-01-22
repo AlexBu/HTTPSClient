@@ -669,3 +669,5 @@ M0: Ò»µÈ
 confirmSingleForQueueOrder change to confirmSingleForQueue, but can only be used at
  https://www.12306.cn
 getOrderWaitTime change to queryOrderWaitTime
+2013.1.21
+add delay interval among requests
