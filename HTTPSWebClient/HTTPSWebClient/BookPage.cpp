@@ -70,6 +70,13 @@ void CBookPage::ParseOutput( TicketInfo& output )
 {
 	if(status == ERROR_HTTP)
 		return;
+
+	// search for unpaid order
+	if(respStr.Find(L"还有未处理的订单") != -1)
+	{
+		status = ERROR_ORDER;
+		return;
+	}
 	// split results
 	CRegex regex;
 	CString pattern, restStr, matchStr;
