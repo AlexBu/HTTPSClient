@@ -36,7 +36,7 @@ CString GetUTF8Str( CString &str )
 	
 	CString r(L"");
 	DWORD chCount = 0;
-	LPTSTR buf = r.GetBuffer();
+	LPTSTR buf = r.GetBuffer(256);
 	if(AtlEscapeUrl(str, buf, &chCount, 256, 0) == TRUE)
 	{
 		//
