@@ -22,6 +22,7 @@
 #include "ConfirmPage.h"
 #include "WaitPage.h"
 #include "LoginValPage.h"
+#include "BookValPage.h"
 
 #include "ValidationDialog.h"
 
@@ -60,6 +61,7 @@ private:
 	CConfirmPage confirmPage;
 	CWaitPage waitPage;
 	CLoginValPage loginValPage;
+	CBookValPage bookValPage;
 public:
 	LoginInfo loginInfo;
 	QueryInfo queryInfo;
@@ -72,10 +74,13 @@ private:
 	CEvent valEvent;
 public:
 	static UINT AFX_CDECL loginWorker(LPVOID param);
+	static UINT AFX_CDECL bookWorker(LPVOID param);
 
 	void SendString(CString &msg);
 
-	void PrepareValidationDialog();
-	void GetValidationCode();
+	void PrepareLoginValDlg();
+	void PrepareBookValDlg();
+	void GetLoginValCode();
+	void GetBookValCode();
 };
 extern CHTTPSWebClientApp theApp;

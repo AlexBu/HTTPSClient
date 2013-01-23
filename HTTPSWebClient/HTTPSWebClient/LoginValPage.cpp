@@ -23,8 +23,6 @@ void CLoginValPage::BuildRequest()
 {
 	reqStr = L"/otsweb/passCodeAction.do?rand=sjrand";
 	refStr = L"Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init";
-	// for book pic
-	// Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
 }
 
 void CLoginValPage::ParseOutput()

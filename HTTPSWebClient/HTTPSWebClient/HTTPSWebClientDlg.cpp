@@ -292,9 +292,13 @@ LRESULT CHTTPSWebClientDlg::OnGetCode( WPARAM wParam, LPARAM lParam )
 	// high word: thread count
 	// low word: stage
 	// lParam: data
-	
+	int valTyp = (int)lParam;
+
 	// show validate picture
-	theApp.GetValidationCode();
+	if(valTyp == 0)
+		theApp.GetLoginValCode();
+	else
+		theApp.GetBookValCode();
 
 	return 1;
 }

@@ -275,6 +275,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BookValPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BookValPage.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CheckPage.cpp"
 				>
 			</File>
