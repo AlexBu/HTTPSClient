@@ -137,33 +137,58 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 	CRegex regex;
 	CString pattern, restStr, matchStr;
 
+	// get errMsg first
 	matchStr = respStr;
-
-	pattern = L"\\{\\\"checkHuimd\\\":{\\q},\\\"check608\\\":{\\q},\\\"msg\\\":{\\q},\\\"errMsg\\\":{\\q}\\}";
+	pattern = L"\\\"errMsg\\\":{\\q}";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 4))
+	if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 1))
 	{
-		regex.matchGet(3, output.errMsg);
+		regex.matchGet(0, output.errMsg);
 	}
-	matchStr = restStr;
-	restStr.Empty();
 
 	if(output.errMsg == L"\"Y\"")
 	{
-		// remove last part of str
-		pattern = L"{.*}&tFlag=.*$";
-		matchStr = reqData;
+		// get rest fields
+		matchStr = respStr;
+		restStr.Empty();
+		pattern = L"\\\"checkHuimd\\\":{\\q},\\\"check608\\\":{\\q},\\\"msg\\\":{\\q}";
 		regex.patternLoad(pattern);
-		if(regex.contextMatch(matchStr, restStr) == TRUE)
+		if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 3))
 		{
-			regex.matchGet(0, output.orderInfo);
-			CLog::GetLog().AddLog(L"check page success!");
-			status = ERROR_OK;
+			regex.matchGet(0, output.checkHuimd);
+			regex.matchGet(1, output.check608);
+			regex.matchGet(2, output.msg);
+		}
+		matchStr = restStr;
+		restStr.Empty();
+
+		if(output.checkHuimd == L"\"N\"")
+		{
+			CLog::GetLog().AddLog(L"canceled too many times!");
+			status = ERROR_CANCEL_TOO_MANY;
+		}
+		else if(output.check608 == L"\"N\"")
+		{
+			CLog::GetLog().AddLog(L"real name applied on this train!");
+			status = ERROR_REAL_NAME;
 		}
 		else
 		{
-			CLog::GetLog().AddLog(L"parse confirm string failed!");
-			status = ERROR_GENERAL;
+			// remove last part of str
+			pattern = L"{.*}&tFlag=.*$";
+			matchStr = reqData;
+			regex.patternLoad(pattern);
+			if(regex.contextMatch(matchStr, restStr) == TRUE)
+			{
+				regex.matchGet(0, output.orderInfo);
+				CLog::GetLog().AddLog(L"check page success!");
+				status = ERROR_OK;
+			}
+			else
+			{
+				CLog::GetLog().AddLog(L"parse confirm string failed!");
+				status = ERROR_GENERAL;
+			}
 		}
 	}
 	else if(output.errMsg.Find(L"·Ç·¨") != -1)
@@ -221,7 +246,7 @@ CString CCheckPage::reserve_flagGet( TicketInfo& input )
 CString CCheckPage::passengerTicketsGet( PassengerInfo& passenger )
 {
 	CString str(L"");
-	str.Format(L"%s%%2Cundefined%%2C%s%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
+	str.Format(L"%s%%2C0%%2C%s%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
 		passenger.seat,
 		ticketGet(passenger),
 		GetUTF8Str(passenger.name),

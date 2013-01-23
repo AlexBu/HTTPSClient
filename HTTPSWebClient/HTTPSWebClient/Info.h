@@ -15,6 +15,9 @@ struct OrderInfo
 	CString waitTime;
 	CString orderNo;
 	CString ticketStr;
+	CString checkHuimd;
+	CString check608;
+	CString msg;
 };
 
 struct QueryInfo

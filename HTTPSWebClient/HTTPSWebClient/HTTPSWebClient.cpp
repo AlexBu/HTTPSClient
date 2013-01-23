@@ -11,6 +11,9 @@
 
 #include <atlrx.h>
 
+// delay second
+#define GENERAL_DELAY		(5)
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -169,6 +172,8 @@ QUERY:
 	queryPage.GetPageStr(httpContent);
 	queryPage.ParseOutput(trainInfo);
 
+	Sleep(GENERAL_DELAY * 1000);
+
 	int queryStatus = queryPage.GetStatus();
 	if(queryStatus == ERROR_OK)
 	{
@@ -183,7 +188,6 @@ QUERY:
 	{
 		// add query delay
 		CLog::GetLog().AddLog(L"no proper train found, wait for retry\r\n");
-		Sleep(QUERY_DELAY * 1000);
 		goto QUERY;
 	}
 
@@ -194,6 +198,8 @@ QUERY:
 BOOK:
 	bookPage.GetPageStr(httpContent);
 	bookPage.ParseOutput(ticketInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
 
 	int bookStatus = bookPage.GetStatus();
 	if(bookStatus == ERROR_OK)
@@ -208,12 +214,12 @@ BOOK:
 	else
 	{
 		result.AppendFormat(L"\r\nbook failed: error code %d", bookStatus);
-		Sleep(1 * 1000);
 		goto BOOK;
 	}
 
 	// add check order page validation code query
 	CValidationDialog dlg;
+	// add some rand number?
 	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=randp";
 	GetValidatePic(ValPicAddr, dlg.pic);
 	if(dlg.DoModal() == IDOK)
@@ -235,6 +241,8 @@ BOOK:
 CHECK:
 	checkPage.GetPageStr(httpContent);
 	checkPage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
 
 	int checkStatus = checkPage.GetStatus();
 	if(checkStatus == ERROR_OK)
@@ -258,7 +266,6 @@ CHECK:
 	{
 		result.AppendFormat(L"\r\ncheck failed: error code %d", checkStatus);
 		result += L"\r\nretry";
-		Sleep(1 * 1000);
 		goto CHECK;
 	}
 
@@ -271,6 +278,8 @@ QUEUE:
 	queuePage.GetPageStr(httpContent);
 	queuePage.ParseOutput(orderInfo);
 	
+	Sleep(GENERAL_DELAY * 1000);
+
 	int queueStatus = queuePage.GetStatus();
 	if(queueStatus == ERROR_OK)
 	{
@@ -286,7 +295,6 @@ QUEUE:
 	{
 		result.AppendFormat(L"\r\nqueue failed: error code %d", queueStatus);
 		result += L"\r\nretry";
-		Sleep(1 * 1000);
 		goto QUEUE;
 	}
 
@@ -297,6 +305,8 @@ QUEUE:
 CONFIRM:
 	confirmPage.GetPageStr(httpContent);
 	confirmPage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
 
 	int confirmStatus = confirmPage.GetStatus();
 
@@ -321,7 +331,6 @@ CONFIRM:
 	{
 		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmStatus);
 		result += L"\r\nretry";
-		Sleep(1 * 1000);
 		goto CONFIRM;
 	}
 
@@ -331,6 +340,8 @@ CONFIRM:
 	waitPage.BuildRequest(orderInfo);
 	waitPage.GetPageStr(httpContent);
 	waitPage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
 
 	int waitStatus = waitPage.GetStatus();
 	if(waitStatus == ERROR_OK)

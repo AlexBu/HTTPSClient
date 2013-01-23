@@ -12,7 +12,7 @@ CConfirmPage::~CConfirmPage(void)
 
 void CConfirmPage::BuildRequest( OrderInfo& input )
 {
-	reqStr = L"/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueueOrder";
+	reqStr = L"/otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueue";
 	// TODO: reset leftTicketStr field
 	reqData = input.orderInfo;
 	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
