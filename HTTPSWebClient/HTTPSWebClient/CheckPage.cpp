@@ -19,10 +19,10 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 	reqData.Format(L"org.apache.struts.taglib.html.TOKEN=%s"
 		L"&leftTicketStr=%s"
 		L"&textfield=%s"
-		L"&checkbox0=0"
-		L"&checkbox2=2"
-		L"&checkbox4=4"
-		L"&checkbox5=5"
+		//L"&checkbox0=0"
+		//L"&checkbox2=2"
+		//L"&checkbox4=4"
+		//L"&checkbox5=5"
 		L"&orderRequest.train_date=%s"
 		L"&orderRequest.train_no=%s"
 		L"&orderRequest.station_train_code=%s"
@@ -37,40 +37,45 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		L"&orderRequest.to_station_name=%s"
 		L"&orderRequest.cancel_flag=%s"
 		L"&orderRequest.id_mode=%s"
+		
 		L"&passengerTickets=%s"
-		L"&oldPassengers=%s"
-		L"&passenger_1_seat=%s"
-		L"&passenger_1_ticket=%s"
-		L"&passenger_1_name=%s"
-		L"&passenger_1_cardtype=%s"
-		L"&passenger_1_cardno=%s"
-		L"&passenger_1_mobileno=%s"
+		//L"&oldPassengers=%s"
+		//L"&passenger_1_seat=%s"
+		//L"&passenger_1_ticket=%s"
+		//L"&passenger_1_name=%s"
+		//L"&passenger_1_cardtype=%s"
+		//L"&passenger_1_cardno=%s"
+		//L"&passenger_1_mobileno=%s"
+
 		L"&passengerTickets=%s"
-		L"&oldPassengers=%s"
-		L"&passenger_2_seat=%s"
-		L"&passenger_2_ticket=%s"
-		L"&passenger_2_name=%s"
-		L"&passenger_2_cardtype=%s"
-		L"&passenger_2_cardno=%s"
-		L"&passenger_2_mobileno=%s"
-		L"&passengerTickets=%s"
-		L"&oldPassengers=%s"
-		L"&passenger_3_seat=%s"
-		L"&passenger_3_ticket=%s"
-		L"&passenger_3_name=%s"
-		L"&passenger_3_cardtype=%s"
-		L"&passenger_3_cardno=%s"
-		L"&passenger_3_mobileno=%s"
-		L"&passengerTickets=%s"
-		L"&oldPassengers=%s"
-		L"&passenger_4_seat=%s"
-		L"&passenger_4_ticket=%s"
-		L"&passenger_4_name=%s"
-		L"&passenger_4_cardtype=%s"
-		L"&passenger_4_cardno=%s"
-		L"&passenger_4_mobileno=%s"
-		L"&oldPassengers="
-		L"&checkbox9=Y"
+		//L"&oldPassengers=%s"
+		//L"&passenger_2_seat=%s"
+		//L"&passenger_2_ticket=%s"
+		//L"&passenger_2_name=%s"
+		//L"&passenger_2_cardtype=%s"
+		//L"&passenger_2_cardno=%s"
+		//L"&passenger_2_mobileno=%s"
+
+		//L"&passengerTickets=%s"
+		//L"&oldPassengers=%s"
+		//L"&passenger_3_seat=%s"
+		//L"&passenger_3_ticket=%s"
+		//L"&passenger_3_name=%s"
+		//L"&passenger_3_cardtype=%s"
+		//L"&passenger_3_cardno=%s"
+		//L"&passenger_3_mobileno=%s"
+		
+		//L"&passengerTickets=%s"
+		//L"&oldPassengers=%s"
+		//L"&passenger_4_seat=%s"
+		//L"&passenger_4_ticket=%s"
+		//L"&passenger_4_name=%s"
+		//L"&passenger_4_cardtype=%s"
+		//L"&passenger_4_cardno=%s"
+		//L"&passenger_4_mobileno=%s"
+		//L"&oldPassengers="
+		//L"&checkbox9=Y"
+
 		L"&randCode=%s"
 		L"&orderRequest.reserve_flag=%s"
 		L"&tFlag=%s"
@@ -90,37 +95,37 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		,input.cancel_flag
 		,input.id_mode
 		,passengerTicketsGet(input.passengers[0])
-		,oldPassengersGet(input.passengers[0])
-		,input.passengers[0].seat
-		,ticketGet(input.passengers[0])
-		,nameGet(input.passengers[0])
-		,input.passengers[0].cardtype
-		,input.passengers[0].cardno
-		,input.passengers[0].mobileno
+		//,oldPassengersGet(input.passengers[0])
+		//,input.passengers[0].seat
+		//,ticketGet(input.passengers[0])
+		//,nameGet(input.passengers[0])
+		//,input.passengers[0].cardtype
+		//,input.passengers[0].cardno
+		//,input.passengers[0].mobileno
 		,passengerTicketsGet(input.passengers[1])
-		,oldPassengersGet(input.passengers[1])
-		,input.passengers[1].seat
-		,ticketGet(input.passengers[1])
-		,nameGet(input.passengers[1])
-		,input.passengers[1].cardtype
-		,input.passengers[1].cardno
-		,input.passengers[1].mobileno
-		,passengerTicketsGet(input.passengers[2])
-		,oldPassengersGet(input.passengers[2])
-		,input.passengers[2].seat
-		,ticketGet(input.passengers[2])
-		,nameGet(input.passengers[2])
-		,input.passengers[2].cardtype
-		,input.passengers[2].cardno
-		,input.passengers[2].mobileno
-		,passengerTicketsGet(input.passengers[3])
-		,oldPassengersGet(input.passengers[3])
-		,input.passengers[3].seat
-		,ticketGet(input.passengers[3])
-		,nameGet(input.passengers[3])
-		,input.passengers[3].cardtype
-		,input.passengers[3].cardno
-		,input.passengers[3].mobileno
+		//,oldPassengersGet(input.passengers[1])
+		//,input.passengers[1].seat
+		//,ticketGet(input.passengers[1])
+		//,nameGet(input.passengers[1])
+		//,input.passengers[1].cardtype
+		//,input.passengers[1].cardno
+		//,input.passengers[1].mobileno
+		//,passengerTicketsGet(input.passengers[2])
+		//,oldPassengersGet(input.passengers[2])
+		//,input.passengers[2].seat
+		//,ticketGet(input.passengers[2])
+		//,nameGet(input.passengers[2])
+		//,input.passengers[2].cardtype
+		//,input.passengers[2].cardno
+		//,input.passengers[2].mobileno
+		//,passengerTicketsGet(input.passengers[3])
+		//,oldPassengersGet(input.passengers[3])
+		//,input.passengers[3].seat
+		//,ticketGet(input.passengers[3])
+		//,nameGet(input.passengers[3])
+		//,input.passengers[3].cardtype
+		//,input.passengers[3].cardno
+		//,input.passengers[3].mobileno
 		,input.randCode
 		,reserve_flagGet(input)
 		,input.tFlag

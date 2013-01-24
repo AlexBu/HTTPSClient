@@ -17,6 +17,7 @@
 #define ERROR_ORDER				(-9)
 #define ERROR_CANCEL_TOO_MANY	(-10)
 #define ERROR_REAL_NAME			(-11)
+#define ERROR_USER_CANCEL		(-12)
 
 #define MAX_DATA_SIZE (1*1024*1024L)
 

@@ -1,21 +1,21 @@
 #include "StdAfx.h"
-#include "LoginRandPage.h"
+#include "RandPage.h"
 
-CLoginRandPage::CLoginRandPage(void)
+CRandPage::CRandPage(void)
 {
 }
 
-CLoginRandPage::~CLoginRandPage(void)
+CRandPage::~CRandPage(void)
 {
 }
 
-void CLoginRandPage::BuildRequest()
+void CRandPage::BuildRequest()
 {
 	reqStr = L"/otsweb/loginAction.do?method=loginAysnSuggest";
 	refStr = L"Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init";
 }
 
-void CLoginRandPage::ParseOutput( LoginInfo& output )
+void CRandPage::ParseOutput( LoginInfo& output )
 {
 	if(status == ERROR_HTTP)
 		return;
@@ -29,11 +29,11 @@ void CLoginRandPage::ParseOutput( LoginInfo& output )
 	{
 		regex.matchGet(0, output.rand);
 		CLog::GetLog().AddLog(L"login rand page success!");
-		status = 0;
+		status = ERROR_OK;
 	}
 	else
 	{
 		CLog::GetLog().AddLog(L"general error!");
-		status = -1;
+		status = ERROR_GENERAL;
 	}	
 }

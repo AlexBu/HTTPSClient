@@ -1,11 +1,11 @@
 #pragma once
 #include "Page.h"
 
-class CLoginRandPage : public CPage
+class CRandPage : public CPage
 {
 public:
-	CLoginRandPage(void);
-	~CLoginRandPage(void);
+	CRandPage(void);
+	~CRandPage(void);
 	void BuildRequest();
 	void ParseOutput( LoginInfo& output );
 };

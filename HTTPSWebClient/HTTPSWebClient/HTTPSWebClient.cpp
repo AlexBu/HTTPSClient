@@ -115,282 +115,10 @@ BOOL CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr, CValPicCtrl& 
 	return TRUE;
 }
 
-void CHTTPSWebClientApp::LoginToSite(CString& result)
-{
-	// assign a worker thread to login
-	AfxBeginThread(loginWorker, this);
-}
-
 void CHTTPSWebClientApp::BookTickets(CString& result)
 {
-	// assign a worker thread to booking
+	// assign a worker thread to book
 	AfxBeginThread(bookWorker, this);
-	return;
-
-	result += L"\r\nquerying train...";
-	CLog::GetLog().AddLog(L"query action start\r\n");
-	queryPage.BuildRequest(queryInfo);
-
-QUERY:
-
-	queryPage.GetPageStr(httpContent);
-	queryPage.ParseOutput(trainInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int queryStatus = queryPage.GetStatus();
-	if(queryStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(queryStatus == ERROR_HTTP)
-	{
-		result += L"\r\nquery page: http connection failed!";
-		return;
-	}
-	else
-	{
-		// add query delay
-		CLog::GetLog().AddLog(L"no proper train found, wait for retry\r\n");
-		goto QUERY;
-	}
-
-
-	result += L"\r\nbooking tickets...";
-	CLog::GetLog().AddLog(L"book action start\r\n");
-	bookPage.BuildRequest(trainInfo);
-BOOK:
-	bookPage.GetPageStr(httpContent);
-	bookPage.ParseOutput(ticketInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int bookStatus = bookPage.GetStatus();
-	if(bookStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(bookStatus == ERROR_HTTP)
-	{
-		result += L"\r\nbook page: http connection failed!";
-		return;
-	}
-	else
-	{
-		result.AppendFormat(L"\r\nbook failed: error code %d", bookStatus);
-		goto BOOK;
-	}
-
-	// add check order page validation code query
-	CValidationDialog dlg;
-	// add some rand number?
-	CString ValPicAddr = L"/otsweb/passCodeAction.do?rand=randp";
-	GetValidatePic(ValPicAddr, dlg.pic);
-	if(dlg.DoModal() == IDOK)
-	{
-		// OK, get code
-		ticketInfo.randCode = dlg.code;
-	}
-	else
-	{
-		// cancel, quit
-		CLog::GetLog().AddLog(L"user cancel validation code input, quit login\r\n");
-		return;
-	}
-
-
-	result += L"\r\nchecking order...";
-	CLog::GetLog().AddLog(L"check action start\r\n");
-	checkPage.BuildRequest(ticketInfo);
-CHECK:
-	checkPage.GetPageStr(httpContent);
-	checkPage.ParseOutput(orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int checkStatus = checkPage.GetStatus();
-	if(checkStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(checkStatus == ERROR_VALIDATE)
-	{
-		result.AppendFormat(L"\r\ncheck failed: error code %d", checkStatus);
-		result += L"\r\nre-enter validation code!";
-		// resend from here will need validate code!
-		return;
-	}
-	else if(checkStatus == ERROR_HTTP)
-	{
-		result += L"\r\ncheck page: http connection failed!";
-		result += L"\r\nretry";
-		return;
-	}
-	else
-	{
-		result.AppendFormat(L"\r\ncheck failed: error code %d", checkStatus);
-		result += L"\r\nretry";
-		goto CHECK;
-	}
-
-
-
-	result += L"\r\nqueueing order...";
-	CLog::GetLog().AddLog(L"queue action start\r\n");
-	queuePage.BuildRequest(ticketInfo);
-QUEUE:
-	queuePage.GetPageStr(httpContent);
-	queuePage.ParseOutput(orderInfo);
-	
-	Sleep(GENERAL_DELAY * 1000);
-
-	int queueStatus = queuePage.GetStatus();
-	if(queueStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(queueStatus == ERROR_HTTP)
-	{
-		result += L"\r\nqueue page: http connection failed!";
-		result += L"\r\nretry";
-		return;
-	}
-	else
-	{
-		result.AppendFormat(L"\r\nqueue failed: error code %d", queueStatus);
-		result += L"\r\nretry";
-		goto QUEUE;
-	}
-
-
-	result += L"\r\nconfirming order...";
-	CLog::GetLog().AddLog(L"confirm action start\r\n");
-	confirmPage.BuildRequest(orderInfo);
-CONFIRM:
-	confirmPage.GetPageStr(httpContent);
-	confirmPage.ParseOutput(orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int confirmStatus = confirmPage.GetStatus();
-
-	if(confirmStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(confirmStatus == ERROR_HTTP)
-	{
-		result += L"\r\nconfirm page: http connection failed!";
-		result += L"\r\nretry";
-		return;
-	}
-	else if(confirmStatus == ERROR_VALIDATE)
-	{
-		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmStatus);
-		result += L"\r\nre-enter validation code!";
-		// resend from here will need validate code!
-		return;
-	}
-	else
-	{
-		result.AppendFormat(L"\r\nconfirm failed: error code %d", confirmStatus);
-		result += L"\r\nretry";
-		goto CONFIRM;
-	}
-
-
-	result += L"\r\nwaiting for result...";
-	CLog::GetLog().AddLog(L"wait action start\r\n");
-	waitPage.BuildRequest(orderInfo);
-	waitPage.GetPageStr(httpContent);
-	waitPage.ParseOutput(orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int waitStatus = waitPage.GetStatus();
-	if(waitStatus == ERROR_OK)
-	{
-		result += L"\r\nbuy ticket success!";
-	}
-	else if(waitStatus == ERROR_HTTP)
-	{
-		result += L"\r\nwait page: http connection failed!";
-		result += L"\r\nretry";
-		return;
-	}
-	else
-	{
-		result.AppendFormat(L"\r\nwait failed: error code %d", waitStatus);
-	}
-}
-
-UINT CHTTPSWebClientApp::loginWorker( LPVOID param )
-{
-	CString statusMsg;
-
-	CHTTPSWebClientApp* app = (CHTTPSWebClientApp*)param;
-	CWnd* gui = app->m_pMainWnd;
-
-	statusMsg.Format(L"request validation picture");
-	app->SendString(statusMsg);
-
-	app->loginValPage.BuildRequest();
-	app->loginValPage.GetPageData(app->httpContent);
-	app->loginValPage.ParseOutput();
-
-	// send message to gui to get validation code from user input
-	app->PrepareLoginValDlg();
-
-	gui->SendMessage(WM_GETCODE, 0, 0);
-
-	// wait for validation code to be retrieved
-	WaitForSingleObject(app->valEvent, INFINITE);
-
-	// check result
-	if(app->loginInfo.validate.IsEmpty())
-	{
-		statusMsg.Format(L"user canceled this request, login abort");
-		app->SendString(statusMsg);
-		return 0;
-	}
-
-	statusMsg.Format(L"get validation code: %s.", app->loginInfo.validate);
-	app->SendString(statusMsg);
-
-	statusMsg.Format(L"request login random number");
-	app->SendString(statusMsg);
-
-	// post request to get rand number
-	app->loginRandPage.BuildRequest();
-	app->loginRandPage.GetPageStr(app->httpContent);
-	app->loginRandPage.ParseOutput(app->loginInfo);
-
-	if(app->loginRandPage.GetStatus() != 0)
-	{
-		statusMsg.Format(L"request login rand failed, error code: %d", app->loginRandPage.GetStatus());
-		app->SendString(statusMsg);
-		return 0;
-	}
-
-	statusMsg.Format(L"send login request");
-	app->SendString(statusMsg);
-
-	app->loginPage.BuildRequest(app->loginInfo);
-	app->loginPage.GetPageStr(app->httpContent);
-	app->loginPage.ParseOutput();
-
-	if(app->loginPage.GetStatus() == 0)
-	{
-		statusMsg.Format(L"login success!");
-		app->SendString(statusMsg);
-	}
-	else
-	{
-		statusMsg.Format(L"login failed, error code: %d", app->loginPage.GetStatus());
-		app->SendString(statusMsg);
-	}
-
-	return 0;
 }
 
 UINT AFX_CDECL CHTTPSWebClientApp::bookWorker( LPVOID param )
@@ -400,219 +128,20 @@ UINT AFX_CDECL CHTTPSWebClientApp::bookWorker( LPVOID param )
 	CHTTPSWebClientApp* app = (CHTTPSWebClientApp*)param;
 	CWnd* gui = app->m_pMainWnd;
 
-	statusMsg.Format(L"querying train...");
-	app->SendString(statusMsg);
+	// TODO: add return value handling
+	app->GetLoginValPageAction();
+	app->GetRandPageAction();
+	app->GetLoginPageAction();
 
-	CLog::GetLog().AddLog(L"query action start\r\n");
-	app->queryPage.BuildRequest(app->queryInfo);
+	// TODO: add return value handling
+	app->GetQueryPageAction();
+	app->GetBookPageAction();
+	app->GetBookValPageAction();
+	app->GetCheckPageAction();
+	app->GetQueuePageAction();
+	app->GetConfirmPageAction();
+	app->GetWaitPageAction();
 
-QUERY:
-	app->queryPage.GetPageStr(app->httpContent);
-	app->queryPage.ParseOutput(app->trainInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int queryStatus = app->queryPage.GetStatus();
-	if(queryStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(queryStatus == ERROR_HTTP)
-	{
-		statusMsg.Format(L"query page: http connection failed!");
-		app->SendString(statusMsg);
-		return 0;
-	}
-	else
-	{
-		// add query delay
-		CLog::GetLog().AddLog(L"no proper train found, wait for retry\r\n");
-		goto QUERY;
-	}
-
-
-	statusMsg.Format(L"booking tickets...");
-	app->SendString(statusMsg);
-	CLog::GetLog().AddLog(L"book action start\r\n");
-	app->bookPage.BuildRequest(app->trainInfo);
-BOOK:
-	app->bookPage.GetPageStr(app->httpContent);
-	app->bookPage.ParseOutput(app->ticketInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int bookStatus = app->bookPage.GetStatus();
-	if(bookStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(bookStatus == ERROR_HTTP)
-	{
-		statusMsg.Format(L"book page: http connection failed!");
-		app->SendString(statusMsg);
-		return 0;
-	}
-	else
-	{
-		statusMsg.Format(L"book failed: error code %d", bookStatus);
-		app->SendString(statusMsg);
-		goto BOOK;
-	}
-
-
-	statusMsg.Format(L"get book validation code");
-	app->SendString(statusMsg);
-
-	app->bookValPage.BuildRequest();
-	app->bookValPage.GetPageData(app->httpContent);
-	app->bookValPage.ParseOutput();
-
-	// send message to gui to get validation code from user input
-	app->PrepareBookValDlg();
-
-	gui->SendMessage(WM_GETCODE, 0, 1);
-
-	// wait for validation code to be retrieved
-	WaitForSingleObject(app->valEvent, INFINITE);
-
-	// check result
-	if(app->ticketInfo.randCode.IsEmpty())
-	{
-		statusMsg.Format(L"user canceled this request, login abort");
-		app->SendString(statusMsg);
-		return 0;
-	}
-
-	statusMsg.Format(L"get validation code: %s.", app->ticketInfo.randCode);
-	app->SendString(statusMsg);
-
-
-	statusMsg.Format(L"checking order...");
-	app->SendString(statusMsg);
-	CLog::GetLog().AddLog(L"check action start\r\n");
-	app->checkPage.BuildRequest(app->ticketInfo);
-CHECK:
-	app->checkPage.GetPageStr(app->httpContent);
-	app->checkPage.ParseOutput(app->orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int checkStatus = app->checkPage.GetStatus();
-	if(checkStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(checkStatus == ERROR_VALIDATE)
-	{
-		statusMsg.Format(L"\r\ncheck failed: error code %d\r\nre-enter validation code!", checkStatus);
-		app->SendString(statusMsg);
-		// resend from here will need validate code!
-		return 0;
-	}
-	else if(checkStatus == ERROR_HTTP)
-	{
-		statusMsg.Format(L"check page: http connection failed! retry...");
-		app->SendString(statusMsg);
-		return 0;
-	}
-	else
-	{
-		statusMsg.Format(L"check failed: error code %d, retry...", checkStatus);
-		app->SendString(statusMsg);
-		goto CHECK;
-	}
-
-
-	statusMsg.Format(L"queueing order...");
-	app->SendString(statusMsg);
-	CLog::GetLog().AddLog(L"queue action start\r\n");
-	app->queuePage.BuildRequest(app->ticketInfo);
-QUEUE:
-	app->queuePage.GetPageStr(app->httpContent);
-	app->queuePage.ParseOutput(app->orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int queueStatus = app->queuePage.GetStatus();
-	if(queueStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(queueStatus == ERROR_HTTP)
-	{
-		statusMsg.Format(L"queue page: http connection failed! retry...");
-		app->SendString(statusMsg);
-		return 0;
-	}
-	else
-	{
-		statusMsg.Format(L"queue failed: error code %d, retry...", queueStatus);
-		app->SendString(statusMsg);
-		goto QUEUE;
-	}
-
-	statusMsg.Format(L"confirming order...");
-	app->SendString(statusMsg);
-	CLog::GetLog().AddLog(L"confirm action start\r\n");
-	app->confirmPage.BuildRequest(app->orderInfo);
-CONFIRM:
-	app->confirmPage.GetPageStr(app->httpContent);
-	app->confirmPage.ParseOutput(app->orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int confirmStatus = app->confirmPage.GetStatus();
-
-	if(confirmStatus == ERROR_OK)
-	{
-		// pass to next phase
-	}
-	else if(confirmStatus == ERROR_HTTP)
-	{
-		statusMsg.Format(L"confirm page: http connection failed! retry...");
-		app->SendString(statusMsg);
-		return 0;
-	}
-	else if(confirmStatus == ERROR_VALIDATE)
-	{
-		statusMsg.Format(L"confirm failed: error code %d\r\nre-enter validation code!", confirmStatus);
-		app->SendString(statusMsg);
-		// resend from here will need validate code!
-		return 0;
-	}
-	else
-	{
-		statusMsg.Format(L"confirm failed: error code %d, retry...", confirmStatus);
-		app->SendString(statusMsg);
-		goto CONFIRM;
-	}
-
-	statusMsg.Format(L"waiting for result...");
-	app->SendString(statusMsg);
-	CLog::GetLog().AddLog(L"wait action start\r\n");
-	app->waitPage.BuildRequest(app->orderInfo);
-	app->waitPage.GetPageStr(app->httpContent);
-	app->waitPage.ParseOutput(app->orderInfo);
-
-	Sleep(GENERAL_DELAY * 1000);
-
-	int waitStatus = app->waitPage.GetStatus();
-	if(waitStatus == ERROR_OK)
-	{
-		statusMsg.Format(L"buy ticket success!");
-		app->SendString(statusMsg);
-	}
-	else if(waitStatus == ERROR_HTTP)
-	{
-		statusMsg.Format(L"wait page: http connection failed!, retry...");
-		app->SendString(statusMsg);
-		return 0;
-	}
-	else
-	{
-		statusMsg.Format(L"wait failed: error code %d", waitStatus);
-		app->SendString(statusMsg);
-	}
 	return 0;
 }
 
@@ -628,7 +157,7 @@ void CHTTPSWebClientApp::PrepareBookValDlg()
 	validationDialog.pic.imageBuffSet(bookValPage.bmpbuff, bookValPage.bmpsize);
 }
 
-void CHTTPSWebClientApp::GetLoginValCode()
+void CHTTPSWebClientApp::GetLoginValCodeInput()
 {
 	if(validationDialog.DoModal() == IDOK)
 	{
@@ -640,13 +169,12 @@ void CHTTPSWebClientApp::GetLoginValCode()
 		// cancel, quit
 		loginInfo.validate.Empty();
 		CLog::GetLog().AddLog(L"user cancel validation code input, quit login\r\n");
-		return;
 	}
 	// notify worker thread things have been complete
 	SetEvent(valEvent);
 }
 
-void CHTTPSWebClientApp::GetBookValCode()
+void CHTTPSWebClientApp::GetBookValCodeInput()
 {
 	if(validationDialog.DoModal() == IDOK)
 	{
@@ -658,7 +186,6 @@ void CHTTPSWebClientApp::GetBookValCode()
 		// cancel, quit
 		ticketInfo.randCode.Empty();
 		CLog::GetLog().AddLog(L"user cancel validation code input, quit login\r\n");
-		return;
 	}
 	// notify worker thread things have been complete
 	SetEvent(valEvent);
@@ -667,4 +194,315 @@ void CHTTPSWebClientApp::GetBookValCode()
 void CHTTPSWebClientApp::SendString( CString &msg )
 {
 	m_pMainWnd->SendMessage(WM_SETSTR, 0, (LPARAM)(LPCTSTR)msg);
+}
+
+int CHTTPSWebClientApp::GetLoginValPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"request validation picture");
+	SendString(statusMsg);
+
+	loginValPage.BuildRequest();
+	loginValPage.GetPageData(httpContent);
+	loginValPage.ParseOutput();
+
+	int loginValStatus = loginValPage.GetStatus();
+
+	if(loginValStatus != 0)
+		return loginValStatus;
+
+	// send message to gui to get validation code from user input
+	PrepareLoginValDlg();
+
+	m_pMainWnd->SendMessage(WM_GETCODE, 0, 0);
+
+	// wait for validation code to be retrieved
+	WaitForSingleObject(valEvent, INFINITE);
+
+	// check result
+	if(loginInfo.validate.IsEmpty())
+	{
+		statusMsg.Format(L"user canceled this request, login abort");
+		SendString(statusMsg);
+		loginValStatus = ERROR_USER_CANCEL;
+		return loginValStatus;
+	}
+
+	statusMsg.Format(L"get validation code: %s.", loginInfo.validate);
+	SendString(statusMsg);
+
+	loginValStatus = ERROR_OK;
+	return loginValStatus;
+}
+
+int CHTTPSWebClientApp::GetBookValPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"get book validation code");
+	SendString(statusMsg);
+
+	bookValPage.BuildRequest();
+	bookValPage.GetPageData(httpContent);
+	bookValPage.ParseOutput();
+
+	int bookValStatus = bookValPage.GetStatus();
+
+	if(bookValStatus != 0)
+		return bookValStatus;
+
+	// send message to gui to get validation code from user input
+	PrepareBookValDlg();
+
+	m_pMainWnd->SendMessage(WM_GETCODE, 0, 1);
+
+	// wait for validation code to be retrieved
+	WaitForSingleObject(valEvent, INFINITE);
+
+	// check result
+	if(ticketInfo.randCode.IsEmpty())
+	{
+		statusMsg.Format(L"user canceled this request, login abort");
+		SendString(statusMsg);
+		bookValStatus = ERROR_USER_CANCEL;
+		return bookValStatus;
+	}
+
+	statusMsg.Format(L"get validation code: %s.", ticketInfo.randCode);
+	SendString(statusMsg);
+	
+	bookValStatus = ERROR_OK;
+	return bookValStatus;
+}
+
+int CHTTPSWebClientApp::GetRandPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"request login random number");
+	SendString(statusMsg);
+
+	// post request to get rand number
+	randPage.BuildRequest();
+	randPage.GetPageStr(httpContent);
+	randPage.ParseOutput(loginInfo);
+
+	int loginRandStatus = randPage.GetStatus();
+	if(loginRandStatus != 0)
+	{
+		statusMsg.Format(L"request login rand failed, error code: %d", loginRandStatus);
+		SendString(statusMsg);
+	}
+
+	return loginRandStatus;
+}
+
+int CHTTPSWebClientApp::GetLoginPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"send login request");
+	SendString(statusMsg);
+
+	loginPage.BuildRequest(loginInfo);
+	loginPage.GetPageStr(httpContent);
+	loginPage.ParseOutput();
+
+	int loginStatus = loginPage.GetStatus();
+	if( loginStatus == 0)
+	{
+		statusMsg.Format(L"login success!");
+		SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"login failed, error code: %d", loginStatus);
+		SendString(statusMsg);
+	}
+	return loginStatus;
+}
+
+int CHTTPSWebClientApp::GetQueryPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"querying train...");
+	SendString(statusMsg);
+
+	CLog::GetLog().AddLog(L"query action start\r\n");
+	queryPage.BuildRequest(queryInfo);
+	queryPage.GetPageStr(httpContent);
+	queryPage.ParseOutput(trainInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
+
+	int queryStatus = queryPage.GetStatus();
+	if(queryStatus == ERROR_HTTP)
+	{
+		statusMsg.Format(L"query page: http connection failed!");
+		SendString(statusMsg);
+	}
+	else
+	{
+		// add query delay
+		CLog::GetLog().AddLog(L"no proper train found, wait for retry\r\n");
+	}
+
+	return queryStatus;
+}
+
+int CHTTPSWebClientApp::GetBookPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"booking tickets...");
+	SendString(statusMsg);
+	CLog::GetLog().AddLog(L"book action start\r\n");
+	bookPage.BuildRequest(trainInfo);
+	bookPage.GetPageStr(httpContent);
+	bookPage.ParseOutput(ticketInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
+
+	int bookStatus = bookPage.GetStatus();
+	if(bookStatus == ERROR_HTTP)
+	{
+		statusMsg.Format(L"book page: http connection failed!");
+		SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"book failed: error code %d", bookStatus);
+		SendString(statusMsg);
+	}
+	return bookStatus;
+}
+
+int CHTTPSWebClientApp::GetCheckPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"checking order...");
+	SendString(statusMsg);
+	CLog::GetLog().AddLog(L"check action start\r\n");
+	checkPage.BuildRequest(ticketInfo);
+	checkPage.GetPageStr(httpContent);
+	checkPage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
+
+	int checkStatus = checkPage.GetStatus();
+	if(checkStatus == ERROR_VALIDATE)
+	{
+		statusMsg.Format(L"\r\ncheck failed: error code %d\r\nre-enter validation code!", checkStatus);
+		SendString(statusMsg);
+	}
+	else if(checkStatus == ERROR_HTTP)
+	{
+		statusMsg.Format(L"check page: http connection failed! retry...");
+		SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"check failed: error code %d, retry...", checkStatus);
+		SendString(statusMsg);
+	}
+
+	return checkStatus;
+}
+
+int CHTTPSWebClientApp::GetQueuePageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"queueing order...");
+	SendString(statusMsg);
+	CLog::GetLog().AddLog(L"queue action start\r\n");
+	queuePage.BuildRequest(ticketInfo);
+	queuePage.GetPageStr(httpContent);
+	queuePage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
+
+	int queueStatus = queuePage.GetStatus();
+	if(queueStatus == ERROR_HTTP)
+	{
+		statusMsg.Format(L"queue page: http connection failed! retry...");
+		SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"queue failed: error code %d, retry...", queueStatus);
+		SendString(statusMsg);
+	}
+
+	return queueStatus;
+}
+
+int CHTTPSWebClientApp::GetConfirmPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"confirming order...");
+	SendString(statusMsg);
+	CLog::GetLog().AddLog(L"confirm action start\r\n");
+	confirmPage.BuildRequest(orderInfo);
+	confirmPage.GetPageStr(httpContent);
+	confirmPage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
+
+	int confirmStatus = confirmPage.GetStatus();
+
+	if(confirmStatus == ERROR_HTTP)
+	{
+		statusMsg.Format(L"confirm page: http connection failed! retry...");
+		SendString(statusMsg);
+	}
+	else if(confirmStatus == ERROR_VALIDATE)
+	{
+		statusMsg.Format(L"confirm failed: error code %d\r\nre-enter validation code!", confirmStatus);
+		SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"confirm failed: error code %d, retry...", confirmStatus);
+		SendString(statusMsg);
+	}
+
+	return confirmStatus;
+}
+
+int CHTTPSWebClientApp::GetWaitPageAction()
+{
+	CString statusMsg;
+
+	statusMsg.Format(L"waiting for result...");
+	SendString(statusMsg);
+	CLog::GetLog().AddLog(L"wait action start\r\n");
+	waitPage.BuildRequest(orderInfo);
+	waitPage.GetPageStr(httpContent);
+	waitPage.ParseOutput(orderInfo);
+
+	Sleep(GENERAL_DELAY * 1000);
+
+	int waitStatus = waitPage.GetStatus();
+	if(waitStatus == ERROR_OK)
+	{
+		statusMsg.Format(L"buy ticket success!");
+		SendString(statusMsg);
+	}
+	else if(waitStatus == ERROR_HTTP)
+	{
+		statusMsg.Format(L"wait page: http connection failed!, retry...");
+		SendString(statusMsg);
+	}
+	else
+	{
+		statusMsg.Format(L"wait failed: error code %d", waitStatus);
+		SendString(statusMsg);
+	}
+
+	return waitStatus;
 }

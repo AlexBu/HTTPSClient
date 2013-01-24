@@ -13,7 +13,7 @@
 #include "regex.h"
 #include "HTTPContent.h"
 #include "Info.h"
-#include "LoginRandPage.h"
+#include "RandPage.h"
 #include "LoginPage.h"
 #include "QueryPage.h"
 #include "BookPage.h"
@@ -46,13 +46,12 @@ public:
 	DECLARE_MESSAGE_MAP()
 public:
 	BOOL GetValidatePic(const CString& ValPicAddr, CValPicCtrl& picCtrl);
-	void LoginToSite(CString& result);
 	void ConnectToURL( const CString& URLString );
 	void BookTickets(CString& result);
 
 private:
 	CHTTPContent httpContent;
-	CLoginRandPage loginRandPage;
+	CRandPage randPage;
 	CLoginPage loginPage;
 	CQueryPage queryPage;
 	CBookPage bookPage;
@@ -73,14 +72,24 @@ public:
 private:
 	CEvent valEvent;
 public:
-	static UINT AFX_CDECL loginWorker(LPVOID param);
 	static UINT AFX_CDECL bookWorker(LPVOID param);
 
 	void SendString(CString &msg);
 
 	void PrepareLoginValDlg();
 	void PrepareBookValDlg();
-	void GetLoginValCode();
-	void GetBookValCode();
+	void GetLoginValCodeInput();
+	void GetBookValCodeInput();
+
+	int GetLoginValPageAction();
+	int GetBookValPageAction();
+	int GetRandPageAction();
+	int GetLoginPageAction();
+	int GetQueryPageAction();
+	int GetBookPageAction();
+	int GetCheckPageAction();
+	int GetQueuePageAction();
+	int GetConfirmPageAction();
+	int GetWaitPageAction();
 };
 extern CHTTPSWebClientApp theApp;

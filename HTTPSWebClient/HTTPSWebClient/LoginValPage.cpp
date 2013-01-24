@@ -33,9 +33,19 @@ void CLoginValPage::ParseOutput()
 	height = bmpHeightGet(buff, size);
 	width = bmpWidthGet(buff, size);
 
+	if(height == 0 || width == 0)
+	{
+		status = ERROR_VALIDATE;
+		return;
+	}
+
 	if(bmpFromJpeg(buff, size, bmpbuff, &bmpsize) != 0)
 	{
 		// set data to zero
 		bmpsize = 0;
+		status = ERROR_VALIDATE;
+		return;
 	}
+
+	status = ERROR_OK;
 }

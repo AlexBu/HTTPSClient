@@ -90,7 +90,6 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_MESSAGE(WM_FINISH, CHTTPSWebClientDlg::OnFinish)
 	ON_MESSAGE(WM_GETCODE, CHTTPSWebClientDlg::OnGetCode)
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_BUTTON_LOGIN, &CHTTPSWebClientDlg::OnLogin)
 	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
 END_MESSAGE_MAP()
 
@@ -161,24 +160,16 @@ void CHTTPSWebClientDlg::ConnectToSite()
 	theApp.ConnectToURL(AddrString);
 }
 
-void CHTTPSWebClientDlg::OnLogin()
+void CHTTPSWebClientDlg::OnBook()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 
 	// fill up user info
 	GetUserInfo();
-	theApp.LoginToSite(RespondString);
-	// set response
-	UpdateData(FALSE);
-}
-
-void CHTTPSWebClientDlg::OnBook()
-{
-	// TODO: Add your control notification handler code here
-	UpdateData(TRUE);
 	// fill up passengers info
 	GetPassengerInfo();
+
 	theApp.BookTickets(RespondString);
 	// set response
 	UpdateData(FALSE);
@@ -192,7 +183,7 @@ void CHTTPSWebClientDlg::InitUserInfo()
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
-	dateString= L"2013-01-20";
+	dateString= L"2013-01-29";
 	trainNo = L"D305";
 	stationFrom = L"南京";
 	stationTo = L"上海";
@@ -296,9 +287,9 @@ LRESULT CHTTPSWebClientDlg::OnGetCode( WPARAM wParam, LPARAM lParam )
 
 	// show validate picture
 	if(valTyp == 0)
-		theApp.GetLoginValCode();
+		theApp.GetLoginValCodeInput();
 	else
-		theApp.GetBookValCode();
+		theApp.GetBookValCodeInput();
 
 	return 1;
 }

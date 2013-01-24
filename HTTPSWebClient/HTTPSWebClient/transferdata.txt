@@ -657,7 +657,16 @@ O0: 二等
 O3: 二等无座
 M0: 一等
 90: 商务
-	
+
+seat_detail_select
+
+0: 随机
+3: 上铺
+2: 中铺
+1: 下铺
+
+this options no longer available, always use 0
+
 [web update]
 2013.1.18
 1.check order validate code no longer be preset before query ticket, implemented

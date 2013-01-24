@@ -307,14 +307,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoginRandPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoginRandPage.h"
-				>
-			</File>
-			<File
 				RelativePath=".\LoginValPage.cpp"
 				>
 			</File>
@@ -344,6 +336,14 @@
 			</File>
 			<File
 				RelativePath=".\QueuePage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RandPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RandPage.h"
 				>
 			</File>
 			<File
