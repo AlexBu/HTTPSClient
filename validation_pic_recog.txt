@@ -7,20 +7,17 @@ threshold = 170
 name it as bArr170
 
 code:
-j::b():
+i.a()
+	l.b()
+l.b():
     b b = new b(bArr170);
 	b.b = bArr170
-	b.d = b.a(bArr170)
-		      (list2 = list)[num3 = i] = list2[num3] + 
-(Convert.ToUInt32(A_0[i, j].ToString()) * 
-((uint) 
-Math.Pow(2.0, (double) ((A_0.GetLength(1) - 1) - j))
-)
-);
-        
-	b.c = b.b(bArr170)
+	b.d = every column in a single binary number        
+	b.c = every row in a single binary number
     b[] bArray = k.a();
 	number and letter font bitmap
+l.a():
+
     return a(a(b, bArray));
 
 
