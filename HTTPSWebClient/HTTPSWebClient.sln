@@ -8,6 +8,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HTTPSWebClient", "HTTPSWebC
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jpeglib", "jpeglib\jpeglib.vcproj", "{C3390EDD-0989-4FBB-98BF-9291BD219E3F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pic_trans", "pic_trans\pic_trans.vcproj", "{F8F386A8-6BB1-4825-A0BE-8755D62E6C71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -22,6 +24,10 @@ Global
 		{C3390EDD-0989-4FBB-98BF-9291BD219E3F}.Debug|Win32.Build.0 = Debug|Win32
 		{C3390EDD-0989-4FBB-98BF-9291BD219E3F}.Release|Win32.ActiveCfg = Release|Win32
 		{C3390EDD-0989-4FBB-98BF-9291BD219E3F}.Release|Win32.Build.0 = Release|Win32
+		{F8F386A8-6BB1-4825-A0BE-8755D62E6C71}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F8F386A8-6BB1-4825-A0BE-8755D62E6C71}.Debug|Win32.Build.0 = Debug|Win32
+		{F8F386A8-6BB1-4825-A0BE-8755D62E6C71}.Release|Win32.ActiveCfg = Release|Win32
+		{F8F386A8-6BB1-4825-A0BE-8755D62E6C71}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
