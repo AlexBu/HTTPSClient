@@ -45,7 +45,6 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	BOOL GetValidatePic(const CString& ValPicAddr, CValPicCtrl& picCtrl);
 	void ConnectToURL( const CString& URLString );
 	void BookTickets(CString& result);
 

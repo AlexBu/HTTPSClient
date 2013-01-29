@@ -84,37 +84,6 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 	httpContent.ConnectSite(URLString);
 }
 
-BOOL CHTTPSWebClientApp::GetValidatePic(const CString& ValPicAddr, CValPicCtrl& picCtrl)
-{
-	// get validation picture data and display it on picture control
-	unsigned int bmpHeight = 0;
-	unsigned int bmpWidth = 0;
-
-	DWORD jpgSize = SMALL_JPG_SIZE;
-	BYTE* jpgBuff = new BYTE[jpgSize];
-
-	DWORD bmpSize = SMALL_JPG_SIZE;
-	BYTE* bmpBuff = new BYTE[bmpSize];
-
-	httpContent.SendDatabyGet(ValPicAddr);
-	httpContent.GetResponseRaw(jpgBuff, jpgSize);
-
-	bmpHeight = bmpHeightGet(jpgBuff, jpgSize);
-	bmpWidth = bmpWidthGet(jpgBuff, jpgSize);
-
-	if(bmpFromJpeg(jpgBuff, jpgSize, bmpBuff, &bmpSize) == 0)
-	{
-		// set to picture control
-		picCtrl.imageAttrSet(bmpHeight, bmpWidth);
-		picCtrl.imageBuffSet(bmpBuff, bmpSize);
-	}
-
-	delete []jpgBuff;
-	delete []bmpBuff;
-
-	return TRUE;
-}
-
 void CHTTPSWebClientApp::BookTickets(CString& result)
 {
 	// assign a worker thread to book
@@ -205,7 +174,7 @@ int CHTTPSWebClientApp::GetLoginValPageAction()
 
 	loginValPage.BuildRequest();
 	loginValPage.GetPageData(httpContent);
-	loginValPage.ParseOutput();
+	loginValPage.ParseOutputPng();
 
 	int loginValStatus = loginValPage.GetStatus();
 

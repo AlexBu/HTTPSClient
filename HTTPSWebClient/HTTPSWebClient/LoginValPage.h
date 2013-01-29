@@ -8,8 +8,9 @@ public:
 	~CLoginValPage(void);
 	void BuildRequest();
 	void ParseOutput();
+	void ParseOutputPng();
 public:
-	unsigned height, width;
+	unsigned int height, width;
 	DWORD bmpsize;
 	BYTE* bmpbuff;
 };

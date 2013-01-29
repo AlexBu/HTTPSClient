@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include\regex&quot;;&quot;$(SolutionDir)\include\jpeg&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include\regex&quot;;&quot;$(SolutionDir)\include\pnglib&quot;;&quot;$(SolutionDir)\include\jpeg&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winhttp.lib jpeglib.lib"
+				AdditionalDependencies="winhttp.lib jpeglib.lib zlib.lib pnglib.lib"
 				ShowProgress="0"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(Solutiondir)\Debug&quot;"
@@ -154,7 +154,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winhttp.lib jpeglib.lib"
+				AdditionalDependencies="winhttp.lib jpeglib.lib zlib.lib pnglib.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(Solutiondir)\Release&quot;"
 				GenerateDebugInformation="true"
@@ -412,6 +412,14 @@
 			</File>
 			<File
 				RelativePath=".\Log.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pngdecode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\pngdecode.h"
 				>
 			</File>
 			<File

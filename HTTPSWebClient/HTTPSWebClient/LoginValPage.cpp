@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "LoginValPage.h"
 #include "jpg.h"
+#include "pngdecode.h"
 
 CLoginValPage::CLoginValPage(void)
 :height(0)
@@ -40,6 +41,22 @@ void CLoginValPage::ParseOutput()
 	}
 
 	if(bmpFromJpeg(buff, size, bmpbuff, &bmpsize) != 0)
+	{
+		// set data to zero
+		bmpsize = 0;
+		status = ERROR_VALIDATE;
+		return;
+	}
+
+	status = ERROR_OK;
+}
+
+void CLoginValPage::ParseOutputPng()
+{
+	if(status == ERROR_HTTP)
+		return;
+	// transform into bmp format
+	if(bmpFromPng(buff, size, bmpbuff, &bmpsize, &height, &width) != 0)
 	{
 		// set data to zero
 		bmpsize = 0;

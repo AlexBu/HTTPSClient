@@ -317,6 +317,7 @@ void CHTTPContent::GetResponseRaw( BYTE* result, DWORD& size )
 
 void CHTTPContent::ConnectSite( const CString& site )
 {
+	
 	siteAdr = site;
 
 	// Use WinHttpOpen to obtain a session handle.
