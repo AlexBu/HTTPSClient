@@ -387,6 +387,10 @@
 			Name="Utilities"
 			>
 			<File
+				RelativePath=".\defines.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HTTPContent.cpp"
 				>
 			</File>

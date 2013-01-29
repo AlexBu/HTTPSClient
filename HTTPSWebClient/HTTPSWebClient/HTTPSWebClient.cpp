@@ -6,9 +6,6 @@
 #include "HTTPSWebClient.h"
 #include "HTTPSWebClientDlg.h"
 
-#include "jpeglib.h"
-#include "jpg.h"
-
 #include <atlrx.h>
 
 // delay second
@@ -87,29 +84,92 @@ void CHTTPSWebClientApp::ConnectToURL( const CString& URLString )
 void CHTTPSWebClientApp::BookTickets(CString& result)
 {
 	// assign a worker thread to book
-	AfxBeginThread(bookWorker, this);
+	AfxBeginThread(BookWorker, this);
 }
 
-UINT AFX_CDECL CHTTPSWebClientApp::bookWorker( LPVOID param )
+UINT AFX_CDECL CHTTPSWebClientApp::BookWorker( LPVOID param )
 {
 	CString statusMsg;
 
 	CHTTPSWebClientApp* app = (CHTTPSWebClientApp*)param;
-	CWnd* gui = app->m_pMainWnd;
 
-	// TODO: add return value handling
-	app->GetLoginValPageAction();
-	app->GetRandPageAction();
-	app->GetLoginPageAction();
+	// build a state table
+	STATUS state_table[11][13] = {
+		//ok		general	http	logic	val		user	pass	overl	noseat	order	many	real	cancel
+		{RAND,		EXIT,	EXIT,	EXIT,	LOGINV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//LOGINV
+		{LOGIN,		RAND,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//RAND
+		{QUERY,		LOGINV,	EXIT,	EXIT,	LOGINV,	RAND,	RAND,	RAND,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//LOGIN
+		{BOOK,		QUERY,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//QUERY
+		{BOOKV,		QUERY,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT,	EXIT,	EXIT,	EXIT},	//BOOK
+		{CHECK,		BOOKV,	EXIT,	EXIT,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOKV},	//BOOKV
+		{QUEUE,		CHECK,	EXIT,	BOOK,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//CHECK
+		{CONFRM,	QUEUE,	EXIT,	BOOK,	QUEUE,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//QUEUE
+		{WAIT,		CONFRM,	EXIT,	BOOK,	CONFRM,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//CONFRM
+		{EXIT,		WAIT,	EXIT,	EXIT,	WAIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//WAIT
+		{EXIT,		EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT},	//EXIT
+	};
+	STATUS current_status = LOGINV;
+	int return_val = ERROR_OK;
+	BOOL machine_stop = FALSE;
+	while(TRUE)
+	{
+		// do action
+		switch(current_status)
+		{
+		case LOGINV:
+			return_val = app->GetLoginValPageAction();
+			break;
+		case RAND:
+			return_val = app->GetRandPageAction();
+			break;
+		case LOGIN:
+			return_val = app->GetLoginPageAction();
+			break;
+		case QUERY:
+			return_val = app->GetQueryPageAction();
+			break;
+		case BOOK:
+			return_val = app->GetBookPageAction();
+			break;
+		case BOOKV:
+			return_val = app->GetBookValPageAction();
+			break;
+		case CHECK:
+			return_val = app->GetCheckPageAction();
+			break;
+		case QUEUE:
+			return_val = app->GetQueuePageAction();
+			break;
+		case CONFRM:
+			return_val = app->GetConfirmPageAction();
+			break;
+		case WAIT:
+			return_val = app->GetWaitPageAction();
+			break;
+		case EXIT:
+			// fall through
+		default:
+			machine_stop = TRUE;
+			break;
+		}
 
-	// TODO: add return value handling
-	app->GetQueryPageAction();
-	app->GetBookPageAction();
-	app->GetBookValPageAction();
-	app->GetCheckPageAction();
-	app->GetQueuePageAction();
-	app->GetConfirmPageAction();
-	app->GetWaitPageAction();
+		if(machine_stop == TRUE)
+			break;
+
+		// jump to next status
+		STATUS next_status = state_table[current_status][- return_val];
+		
+
+		if(next_status == EXIT)
+		{
+			// log and exit
+			CString statusMsg;
+			statusMsg.Format(L"status machine exit, exit code: %d", current_status);
+			app->SendString(statusMsg);
+		}
+		current_status = next_status;
+	}
+	
 
 	return 0;
 }
@@ -174,11 +234,11 @@ int CHTTPSWebClientApp::GetLoginValPageAction()
 
 	loginValPage.BuildRequest();
 	loginValPage.GetPageData(httpContent);
-	loginValPage.ParseOutputPng();
+	loginValPage.ParseOutput();
 
 	int loginValStatus = loginValPage.GetStatus();
 
-	if(loginValStatus != 0)
+	if(loginValStatus != ERROR_OK)
 		return loginValStatus;
 
 	// send message to gui to get validation code from user input
@@ -218,7 +278,7 @@ int CHTTPSWebClientApp::GetBookValPageAction()
 
 	int bookValStatus = bookValPage.GetStatus();
 
-	if(bookValStatus != 0)
+	if(bookValStatus != ERROR_OK)
 		return bookValStatus;
 
 	// send message to gui to get validation code from user input
@@ -258,7 +318,7 @@ int CHTTPSWebClientApp::GetRandPageAction()
 	randPage.ParseOutput(loginInfo);
 
 	int loginRandStatus = randPage.GetStatus();
-	if(loginRandStatus != 0)
+	if(loginRandStatus != ERROR_OK)
 	{
 		statusMsg.Format(L"request login rand failed, error code: %d", loginRandStatus);
 		SendString(statusMsg);
@@ -279,7 +339,7 @@ int CHTTPSWebClientApp::GetLoginPageAction()
 	loginPage.ParseOutput();
 
 	int loginStatus = loginPage.GetStatus();
-	if( loginStatus == 0)
+	if( loginStatus == ERROR_OK)
 	{
 		statusMsg.Format(L"login success!");
 		SendString(statusMsg);
@@ -307,7 +367,12 @@ int CHTTPSWebClientApp::GetQueryPageAction()
 	Sleep(GENERAL_DELAY * 1000);
 
 	int queryStatus = queryPage.GetStatus();
-	if(queryStatus == ERROR_HTTP)
+	if(queryStatus == ERROR_OK)
+	{
+		statusMsg.Format(L"query success!");
+		SendString(statusMsg);
+	}
+	else if(queryStatus == ERROR_HTTP)
 	{
 		statusMsg.Format(L"query page: http connection failed!");
 		SendString(statusMsg);
@@ -335,7 +400,12 @@ int CHTTPSWebClientApp::GetBookPageAction()
 	Sleep(GENERAL_DELAY * 1000);
 
 	int bookStatus = bookPage.GetStatus();
-	if(bookStatus == ERROR_HTTP)
+	if(bookStatus == ERROR_OK)
+	{
+		statusMsg.Format(L"book success!");
+		SendString(statusMsg);
+	}
+	else if(bookStatus == ERROR_HTTP)
 	{
 		statusMsg.Format(L"book page: http connection failed!");
 		SendString(statusMsg);
@@ -362,7 +432,12 @@ int CHTTPSWebClientApp::GetCheckPageAction()
 	Sleep(GENERAL_DELAY * 1000);
 
 	int checkStatus = checkPage.GetStatus();
-	if(checkStatus == ERROR_VALIDATE)
+	if(checkStatus == ERROR_OK)
+	{
+		statusMsg.Format(L"check success!");
+		SendString(statusMsg);
+	}
+	else if(checkStatus == ERROR_VALIDATE)
 	{
 		statusMsg.Format(L"\r\ncheck failed: error code %d\r\nre-enter validation code!", checkStatus);
 		SendString(statusMsg);
@@ -395,7 +470,12 @@ int CHTTPSWebClientApp::GetQueuePageAction()
 	Sleep(GENERAL_DELAY * 1000);
 
 	int queueStatus = queuePage.GetStatus();
-	if(queueStatus == ERROR_HTTP)
+	if(queueStatus == ERROR_OK)
+	{
+		statusMsg.Format(L"queue success!");
+		SendString(statusMsg);
+	}
+	else if(queueStatus == ERROR_HTTP)
 	{
 		statusMsg.Format(L"queue page: http connection failed! retry...");
 		SendString(statusMsg);
@@ -424,7 +504,12 @@ int CHTTPSWebClientApp::GetConfirmPageAction()
 
 	int confirmStatus = confirmPage.GetStatus();
 
-	if(confirmStatus == ERROR_HTTP)
+	if(confirmStatus == ERROR_OK)
+	{
+		statusMsg.Format(L"confirm success!");
+		SendString(statusMsg);
+	}
+	else if(confirmStatus == ERROR_HTTP)
 	{
 		statusMsg.Format(L"confirm page: http connection failed! retry...");
 		SendString(statusMsg);

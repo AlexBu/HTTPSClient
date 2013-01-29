@@ -4,15 +4,13 @@
 #include "stdafx.h"
 #include "ValidationCtrl.h"
 
-#include "jpg.h"
-
 // CValPic
 
 IMPLEMENT_DYNAMIC(CValPicCtrl, CStatic)
 
 CValPicCtrl::CValPicCtrl():width(0),height(0),hasData(FALSE)
 {
-	picBuff = new BYTE[SMALL_JPG_SIZE];
+	picBuff = new BYTE[SMALL_PIC_SIZE];
 }
 
 CValPicCtrl::~CValPicCtrl()
@@ -82,7 +80,7 @@ void CValPicCtrl::imageAttrSet( DWORD h, DWORD w )
 
 void CValPicCtrl::imageBuffSet( BYTE* buff, DWORD size )
 {
-	if(buff && size < SMALL_JPG_SIZE)
+	if(buff && size < SMALL_PIC_SIZE)
 	{
 		memcpy(picBuff, buff, size);
 		hasData = TRUE;

@@ -2,6 +2,7 @@
 
 
 // CValPic
+#define SMALL_PIC_SIZE	(1024*300)
 
 class CValPicCtrl : public CStatic
 {

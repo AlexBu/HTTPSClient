@@ -101,6 +101,7 @@ unsigned int bmpCompGet(unsigned char* jpeg_buf, unsigned long jpeg_buf_size)
 	
 	return comp;
 }
+
 int bmpFromJpeg(unsigned char* jpeg_buf, unsigned long jpeg_buf_size, unsigned char* bmp_buf, unsigned long* bmp_buf_size)
 {
 	if(bmp_buf == NULL)

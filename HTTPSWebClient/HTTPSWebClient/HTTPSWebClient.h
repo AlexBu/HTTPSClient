@@ -71,7 +71,7 @@ public:
 private:
 	CEvent valEvent;
 public:
-	static UINT AFX_CDECL bookWorker(LPVOID param);
+	static UINT AFX_CDECL BookWorker(LPVOID param);
 
 	void SendString(CString &msg);
 
