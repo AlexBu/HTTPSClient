@@ -9,3 +9,13 @@
 /HTTPSWebClient/HTTPSWebClient/Release
 /HTTPSWebClient/HTTPSWebClient/*.aps
 /HTTPSWebClient/HTTPSWebClient/*.user
+/HTTPSWebClient/pic_trans/Debug
+/HTTPSWebClient/pic_trans/Release
+/HTTPSWebClient/pic_trans/*.aps
+/HTTPSWebClient/pic_trans/*.user
+/HTTPSWebClient/pnglib/Debug
+/HTTPSWebClient/pnglib/Release
+/HTTPSWebClient/pnglib/*.user
+/HTTPSWebClient/zlib/Debug
+/HTTPSWebClient/zlib/Release
+/HTTPSWebClient/zlib/*.user
