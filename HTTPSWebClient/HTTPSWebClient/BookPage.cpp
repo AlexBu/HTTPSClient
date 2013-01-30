@@ -68,7 +68,7 @@ void CBookPage::BuildRequest( TrainInfo& input )
 
 void CBookPage::ParseOutput( TicketInfo& output )
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
 
 	// search for unpaid order

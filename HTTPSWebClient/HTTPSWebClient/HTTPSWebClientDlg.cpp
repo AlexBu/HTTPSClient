@@ -111,9 +111,6 @@ BOOL CHTTPSWebClientDlg::OnInitDialog()
 
 	UpdateData(FALSE);
 
-	// connect to site
-	ConnectToSite();
-
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -153,13 +150,6 @@ HCURSOR CHTTPSWebClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CHTTPSWebClientDlg::ConnectToSite()
-{
-	AddrString = _T("dynamic.12306.cn");
-	
-	theApp.ConnectToURL(AddrString);
-}
-
 void CHTTPSWebClientDlg::OnBook()
 {
 	// TODO: Add your control notification handler code here
@@ -183,7 +173,7 @@ void CHTTPSWebClientDlg::InitUserInfo()
 
 void CHTTPSWebClientDlg::InitPassengerInfo()
 {
-	dateString= L"2013-01-29";
+	dateString= L"2013-02-03";
 	trainNo = L"D305";
 	stationFrom = L"南京";
 	stationTo = L"上海";

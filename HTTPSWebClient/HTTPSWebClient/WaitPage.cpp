@@ -17,7 +17,7 @@ void CWaitPage::BuildRequest( OrderInfo& input )
 
 void CWaitPage::ParseOutput( OrderInfo& output )
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
 	// split results
 	CRegex regex;
@@ -31,10 +31,36 @@ void CWaitPage::ParseOutput( OrderInfo& output )
 		status = 0;
 		CLog::GetLog().AddLog(L"wait page success!");
 		CLog::GetLog().AddLog(output.waitTime);
+
+		long wait_time = _tstol(output.waitTime);
+		if(wait_time >= 0)
+		{
+			// continue waiting
+			status = ERROR_IN_QUEUE;
+
+			// print queue info
+		}
+		else
+		{
+			// time out
+			status = ERROR_OK;
+
+			// get request id info
+			pattern = L"\\\"orderId\\\":\\\"{E\\d+}\\\"";
+			regex.patternLoad(pattern);
+			if( (regex.contextMatch(respStr, restStr) == TRUE) && (regex.matchCount() == 1) )
+			{
+				regex.matchGet(0, output.orderId);
+			}
+			else
+			{
+				output.orderId.Empty();
+			}
+		}
 	}
 	else
 	{
-		status = -1;
+		status = ERROR_GENERAL;
 		CLog::GetLog().AddLog(L"general error!");
 	}
 }

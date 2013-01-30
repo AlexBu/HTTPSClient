@@ -13,10 +13,14 @@
 #define ERROR_CANCEL_TOO_MANY	(-10)
 #define ERROR_REAL_NAME			(-11)
 #define ERROR_USER_CANCEL		(-12)
+#define ERROR_IN_QUEUE			(-13)
+#define ERROR_SERVER			(-14)
+#define ERROR_NOTRAIN			(-15)
 
 enum STATUS
 {
-	LOGINV = 0,
+	START = 0,
+	LOGINV,
 	RAND,
 	LOGIN,
 	QUERY,

@@ -38,7 +38,6 @@ protected:
 	afx_msg void OnBook();
 
 public:
-	void ConnectToSite();
 	void InitUserInfo();
 	void InitPassengerInfo();
 	void GetPassengerInfo();

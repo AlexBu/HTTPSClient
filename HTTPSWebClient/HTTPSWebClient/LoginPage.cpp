@@ -31,7 +31,7 @@ void CLoginPage::BuildRequest( LoginInfo& input )
 
 void CLoginPage::ParseOutput( )
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
 	CRegex regex;
 	CString patternTitle = L"<[tT][iI][tT][lL][eE]>{[^</>]+}</[tT][iI][tT][lL][eE]>";

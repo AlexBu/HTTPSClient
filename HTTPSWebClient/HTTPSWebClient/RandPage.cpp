@@ -17,7 +17,7 @@ void CRandPage::BuildRequest()
 
 void CRandPage::ParseOutput( LoginInfo& output )
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
 	// get rand number from response
 	CRegex regex;

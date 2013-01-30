@@ -45,7 +45,6 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	void ConnectToURL( const CString& URLString );
 	void BookTickets(CString& result);
 
 private:
@@ -90,5 +89,7 @@ public:
 	int GetQueuePageAction();
 	int GetConfirmPageAction();
 	int GetWaitPageAction();
+
+	int ResetHttpContent();
 };
 extern CHTTPSWebClientApp theApp;

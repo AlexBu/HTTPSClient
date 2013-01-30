@@ -13,7 +13,7 @@ struct OrderInfo
 	CString errMsg;
 	CString orderInfo;
 	CString waitTime;
-	CString orderNo;
+	CString orderId;
 	CString ticketStr;
 	CString checkHuimd;
 	CString check608;

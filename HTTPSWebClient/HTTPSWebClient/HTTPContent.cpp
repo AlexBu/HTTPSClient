@@ -308,10 +308,11 @@ void CHTTPContent::GetResponseStr( CString& result )
 
 void CHTTPContent::GetResponseRaw( BYTE* result, DWORD& size )
 {
-	if(status == -1)
+	if(status == -1 || buffUsed == 0)
 		return;
 
-	size = (size < buffUsed) ? size : buffUsed;
+	//size = (size < buffUsed) ? size : buffUsed;
+	size = buffUsed;
 	memcpy(result, buff, size );
 }
 

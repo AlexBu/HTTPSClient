@@ -41,12 +41,19 @@ void CPage::GetPageStr( CHTTPContent& content )
 	if(sendResult == TRUE)
 	{
 		content.GetResponseStr(respStr);
+		if(respStr.IsEmpty())
+		{
+			status = ERROR_SERVER;
+			return;
+		}
 	}
 	else
 	{
 		status = ERROR_HTTP;
 		log.AddLog(L"send data failed.");
+		return;
 	}
+	status = ERROR_OK;
 }
 
 int CPage::GetStatus()
@@ -79,10 +86,17 @@ void CPage::GetPageData( CHTTPContent& content )
 	if(sendResult == TRUE)
 	{
 		content.GetResponseRaw(buff, size);
+		if(size == 0)
+		{
+			status = ERROR_SERVER;
+			return;
+		}
 	}
 	else
 	{
 		status = ERROR_HTTP;
 		log.AddLog(L"send data failed.");
+		return;
 	}
+	status = ERROR_OK;
 }

@@ -32,17 +32,40 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 
 void CQueryPage::ParseOutput( TrainInfo& output )
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
-	// split results
+
 	CRegex regex;
-	CString pattern = L"javascript:getSelected\\(\\'"
+	CString pattern;
+	CString restStr;
+	CString matchStr;
+
+	// first find out the train
+	if(respStr == L"-1")
+	{
+		// no train information
+		status = ERROR_NOTRAIN;
+		return;
+	}
+
+	pattern.Format(L"{>%s<}", output.trainCode);
+	regex.patternLoad(pattern);
+
+	matchStr = respStr;
+	if( (regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() != 1) )
+	{
+		// no train
+		status = ERROR_NOTRAIN;
+		return;
+	}
+
+	matchStr = restStr;
+
+	// split results
+	pattern = L"javascript:getSelected\\(\\'"
 		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#"
 		L"{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#]+}#{[^#\\']+}\\')>";
 	regex.patternLoad(pattern);
-
-	CString restStr;
-	CString matchStr;
 
 	matchStr = respStr;
 
@@ -53,6 +76,7 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 		{
 			CString groupStr;
 			regex.matchGet(0, groupStr);
+			// no ticket and no train
 			if(output.trainCode == groupStr)
 			{
 				regex.matchGet(1, output.duration);

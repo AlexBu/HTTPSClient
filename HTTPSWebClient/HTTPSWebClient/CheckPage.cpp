@@ -136,7 +136,7 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 
 void CCheckPage::ParseOutput( OrderInfo& output )
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
 	// split results
 	CRegex regex;
@@ -179,21 +179,24 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		}
 		else
 		{
-			// remove last part of str
-			pattern = L"{.*}&tFlag=.*$";
-			matchStr = reqData;
-			regex.patternLoad(pattern);
-			if(regex.contextMatch(matchStr, restStr) == TRUE)
-			{
-				regex.matchGet(0, output.orderInfo);
-				CLog::GetLog().AddLog(L"check page success!");
-				status = ERROR_OK;
-			}
-			else
-			{
-				CLog::GetLog().AddLog(L"parse confirm string failed!");
-				status = ERROR_GENERAL;
-			}
+			//// remove last part of str
+			//pattern = L"{.*}&tFlag=.*$";
+			//matchStr = reqData;
+			//regex.patternLoad(pattern);
+			//if(regex.contextMatch(matchStr, restStr) == TRUE)
+			//{
+			//	regex.matchGet(0, output.orderInfo);
+			//	CLog::GetLog().AddLog(L"check page success!");
+			//	status = ERROR_OK;
+			//}
+			//else
+			//{
+			//	CLog::GetLog().AddLog(L"parse confirm string failed!");
+			//	status = ERROR_GENERAL;
+			//}
+
+			CLog::GetLog().AddLog(L"check page success!");
+			status = ERROR_OK;
 		}
 	}
 	else if(output.errMsg.Find(L"·Ç·¨") != -1)

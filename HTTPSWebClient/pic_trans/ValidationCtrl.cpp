@@ -115,7 +115,7 @@ void CValPicCtrl::LoadLabConst()
 float CValPicCtrl::ApplyLValue( DWORD l )
 {
 	DWORD count = 0;
-	float total = width * height;
+	float total = (float)width * height;
 	for(DWORD i = 0; i < width * height; i++)
 	{
 		BYTE b = picBuff[3*i];

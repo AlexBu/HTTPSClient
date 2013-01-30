@@ -27,7 +27,7 @@ void CBookValPage::BuildRequest()
 
 void CBookValPage::ParseOutput()
 {
-	if(status == ERROR_HTTP)
+	if(status != ERROR_OK)
 		return;
 	// transform into bmp format
 	if(bmpFromPng(buff, size, bmpbuff, &bmpsize, &height, &width) != 0)
