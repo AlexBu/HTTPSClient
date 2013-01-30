@@ -45,7 +45,6 @@ public:
 
 private:
 	CString dateString;	
-	CString AddrString;
 	CString usernameStr;
 	CString passwordStr;
 
@@ -79,6 +78,6 @@ private:
 	CString stationTo;
 
 public:
-	CString RespondString;
 
+	CEdit outputBox;
 };

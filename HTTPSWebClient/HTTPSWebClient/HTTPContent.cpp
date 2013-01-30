@@ -94,6 +94,17 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 	if(FALSE == WinHttpReceiveResponse( hRequest, NULL) )
 		goto SENDGETDATAFAIL;
 
+	// try to get status code
+	TCHAR statuscode[128];
+	DWORD statussize = 128;
+	if(FALSE == WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_STATUS_CODE, WINHTTP_HEADER_NAME_BY_INDEX,
+		statuscode, &statussize, WINHTTP_NO_HEADER_INDEX))
+		goto SENDGETDATAFAIL;
+	if(_tstol(statuscode) != 200)
+	{
+		// see who will fall into this branch?
+		int i = 10;
+	}
 	// Keep checking for data until there is nothing left.
 	DWORD availSize = 0;
 	DWORD dwDownloaded = 0;

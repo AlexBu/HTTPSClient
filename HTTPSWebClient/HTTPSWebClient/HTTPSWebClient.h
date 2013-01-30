@@ -45,7 +45,7 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	void BookTickets(CString& result);
+	void BookTickets();
 
 private:
 	CHTTPContent httpContent;

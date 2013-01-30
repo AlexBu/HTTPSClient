@@ -76,7 +76,7 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	return FALSE;
 }
 
-void CHTTPSWebClientApp::BookTickets(CString& result)
+void CHTTPSWebClientApp::BookTickets()
 {
 	// assign a worker thread to book
 	AfxBeginThread(BookWorker, this);
@@ -196,7 +196,7 @@ void CHTTPSWebClientApp::GetLoginValCodeInput()
 	{
 		// cancel, quit
 		loginInfo.validate.Empty();
-		CLog::GetLog().AddLog(L"user cancel validation code input, quit login\r\n");
+		CLog::GetLog().AddLog(L"user cancel validation code input, quit login");
 	}
 	// notify worker thread things have been complete
 	SetEvent(valEvent);
@@ -213,7 +213,7 @@ void CHTTPSWebClientApp::GetBookValCodeInput()
 	{
 		// cancel, quit
 		ticketInfo.randCode.Empty();
-		CLog::GetLog().AddLog(L"user cancel validation code input, quit login\r\n");
+		CLog::GetLog().AddLog(L"user cancel validation code input, quit login");
 	}
 	// notify worker thread things have been complete
 	SetEvent(valEvent);
@@ -373,7 +373,7 @@ int CHTTPSWebClientApp::GetQueryPageAction()
 	statusMsg.Format(L"querying train...");
 	SendString(statusMsg);
 
-	CLog::GetLog().AddLog(L"query action start\r\n");
+	CLog::GetLog().AddLog(L"query action start");
 	queryPage.BuildRequest(queryInfo);
 	queryPage.GetPageStr(httpContent);
 	queryPage.ParseOutput(trainInfo);
@@ -394,7 +394,7 @@ int CHTTPSWebClientApp::GetQueryPageAction()
 	else
 	{
 		// add query delay
-		CLog::GetLog().AddLog(L"no proper train found, wait for retry\r\n");
+		CLog::GetLog().AddLog(L"no proper train found, wait for retry");
 	}
 
 	return queryStatus;
@@ -406,7 +406,7 @@ int CHTTPSWebClientApp::GetBookPageAction()
 
 	statusMsg.Format(L"booking tickets...");
 	SendString(statusMsg);
-	CLog::GetLog().AddLog(L"book action start\r\n");
+	CLog::GetLog().AddLog(L"book action start");
 	bookPage.BuildRequest(trainInfo);
 	bookPage.GetPageStr(httpContent);
 	bookPage.ParseOutput(ticketInfo);
@@ -438,7 +438,7 @@ int CHTTPSWebClientApp::GetCheckPageAction()
 
 	statusMsg.Format(L"checking order...");
 	SendString(statusMsg);
-	CLog::GetLog().AddLog(L"check action start\r\n");
+	CLog::GetLog().AddLog(L"check action start");
 	checkPage.BuildRequest(ticketInfo);
 	checkPage.GetPageStr(httpContent);
 	checkPage.ParseOutput(orderInfo);
@@ -476,7 +476,7 @@ int CHTTPSWebClientApp::GetQueuePageAction()
 
 	statusMsg.Format(L"queueing order...");
 	SendString(statusMsg);
-	CLog::GetLog().AddLog(L"queue action start\r\n");
+	CLog::GetLog().AddLog(L"queue action start");
 	queuePage.BuildRequest(ticketInfo);
 	queuePage.GetPageStr(httpContent);
 	queuePage.ParseOutput(orderInfo);
@@ -512,7 +512,7 @@ int CHTTPSWebClientApp::GetConfirmPageAction()
 
 	statusMsg.Format(L"confirming order...");
 	SendString(statusMsg);
-	CLog::GetLog().AddLog(L"confirm action start\r\n");
+	CLog::GetLog().AddLog(L"confirm action start");
 	confirmPage.BuildRequest(ticketInfo);
 	confirmPage.GetPageStr(httpContent);
 	confirmPage.ParseOutput(orderInfo);
@@ -551,7 +551,7 @@ int CHTTPSWebClientApp::GetWaitPageAction()
 
 	statusMsg.Format(L"waiting for result...");
 	SendString(statusMsg);
-	CLog::GetLog().AddLog(L"wait action start\r\n");
+	CLog::GetLog().AddLog(L"wait action start");
 	waitPage.BuildRequest(orderInfo);
 	waitPage.GetPageStr(httpContent);
 	waitPage.ParseOutput(orderInfo);

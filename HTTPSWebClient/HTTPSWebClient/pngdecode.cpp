@@ -2,11 +2,12 @@
 
 #include "pngdecode.h"
 
-typedef struct {
+struct png_buf_mgr
+{
 	unsigned char* data;
 	unsigned int size;
 	unsigned int offset;
-}png_buf_mgr;
+};
 
 static void user_read_buf_callback(png_structp png_ptr, png_bytep data, png_size_t length)
 {

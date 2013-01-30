@@ -18,8 +18,6 @@
 
 CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CHTTPSWebClientDlg::IDD, pParent)
-	, RespondString(_T(""))
-	, AddrString(_T(""))
 	, usernameStr(_T(""))
 	, passwordStr(_T(""))
 	, dateString(_T(""))
@@ -53,7 +51,6 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_EDIT_GET, RespondString);
 	DDX_Text(pDX, IDC_EDIT_DATE, dateString);
 	DDX_Text(pDX, IDC_EDIT_USERNAME, usernameStr);
 	DDX_Text(pDX, IDC_EDIT_PASSWORD, passwordStr);
@@ -80,6 +77,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
+	DDX_Control(pDX, IDC_EDIT_GET, outputBox);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -160,7 +158,7 @@ void CHTTPSWebClientDlg::OnBook()
 	// fill up passengers info
 	GetPassengerInfo();
 
-	theApp.BookTickets(RespondString);
+	theApp.BookTickets();
 	// set response
 	UpdateData(FALSE);
 }
@@ -251,10 +249,13 @@ LRESULT CHTTPSWebClientDlg::OnSetStr( WPARAM wParam, LPARAM lParam )
 	// high word: thread count
 	// low word: stage
 	// lParam: data
-	
-	RespondString += (LPCTSTR)lParam;
-	RespondString += L"\r\n";
-	UpdateData(FALSE);
+
+	CString output;
+	outputBox.GetWindowText(output);
+	output += (LPCTSTR)lParam;
+	output += L"\r\n";
+	outputBox.SetWindowText(output);
+	outputBox.LineScroll(outputBox.GetLineCount());
 	return 1;
 }
 

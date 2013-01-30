@@ -5,6 +5,7 @@ CLog::CLog(void)
 {
 	CString fileName;
 	fileName.Format(L"http_%x.log", GetCurrentProcessId());
+	//fileName.Format(L"http.log");
 	logFile.Open(fileName, 
 	CFile::modeCreate|CFile::modeNoTruncate|CFile::modeWrite|CFile::shareDenyWrite);
 	logFile.SeekToEnd();
