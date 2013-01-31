@@ -43,6 +43,7 @@ public:
 	void GetPassengerInfo();
 	void GetUserInfo();
 
+	void LoadConfig();
 private:
 	CString dateString;	
 	CString usernameStr;
@@ -80,4 +81,5 @@ private:
 public:
 
 	CEdit outputBox;
+	CListCtrl listPassengers;
 };

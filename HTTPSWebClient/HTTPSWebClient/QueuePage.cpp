@@ -27,7 +27,7 @@ void CQueuePage::BuildRequest( TicketInfo& input )
 		input.to_station_telecode,
 		input.leftTicketStr
 		);
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
+	refStr = L"/otsweb/order/confirmPassengerAction.do?method=init";
 }
 
 void CQueuePage::ParseOutput( OrderInfo& output )
@@ -40,7 +40,7 @@ void CQueuePage::ParseOutput( OrderInfo& output )
 
 	matchStr = respStr;
 
-	pattern = L"\\\"ticket\\\":{\\q}";
+	pattern = L"\\\"ticket\\\":\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
 
 	if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 1) )

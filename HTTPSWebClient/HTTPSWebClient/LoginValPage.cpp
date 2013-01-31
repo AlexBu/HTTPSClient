@@ -22,7 +22,7 @@ CLoginValPage::~CLoginValPage(void)
 void CLoginValPage::BuildRequest()
 {
 	reqStr = L"/otsweb/passCodeAction.do?rand=sjrand";
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init";
+	refStr = L"/otsweb/loginAction.do?method=init";
 }
 
 void CLoginValPage::ParseOutput()

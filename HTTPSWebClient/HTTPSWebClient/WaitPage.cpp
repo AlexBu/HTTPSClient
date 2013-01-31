@@ -12,7 +12,7 @@ CWaitPage::~CWaitPage(void)
 void CWaitPage::BuildRequest( OrderInfo& input )
 {
 	reqStr = L"/otsweb/order/myOrderAction.do?method=queryOrderWaitTime&tourFlag=dc";
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
+	refStr = L"/otsweb/order/confirmPassengerAction.do?method=init";
 }
 
 void CWaitPage::ParseOutput( OrderInfo& output )

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "HTTPSWebClient.h"
 #include "HTTPSWebClientDlg.h"
+#include "Config.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -78,6 +79,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
 	DDX_Control(pDX, IDC_EDIT_GET, outputBox);
+	DDX_Control(pDX, IDC_LIST_PASSENGER, listPassengers);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -106,6 +108,8 @@ BOOL CHTTPSWebClientDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	InitUserInfo();
 	InitPassengerInfo();
+
+	LoadConfig();
 
 	UpdateData(FALSE);
 
@@ -283,4 +287,39 @@ LRESULT CHTTPSWebClientDlg::OnGetCode( WPARAM wParam, LPARAM lParam )
 		theApp.GetBookValCodeInput();
 
 	return 1;
+}
+
+void CHTTPSWebClientDlg::LoadConfig()
+{
+	// load passenger info into list ctrl
+
+	listPassengers.SetExtendedStyle(LVS_EX_FULLROWSELECT);
+
+	listPassengers.InsertColumn(0, L"Name");
+	listPassengers.InsertColumn(1, L"IdType");
+	listPassengers.InsertColumn(2, L"IdNo");
+	listPassengers.InsertColumn(3, L"Mobile");
+	listPassengers.InsertColumn(4, L"SeatTyp");
+
+	listPassengers.SetColumnWidth(0, 100);
+	listPassengers.SetColumnWidth(1, 100);
+	listPassengers.SetColumnWidth(2, 100);
+	listPassengers.SetColumnWidth(3, 100);
+	listPassengers.SetColumnWidth(4, LVSCW_AUTOSIZE_USEHEADER);
+
+	CConfig& config = CConfig::GetConfig();
+	DWORD passengerNum = config.GetPassengerCount();
+	for(DWORD i = 0; i < passengerNum; i++)
+	{
+		PassInfo passengerinfo = config.GetPassenger(i);
+		// load into list ctrl
+		listPassengers.InsertItem(i, passengerinfo.name);
+		CString str;
+		str.Format(L"%d", passengerinfo.passTyp);
+		listPassengers.SetItemText(i, 1, str);
+		listPassengers.SetItemText(i, 2, passengerinfo.passNo);
+		listPassengers.SetItemText(i, 3, passengerinfo.mobileNo);
+		str.Format(L"%d", passengerinfo.seatTyp);
+		listPassengers.SetItemText(i, 4, str);
+	}
 }

@@ -19,6 +19,7 @@
 #define IDC_BUTTON_CONN                 1010
 #define IDC_BUTTON1                     1011
 #define IDC_BUTTON_GET_VALPIC           1011
+#define IDC_BUTTON_READPASS             1011
 #define IDC_BUTTON_LOGIN                1012
 #define IDC_EDIT_USER                   1013
 #define IDC_BUTTON_GET_VALPIC2          1013
@@ -60,6 +61,9 @@
 #define IDC_EDIT_IDNO_P4                1043
 #define IDC_EDIT_MOB_P4                 1044
 #define IDC_EDIT_SEATTYP_P4             1045
+#define IDC_LIST_PASSENGER              1046
+#define IDC_BUTTON_SAVEPASS             1047
+#define IDC_LIST2                       1048
 
 // Next default values for new objects
 // 
@@ -67,7 +71,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1037
+#define _APS_NEXT_CONTROL_VALUE         1049
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

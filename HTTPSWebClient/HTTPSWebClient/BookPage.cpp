@@ -63,7 +63,7 @@ void CBookPage::BuildRequest( TrainInfo& input )
  		input.mmStr,
  		input.locationCode
  		);
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/querySingleAction.do?method=init";
+	refStr = L"/otsweb/order/querySingleAction.do?method=init";
 }
 
 void CBookPage::ParseOutput( TicketInfo& output )

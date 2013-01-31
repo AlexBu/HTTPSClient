@@ -585,6 +585,6 @@ int CHTTPSWebClientApp::GetWaitPageAction()
 
 int CHTTPSWebClientApp::ResetHttpContent()
 {
-	httpContent.ConnectSite(L"dynamic.12306.cn");
+	httpContent.ConnectInit(L"dynamic.12306.cn");
 	return ERROR_OK;
 }

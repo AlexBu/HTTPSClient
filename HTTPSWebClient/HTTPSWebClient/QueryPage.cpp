@@ -27,7 +27,7 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 		to_station_telecodeGet(input)
 		);
 	//reqStr = GetUTF8Str(reqStr);
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/querySingleAction.do?method=init";
+	refStr = L"/otsweb/order/querySingleAction.do?method=init";
 }
 
 void CQueryPage::ParseOutput( TrainInfo& output )

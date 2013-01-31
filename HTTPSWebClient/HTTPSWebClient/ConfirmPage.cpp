@@ -56,7 +56,7 @@ void CConfirmPage::BuildRequest( TicketInfo& input )
 		,reserve_flagGet(input)
 		);
 
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
+	refStr = L"/otsweb/order/confirmPassengerAction.do?method=init";
 }
 
 void CConfirmPage::ParseOutput( OrderInfo& output )

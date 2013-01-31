@@ -12,7 +12,7 @@ CRandPage::~CRandPage(void)
 void CRandPage::BuildRequest()
 {
 	reqStr = L"/otsweb/loginAction.do?method=loginAysnSuggest";
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init";
+	refStr = L"/otsweb/loginAction.do?method=init";
 }
 
 void CRandPage::ParseOutput( LoginInfo& output )

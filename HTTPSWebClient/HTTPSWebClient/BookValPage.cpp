@@ -22,7 +22,7 @@ CBookValPage::~CBookValPage(void)
 void CBookValPage::BuildRequest()
 {
 	reqStr = L"/otsweb/passCodeAction.do?rand=randp";
-	refStr = L"Referer: https://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init";
+	refStr = L"/otsweb/order/confirmPassengerAction.do?method=init";
 }
 
 void CBookValPage::ParseOutput()

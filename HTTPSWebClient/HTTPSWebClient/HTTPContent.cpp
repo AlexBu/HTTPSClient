@@ -4,12 +4,34 @@
 #define MAX_CONTENT_SIZE	(1L*1024*1024)
 #define GB2312_CODEPAGE		(936)
 
+//#define HTTPS_12306
+//#define CDN_SWITCH
+
 CHTTPContent::CHTTPContent()
 	:siteAdr(L"")
 	,status(0)
 	,buffUsed(0)
 {
 	buff = new BYTE[MAX_CONTENT_SIZE];
+
+	// load a cdn list for testing
+#ifdef CDN_SWITCH
+	CStdioFile cdnFile(L"cdns.txt", CFile::modeRead);
+
+	while(TRUE)
+	{
+		CString str;
+		if(cdnFile.ReadString(str) == TRUE)
+		{
+			cdnlist.Add(str);
+		}
+		else
+		{
+			break;
+		}
+	}
+	cdnFile.Close();
+#endif
 }
 
 CHTTPContent::~CHTTPContent(void)
@@ -28,10 +50,20 @@ CHTTPContent::~CHTTPContent(void)
 		hSession = NULL;
 	}
 	buffUsed = 0;
+
+	cdnlist.RemoveAll();
+	/*while(!cdnlist.IsEmpty())
+	{
+		CString* str = cdnlist.GetAt(0);
+		cdnlist.RemoveAt(0);
+		delete str;
+	}*/
 }
 
 BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 {
+	SwitchSite();
+
 	HINTERNET hRequest = 0;
 
 	if (status == -1)
@@ -45,12 +77,17 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 			NULL, 
 			WINHTTP_NO_REFERER,
 			WINHTTP_DEFAULT_ACCEPT_TYPES,
+#ifdef HTTPS_12306
 			WINHTTP_FLAG_SECURE
+#else
+			WINHTTP_FLAG_REFRESH
+#endif
 			);
 
 	if(hRequest == NULL)
 		goto SENDGETDATAFAIL;
 
+#ifdef HTTPS_12306
 	DWORD queryFlags;
 	DWORD flagSize = sizeof(queryFlags);
 	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
@@ -69,6 +106,7 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 	if(FALSE == WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
 		&queryFlags, sizeof (flagSize) ))
 		goto SENDGETDATAFAIL;
+#endif
 
 	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
 		_T("Cache-Control: no-cache"),
@@ -78,8 +116,44 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 
 	if(refStr.IsEmpty() == FALSE)
 	{
+		CString host_ref;
+#ifdef HTTPS_12306
+		host_ref.Format(L"Referer: https://dynamic.12306.cn%s", refStr);
+#else
+		host_ref.Format(L"Referer: http://dynamic.12306.cn%s", refStr);
+#endif
 		if(FALSE == WinHttpAddRequestHeaders( hRequest, 
-			refStr,
+			host_ref,
+			-1,
+			WINHTTP_ADDREQ_FLAG_ADD) )
+			goto SENDGETDATAFAIL;
+	}
+
+#ifdef CDN_SWITCH
+	// test: replace host field
+	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+		_T("Host: dynamic.12306.cn"),
+		-1,
+		0) )	// must be zero
+		goto SENDGETDATAFAIL;
+#endif
+
+	// disable cookie
+	// WINHTTP_DISABLE_COOKIES
+	DWORD cookieFlags;
+	DWORD cookieFlagSize = sizeof(cookieFlags);
+	cookieFlags = WINHTTP_DISABLE_COOKIES;
+	if(FALSE == WinHttpSetOption (hRequest, WINHTTP_OPTION_DISABLE_FEATURE,
+		&cookieFlags, sizeof (cookieFlagSize) ))
+		goto SENDGETDATAFAIL;
+
+	// add cookie if there is any
+	if(!cookieStr.IsEmpty())
+	{
+		CString tmpStr;
+		tmpStr.Format(L"Cookie: %s", cookieStr);
+		if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+			tmpStr,
 			-1,
 			WINHTTP_ADDREQ_FLAG_ADD) )
 			goto SENDGETDATAFAIL;
@@ -105,6 +179,12 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 		// see who will fall into this branch?
 		int i = 10;
 	}
+
+	// try to get cookie
+	GetCookie(hRequest);
+
+	
+
 	// Keep checking for data until there is nothing left.
 	DWORD availSize = 0;
 	DWORD dwDownloaded = 0;
@@ -147,6 +227,8 @@ SENDGETDATAFAIL:
 
 BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additionalData )
 {
+	SwitchSite();
+
 	HINTERNET hRequest = 0;
 
 	if (status == -1)
@@ -160,12 +242,16 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 		NULL, 
 		WINHTTP_NO_REFERER,
 		WINHTTP_DEFAULT_ACCEPT_TYPES,
+#ifdef HTTPS_12306
 		WINHTTP_FLAG_SECURE
+#else
+		WINHTTP_FLAG_REFRESH
+#endif
 		);
 
 	if(hRequest == NULL)
 		goto SENDGETDATAFAIL;
-
+#ifdef HTTPS_12306
 	DWORD queryFlags;
 	DWORD flagSize = sizeof(queryFlags);
 	if(FALSE == WinHttpQueryOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
@@ -184,6 +270,7 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 	if(FALSE == WinHttpSetOption (hRequest, WINHTTP_OPTION_SECURITY_FLAGS,
 		&queryFlags, sizeof (flagSize) ))
 		goto SENDGETDATAFAIL;
+#endif
 
 	// add additional headers
 	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
@@ -197,6 +284,15 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 		-1,
 		WINHTTP_ADDREQ_FLAG_ADD) )
 		goto SENDGETDATAFAIL;
+
+#ifdef CDN_SWITCH
+	// test: replace host field
+	if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+		_T("Host: dynamic.12306.cn"),
+		-1,
+		0) )	// must be zero
+		goto SENDGETDATAFAIL;
+#endif
 
 	//if(FALSE == WinHttpAddRequestHeaders( hRequest, 
 	//	_T("x-requested-with: XMLHttpRequest"),
@@ -214,8 +310,14 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 	// Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init
 	if(refStr.IsEmpty() == FALSE)
 	{
+		CString host_ref;
+#ifdef HTTPS_12306
+		host_ref.Format(L"Referer: https://dynamic.12306.cn%s", refStr);
+#else
+		host_ref.Format(L"Referer: http://dynamic.12306.cn%s", refStr);
+#endif
 		if(FALSE == WinHttpAddRequestHeaders( hRequest, 
-			refStr,
+			host_ref,
 			-1,
 			WINHTTP_ADDREQ_FLAG_ADD) )
 			goto SENDGETDATAFAIL;
@@ -235,6 +337,27 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 	//	-1,
 	//	WINHTTP_ADDREQ_FLAG_ADD) )
 	//	goto SENDGETDATAFAIL;
+
+	// disable cookie
+	// WINHTTP_DISABLE_COOKIES
+	DWORD cookieFlags;
+	DWORD cookieFlagSize = sizeof(cookieFlags);
+	cookieFlags = WINHTTP_DISABLE_COOKIES;
+	if(FALSE == WinHttpSetOption (hRequest, WINHTTP_OPTION_DISABLE_FEATURE,
+		&cookieFlags, sizeof (cookieFlagSize) ))
+		goto SENDGETDATAFAIL;
+
+	// add cookie if there is any
+	if(!cookieStr.IsEmpty())
+	{
+		CString tmpStr;
+		tmpStr.Format(L"Cookie: %s", cookieStr);
+		if(FALSE == WinHttpAddRequestHeaders( hRequest, 
+			tmpStr,
+			-1,
+			WINHTTP_ADDREQ_FLAG_ADD) )
+			goto SENDGETDATAFAIL;
+	}
 
 	// transform post string to MBCS type
 	char* postData = NULL;
@@ -260,6 +383,8 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 
 	if(FALSE == WinHttpReceiveResponse( hRequest, NULL) )
 		goto SENDGETDATAFAIL;
+
+	GetCookie(hRequest);
 
 	// Keep checking for data until there is nothing left.
 	DWORD availSize = 0;
@@ -327,9 +452,34 @@ void CHTTPContent::GetResponseRaw( BYTE* result, DWORD& size )
 	memcpy(result, buff, size );
 }
 
+void CHTTPContent::ConnectInit( const CString& site )
+{
+	CleanCookie();
+	ConnectSite(site);
+}
+
+void CHTTPContent::SwitchSite()
+{
+#ifdef CDN_SWITCH
+	static int cdn_index = 0;
+	if(cdn_index >= cdnlist.GetCount())
+		cdn_index = 0;
+	ConnectSite(cdnlist[cdn_index++]);
+#endif
+}
+
+void CHTTPContent::SetRefStr( CString& str )
+{
+	refStr = str;
+}
+
+void CHTTPContent::CleanCookie()
+{
+	cookieStr.Empty();
+}
+
 void CHTTPContent::ConnectSite( const CString& site )
 {
-	
 	siteAdr = site;
 
 	// Use WinHttpOpen to obtain a session handle.
@@ -342,7 +492,12 @@ void CHTTPContent::ConnectSite( const CString& site )
 		status = -1;
 
 	hConnect = WinHttpConnect( hSession, siteAdr,
-		INTERNET_DEFAULT_HTTPS_PORT, 0);
+#ifdef HTTPS_12306
+		INTERNET_DEFAULT_HTTPS_PORT, 
+#else
+		INTERNET_DEFAULT_HTTP_PORT,
+#endif
+		0);
 
 	if(hConnect == NULL)
 		status = -1;
@@ -350,7 +505,32 @@ void CHTTPContent::ConnectSite( const CString& site )
 	status = 1;
 }
 
-void CHTTPContent::SetRefStr( CString& str )
+void CHTTPContent::GetCookie( HINTERNET hRequest )
 {
-	refStr = str;
+	TCHAR cookie[128], cookie2[128];
+	DWORD cookiesize = 128;
+	TCHAR cookieheader[128] = L"Set-Cookie:";
+	DWORD cookieindex = 0;
+	if(cookieStr.IsEmpty())
+	{
+		CString tmpStr, tmpStr2;
+		// store cookie
+		if( (TRUE == WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, cookieheader, cookie, &cookiesize, &cookieindex))
+			&&
+			(TRUE == WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, cookieheader, cookie2, &cookiesize, &cookieindex))
+			)
+		{
+			// merge cookies together
+			tmpStr += cookie;
+			tmpStr2 += cookie2;
+			int pos = tmpStr.ReverseFind(L';');
+			int pos2 = tmpStr2.ReverseFind(L';');
+			if( (pos != -1) && (pos != -1) )
+			{
+				tmpStr = tmpStr.Left(pos);
+				tmpStr2 = tmpStr2.Left(pos2);
+				cookieStr.Format(L"%s; %s", tmpStr, tmpStr2);
+			}
+		}
+	}
 }
