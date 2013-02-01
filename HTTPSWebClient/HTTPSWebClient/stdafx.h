@@ -41,7 +41,7 @@
 
 // customized message
 #define WM_SETSTR	(WM_USER + 1)
-#define WM_FINISH	(WM_USER + 2)
+#define WM_LOGIN	(WM_USER + 2)
 #define WM_GETCODE	(WM_USER + 3)
 
 #ifdef _UNICODE

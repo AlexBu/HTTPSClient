@@ -5,6 +5,9 @@
 #define IDD_HTTPSWEBCLIENT_DIALOG       102
 #define IDR_MAINFRAME                   128
 #define IDD_DIALOG_VALIDATE_CODE        129
+#define IDD_DIALOG_SELECT_USER          130
+#define IDD_DIALOG_SELECT_PASS          131
+#define IDD_DIALOG_SELECT_PASSENGER     131
 #define IDC_EDIT_URL                    1000
 #define IDC_EDIT_POST                   1001
 #define IDC_EDIT_GET                    1002
@@ -19,7 +22,7 @@
 #define IDC_BUTTON_CONN                 1010
 #define IDC_BUTTON1                     1011
 #define IDC_BUTTON_GET_VALPIC           1011
-#define IDC_BUTTON_READPASS             1011
+#define IDC_BUTTON_ADDPASS              1011
 #define IDC_BUTTON_LOGIN                1012
 #define IDC_EDIT_USER                   1013
 #define IDC_BUTTON_GET_VALPIC2          1013
@@ -61,17 +64,20 @@
 #define IDC_EDIT_IDNO_P4                1043
 #define IDC_EDIT_MOB_P4                 1044
 #define IDC_EDIT_SEATTYP_P4             1045
-#define IDC_LIST_PASSENGER              1046
-#define IDC_BUTTON_SAVEPASS             1047
-#define IDC_LIST2                       1048
+#define IDC_LIST_PASSENGER_BOARD        1046
+#define IDC_BUTTON_REMOVEPASS           1047
+#define IDC_BUTTON_SELECT_USER          1049
+#define IDC_LIST_USER                   1050
+#define IDC_BUTTON_SELECT_PASS          1050
+#define IDC_LIST_PASSENGER              1051
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        130
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1049
+#define _APS_NEXT_CONTROL_VALUE         1052
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

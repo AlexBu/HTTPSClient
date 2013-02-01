@@ -2,8 +2,8 @@
 
 struct UserInfo
 {
-	TCHAR name[8];
-	TCHAR pass[256];
+	CString name;
+	CString pass;
 };
 
 struct UserList
@@ -14,10 +14,10 @@ struct UserList
 
 struct PassInfo
 {
-	TCHAR name[8];
+	CString name;
 	DWORD passTyp;
-	TCHAR passNo[256];
-	TCHAR mobileNo[16];
+	CString passNo;
+	CString mobileNo;
 	DWORD seatTyp;
 };
 
@@ -27,19 +27,15 @@ struct PassList
 	CArray<PassInfo> pass;
 };
 
-struct CDNIP
-{
-	TCHAR IP[16];
-};
 struct CDNList
 {
 	DWORD count;
-	CArray<CDNIP> ip;
+	CStringArray ip;
 };
 
 struct CfgData
 {
-	TCHAR version[16];
+	CString version;
 	UserList userlist;
 	PassList passlist;
 	CDNList cdnlist;
@@ -48,14 +44,29 @@ struct CfgData
 class CConfig
 {
 public:
-	DWORD GetUserCount();
-	DWORD GetPassengerCount();
-	UserInfo GetUser(DWORD);
-	PassInfo GetPassenger(DWORD);
+	CArray<UserInfo>& GetUser();
+	CArray<PassInfo>& GetPassenger();
 	void SetUpdate();
 private:
 	BOOL LoadConfig();
 	BOOL SaveConfig();
+
+	void LoadDword( CFile &file, DWORD& n );
+	void LoadString( CFile &file, CString& str );
+	void LoadUserInfo( CFile &file, UserInfo& userinfo );
+	void LoadPassInfo( CFile &file, PassInfo& passinfo );
+	void LoadUserList( CFile &file, UserList& userlist );
+	void LoadPassList( CFile &file, PassList& passlist );
+	void LoadCDNList( CFile &file, CDNList& cdnlist );
+
+	void WriteDword( CFile &file, DWORD n );
+	void WriteString( CFile &file, CString& str );
+	void WriteUserInfo( CFile &file, UserInfo& userinfo );
+	void WritePassInfo( CFile &file, PassInfo& passinfo );
+	void WriteUserList( CFile &file, UserList& userlist );
+	void WritePassList( CFile &file, PassList& passlist );
+	void WriteCDNList( CFile &file, CDNList& cdnlist );
+
 	CConfig(void);
 	CConfig(const CConfig& config);
 	~CConfig(void);
@@ -63,7 +74,6 @@ private:
 private:
 	CfgData cfgData;
 	CString fileName;
-	BOOL	needUpdate;
 public:
 	static CConfig& GetConfig();
 	static void ReleaseConfig();

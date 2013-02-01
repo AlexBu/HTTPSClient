@@ -123,6 +123,9 @@ UINT AFX_CDECL CHTTPSWebClientApp::BookWorker( LPVOID param )
 			break;
 		case LOGIN:
 			return_val = app->GetLoginPageAction();
+			// do something after login success
+			if(return_val == ERROR_OK)
+				app->m_pMainWnd->SendMessage(WM_LOGIN, 0, 0);
 			break;
 		case QUERY:
 			return_val = app->GetQueryPageAction();

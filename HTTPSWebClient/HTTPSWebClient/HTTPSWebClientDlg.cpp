@@ -6,6 +6,7 @@
 #include "HTTPSWebClient.h"
 #include "HTTPSWebClientDlg.h"
 #include "Config.h"
+#include "SelectUser.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -13,9 +14,6 @@
 
 
 // CHTTPSWebClientDlg ¶Ô»°¿ò
-
-
-
 
 CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CHTTPSWebClientDlg::IDD, pParent)
@@ -79,7 +77,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
 	DDX_Control(pDX, IDC_EDIT_GET, outputBox);
-	DDX_Control(pDX, IDC_LIST_PASSENGER, listPassengers);
+	DDX_Control(pDX, IDC_LIST_PASSENGER_BOARD, listPassengers);
 }
 
 BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
@@ -87,10 +85,11 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(WM_SETSTR, CHTTPSWebClientDlg::OnSetStr)
-	ON_MESSAGE(WM_FINISH, CHTTPSWebClientDlg::OnFinish)
+	ON_MESSAGE(WM_LOGIN, CHTTPSWebClientDlg::OnLogin)
 	ON_MESSAGE(WM_GETCODE, CHTTPSWebClientDlg::OnGetCode)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
+	ON_BN_CLICKED(IDC_BUTTON_SELECT_USER, &CHTTPSWebClientDlg::OnSelectUser)
 END_MESSAGE_MAP()
 
 
@@ -263,12 +262,45 @@ LRESULT CHTTPSWebClientDlg::OnSetStr( WPARAM wParam, LPARAM lParam )
 	return 1;
 }
 
-LRESULT CHTTPSWebClientDlg::OnFinish( WPARAM wParam, LPARAM lParam )
+LRESULT CHTTPSWebClientDlg::OnLogin( WPARAM wParam, LPARAM lParam )
 {
 	// wParam:
 	// high word: thread count
 	// low word: stage
 	// lParam: data
+
+	// update config
+
+	// update account
+	CArray<UserInfo>& userlist = CConfig::GetConfig().GetUser();
+	BOOL isFound = FALSE;
+	BOOL isUpdate = FALSE;
+	for(int i = 0; i < userlist.GetCount(); i++)
+	{
+		if(userlist[i].name == usernameStr)
+		{
+			if(userlist[i].pass == passwordStr)
+			{
+				// do nothing
+			}
+			else
+			{
+				userlist[i].pass = passwordStr;
+				isUpdate = TRUE;
+			}
+		}
+	}
+	if(isFound == FALSE)
+	{
+		UserInfo userinfo;
+		userinfo.name = usernameStr;
+		userinfo.pass = passwordStr;
+		userlist.Add(userinfo);
+		isUpdate = TRUE;
+	}
+	if(isUpdate)
+		CConfig::GetConfig().SetUpdate();
+
 	return 1;
 }
 
@@ -296,30 +328,33 @@ void CHTTPSWebClientDlg::LoadConfig()
 	listPassengers.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
 	listPassengers.InsertColumn(0, L"Name");
-	listPassengers.InsertColumn(1, L"IdType");
-	listPassengers.InsertColumn(2, L"IdNo");
-	listPassengers.InsertColumn(3, L"Mobile");
-	listPassengers.InsertColumn(4, L"SeatTyp");
+	listPassengers.InsertColumn(1, L"SeatTyp");
 
-	listPassengers.SetColumnWidth(0, 100);
-	listPassengers.SetColumnWidth(1, 100);
-	listPassengers.SetColumnWidth(2, 100);
-	listPassengers.SetColumnWidth(3, 100);
-	listPassengers.SetColumnWidth(4, LVSCW_AUTOSIZE_USEHEADER);
+	listPassengers.SetColumnWidth(0, 150);
+	listPassengers.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
 
-	CConfig& config = CConfig::GetConfig();
-	DWORD passengerNum = config.GetPassengerCount();
-	for(DWORD i = 0; i < passengerNum; i++)
+	CArray<PassInfo>& passinfo = CConfig::GetConfig().GetPassenger();
+	for(int i = 0; i < passinfo.GetCount(); i++)
 	{
-		PassInfo passengerinfo = config.GetPassenger(i);
+		PassInfo& passengerinfo = passinfo[i];
 		// load into list ctrl
 		listPassengers.InsertItem(i, passengerinfo.name);
 		CString str;
-		str.Format(L"%d", passengerinfo.passTyp);
-		listPassengers.SetItemText(i, 1, str);
-		listPassengers.SetItemText(i, 2, passengerinfo.passNo);
-		listPassengers.SetItemText(i, 3, passengerinfo.mobileNo);
 		str.Format(L"%d", passengerinfo.seatTyp);
-		listPassengers.SetItemText(i, 4, str);
+		listPassengers.SetItemText(i, 1, str);
+	}
+}
+
+void CHTTPSWebClientDlg::OnSelectUser()
+{
+	CSelectUser dlg;
+	UpdateData(TRUE);
+	dlg.userOutside = usernameStr;
+	if(dlg.DoModal() == IDOK)
+	{
+		// update current username / password
+		usernameStr = dlg.selecteduser.name;
+		passwordStr = dlg.selecteduser.pass;
+		UpdateData(FALSE);
 	}
 }

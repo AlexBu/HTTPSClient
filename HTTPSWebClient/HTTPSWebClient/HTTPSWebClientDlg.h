@@ -30,12 +30,11 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg LRESULT OnSetStr(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnFinish(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnLogin(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetCode(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
-
-protected:
 	afx_msg void OnBook();
+	afx_msg void OnSelectUser();
+	DECLARE_MESSAGE_MAP()
 
 public:
 	void InitUserInfo();
@@ -82,4 +81,5 @@ public:
 
 	CEdit outputBox;
 	CListCtrl listPassengers;
+	
 };

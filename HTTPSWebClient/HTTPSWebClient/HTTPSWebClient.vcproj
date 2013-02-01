@@ -367,6 +367,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SelectPassenger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SelectPassenger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SelectUser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SelectUser.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ValidationCtrl.cpp"
 				>
 			</File>

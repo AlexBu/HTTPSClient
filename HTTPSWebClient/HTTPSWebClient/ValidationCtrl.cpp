@@ -64,7 +64,9 @@ void CValPicCtrl::OnPaint()
 
 	HBITMAP old_bitmap = (HBITMAP)SelectObject(memdc, dibHandle);
 
-	dc.BitBlt(0,0,width,height,&memdc,0,0,SRCCOPY);
+	//dc.BitBlt(0,0,width,height,&memdc,0,0,SRCCOPY);
+	// enlarge 2x for better view
+	dc.StretchBlt(0,0,width*2,height*2, &memdc, 0, 0, width, height, SRCCOPY);
 
 	memdc.SelectObject(old_bitmap);
 	DeleteObject(dibHandle);

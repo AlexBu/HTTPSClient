@@ -3,7 +3,6 @@
 
 CConfig::CConfig(void)
 :fileName(L"config.bin")
-,needUpdate(FALSE)
 {
 	LoadConfig();
 }
@@ -35,111 +34,46 @@ BOOL CConfig::LoadConfig()
 	}
 	
 	// version
-	configFile.Read(&cfgData.version, 16 * sizeof(TCHAR));
+	LoadString(configFile, cfgData.version);
 
-	// user info
-	configFile.Read(&cfgData.userlist.count, sizeof(DWORD));
+	if(cfgData.version.IsEmpty())
+		cfgData.version = L"0.1";
 
-	if(cfgData.userlist.count < 256)
-	{
-		for(DWORD i = 0; i < cfgData.userlist.count; i++)
-		{
-			UserInfo user;
-			configFile.Read(&user, sizeof(UserInfo));
-			cfgData.userlist.user.Add(user);
-		}
-	}
-	else
-	{
-		goto LOAD_FAIL;
-	}
+	// user list
+	LoadUserList(configFile, cfgData.userlist);
+
+	// pass list
+	LoadPassList(configFile, cfgData.passlist);
 	
-	// pass info
-	configFile.Read(&cfgData.passlist.count, sizeof(DWORD));
-
-	if(cfgData.passlist.count < 256)
-	{
-		for(DWORD i = 0; i < cfgData.userlist.count; i++)
-		{
-			PassInfo passenger;
-			configFile.Read(&passenger, sizeof(PassInfo));
-			cfgData.passlist.pass.Add(passenger);
-		}
-	}
-	else
-	{
-		goto LOAD_FAIL;
-	}
-
 	// cdn list
-	configFile.Read(&cfgData.cdnlist.count, sizeof(DWORD));
-
-	if(cfgData.cdnlist.count < 256)
-	{
-		for(DWORD i = 0; i < cfgData.cdnlist.count; i++)
-		{
-			CDNIP cdn;
-			configFile.Read(&cdn, sizeof(CDNIP));
-			cfgData.cdnlist.ip.Add(cdn);
-		}
-	}
-	else
-	{
-		goto LOAD_FAIL;
-	}
+	LoadCDNList(configFile, cfgData.cdnlist);
 
 	configFile.Close();
 	return TRUE;
-LOAD_FAIL:
-	configFile.Close();
-	return FALSE;
 }
 
 BOOL CConfig::SaveConfig()
 {
 	// open file for loading
-	if(needUpdate)
-		return TRUE;
 	CFile configFile;
-	configFile.Open(fileName, 
-		CFile::modeCreate|CFile::modeWrite|CFile::shareDenyWrite);
+	if( FALSE == configFile.Open(fileName, 
+		CFile::modeCreate|CFile::modeWrite|CFile::shareDenyWrite) )
 	{
 		configFile.Close();
 		return FALSE;
 	}
 
 	// version
-	configFile.Write(&cfgData.version, 16 * sizeof(TCHAR));
+	WriteString(configFile, cfgData.version);
 
-	// user info
-	configFile.Write(&cfgData.userlist.count, sizeof(DWORD));
+	// user list
+	WriteUserList(configFile, cfgData.userlist);
 
-
-	for(DWORD i = 0; i < cfgData.userlist.count; i++)
-	{
-		configFile.Write(&cfgData.userlist.user[0], sizeof(UserInfo));
-		cfgData.userlist.user.RemoveAt(0);
-	}
-
-	// pass info
-	configFile.Write(&cfgData.passlist.count, sizeof(DWORD));
-
-
-	for(DWORD i = 0; i < cfgData.userlist.count; i++)
-	{
-		configFile.Write(&cfgData.passlist.pass[0], sizeof(PassInfo));
-		cfgData.passlist.pass.RemoveAt(0);
-	}
+	// pass list
+	WritePassList(configFile, cfgData.passlist);
 
 	// cdn list
-	configFile.Write(&cfgData.cdnlist.count, sizeof(DWORD));
-
-
-	for(DWORD i = 0; i < cfgData.cdnlist.count; i++)
-	{
-		configFile.Write(&cfgData.cdnlist.ip[0], sizeof(CDNIP));
-		cfgData.cdnlist.ip.RemoveAt(0);
-	}
+	WriteCDNList(configFile, cfgData.cdnlist);
 
 	configFile.Close();
 	return TRUE;
@@ -147,46 +81,160 @@ BOOL CConfig::SaveConfig()
 
 void CConfig::ReleaseConfig()
 {
-	GetConfig().SaveConfig();
+	GetConfig().cfgData.userlist.user.RemoveAll();
+	GetConfig().cfgData.passlist.pass.RemoveAll();
+	GetConfig().cfgData.cdnlist.ip.RemoveAll();
 }
 
 void CConfig::SetUpdate()
 {
-	needUpdate = TRUE;
+	SaveConfig();
 }
 
-DWORD CConfig::GetUserCount()
+CArray<UserInfo>& CConfig::GetUser()
 {
-	GetConfig();
-	return cfgData.userlist.count;
+	return cfgData.userlist.user;
 }
 
-DWORD CConfig::GetPassengerCount()
+CArray<PassInfo>& CConfig::GetPassenger()
 {
-	GetConfig();
-	return cfgData.passlist.count;
+	return cfgData.passlist.pass;
 }
 
-UserInfo CConfig::GetUser( DWORD index)
+void CConfig::LoadDword( CFile &file, DWORD& n )
 {
-	UserInfo userinfo;
-	memset(&userinfo, 0, sizeof(UserInfo));
-
-	GetConfig();
-	if(index < cfgData.userlist.count)
-		userinfo = cfgData.userlist.user[index];
-
-	return userinfo;
+	file.Read(&n, sizeof(DWORD));
 }
 
-PassInfo CConfig::GetPassenger( DWORD index)
+void CConfig::LoadString( CFile &file, CString& str )
 {
-	PassInfo passengerinfo;
-	memset(&passengerinfo, 0, sizeof(PassInfo));
+	DWORD count = 0;
+	if(file.Read(&count, sizeof(DWORD)) == FALSE)
+	{
+		str.Empty();
+		return;
+	}
+	TCHAR* buf = new TCHAR[count];
+	if(file.Read(buf, sizeof(TCHAR)*count) == FALSE)
+	{
+		str.Empty();
+		delete []buf;
+		return;
+	}
+	str = buf;
+	delete []buf;
+}
 
-	GetConfig();
-	if(index < cfgData.passlist.count)
-		passengerinfo = cfgData.passlist.pass[index];
+void CConfig::LoadUserInfo( CFile &file, UserInfo& userinfo )
+{
+	LoadString(file, userinfo.name);
+	LoadString(file, userinfo.pass);
+}
 
-	return passengerinfo;
+void CConfig::LoadPassInfo( CFile &file, PassInfo& passinfo )
+{
+	LoadString(file, passinfo.name);
+	LoadDword(file, passinfo.passTyp);
+	LoadString(file, passinfo.passNo);
+	LoadString(file, passinfo.mobileNo);
+	LoadDword(file, passinfo.seatTyp);
+}
+
+void CConfig::LoadUserList( CFile &file, UserList& userlist )
+{
+	LoadDword(file, userlist.count);
+
+	for(DWORD i = 0; i < userlist.count; i++)
+	{
+		UserInfo userinfo;
+		LoadUserInfo(file, userinfo);
+		userlist.user.Add(userinfo);
+	}
+}
+
+void CConfig::LoadPassList( CFile &file, PassList& passlist )
+{
+	LoadDword(file, passlist.count);
+
+	for(DWORD i = 0; i < passlist.count; i++)
+	{
+		PassInfo passinfo;
+		LoadPassInfo(file, passinfo);
+		passlist.pass.Add(passinfo);
+	}
+}
+
+void CConfig::LoadCDNList( CFile &file, CDNList& cdnlist )
+{
+	LoadDword(file, cdnlist.count);
+
+	for(DWORD i = 0; i < cdnlist.count; i++)
+	{
+		CString str;
+		LoadString(file, str);
+		cdnlist.ip.Add(str);
+	}
+}
+
+void CConfig::WriteDword( CFile &file, DWORD n )
+{
+	file.Write(&n, sizeof(DWORD));
+}
+
+void CConfig::WriteString( CFile &file, CString& str )
+{
+	DWORD count = str.GetLength() + 1;
+	file.Write(&count, sizeof(DWORD));
+	TCHAR* buf = new TCHAR[count];
+	memcpy(buf, str, count * sizeof(TCHAR));
+	file.Write(buf, sizeof(TCHAR)*count);
+	delete []buf;
+}
+
+void CConfig::WriteUserInfo( CFile &file, UserInfo& userinfo )
+{
+	WriteString(file, userinfo.name);
+	WriteString(file, userinfo.pass);
+}
+
+void CConfig::WritePassInfo( CFile &file, PassInfo& passinfo )
+{
+	WriteString(file, passinfo.name);
+	WriteDword(file, passinfo.passTyp);
+	WriteString(file, passinfo.passNo);
+	WriteString(file, passinfo.mobileNo);
+	WriteDword(file, passinfo.seatTyp);
+}
+
+void CConfig::WriteUserList( CFile &file, UserList& userlist )
+{
+	WriteDword(file, userlist.count);
+
+	for(DWORD i = 0; i < userlist.count; i++)
+	{
+		UserInfo& userinfo = userlist.user[i];
+		WriteUserInfo(file, userinfo);
+	}
+}
+
+void CConfig::WritePassList( CFile &file, PassList& passlist )
+{
+	WriteDword(file, passlist.count);
+
+	for(DWORD i = 0; i < passlist.count; i++)
+	{
+		PassInfo& passinfo = passlist.pass[i];
+		WritePassInfo(file, passinfo);
+	}
+}
+
+void CConfig::WriteCDNList( CFile &file, CDNList& cdnlist )
+{
+	WriteDword(file, cdnlist.count);
+
+	for(DWORD i = 0; i < cdnlist.count; i++)
+	{
+		CString& str = cdnlist.ip[i];
+		WriteString(file, str);
+	}
 }
