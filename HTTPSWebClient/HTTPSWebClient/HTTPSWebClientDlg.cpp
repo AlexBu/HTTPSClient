@@ -7,6 +7,7 @@
 #include "HTTPSWebClientDlg.h"
 #include "Config.h"
 #include "SelectUser.h"
+#include "SelectPassenger.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -90,6 +91,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_USER, &CHTTPSWebClientDlg::OnSelectUser)
+	ON_BN_CLICKED(IDC_BUTTON_SELECT_PASS, &CHTTPSWebClientDlg::OnSelectPassenger)
 END_MESSAGE_MAP()
 
 
@@ -355,6 +357,34 @@ void CHTTPSWebClientDlg::OnSelectUser()
 		// update current username / password
 		usernameStr = dlg.selecteduser.name;
 		passwordStr = dlg.selecteduser.pass;
+		UpdateData(FALSE);
+	}
+}
+
+void CHTTPSWebClientDlg::OnSelectPassenger()
+{
+	CSelectPassenger dlg;
+	UpdateData(TRUE);
+	for(int i = 0; i < listPassengers.GetItemCount(); i++)
+	{
+		dlg.passOutside.Add(listPassengers.GetItemText(i, 0));
+	}
+	if(dlg.DoModal() == IDOK)
+	{
+		// update current passenger list
+		//for(int i = 0; i < passlist.GetCount(); i++)
+		//{
+		//	for(int j = 0; j < selectedIndex.GetCount(); j++)
+		//	{
+		//		CString str;
+		//		listboxPassenger.GetText(j, str);
+		//		if(passlist[i].name == str)
+		//		{
+		//			selectedpass.Add(passlist[i]);
+		//		}
+		//	}
+		//}
+
 		UpdateData(FALSE);
 	}
 }

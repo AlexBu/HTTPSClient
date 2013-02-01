@@ -82,4 +82,5 @@ public:
 	CEdit outputBox;
 	CListCtrl listPassengers;
 	
+	afx_msg void OnSelectPassenger();
 };
