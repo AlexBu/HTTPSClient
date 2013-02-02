@@ -359,6 +359,14 @@
 			Name="GUI"
 			>
 			<File
+				RelativePath=".\EditPassenger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EditPassenger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HTTPSWebClientDlg.cpp"
 				>
 			</File>

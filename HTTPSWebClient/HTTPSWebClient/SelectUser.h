@@ -28,6 +28,5 @@ public:
 
 public:
 	CListBox listboxUser;
-	CString userOutside;
 	UserInfo selecteduser;
 };

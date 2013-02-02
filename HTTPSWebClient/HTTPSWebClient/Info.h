@@ -27,23 +27,6 @@ struct QueryInfo
 	CString toStation;
 };
 
-//O, M, 9, 3, 4, 2, 1
-enum SeatType
-{
-	BUSI_SEAT = '9',
-	SUPER_SEAT = 'P',
-	FIRST_SEAT = 'M',
-	SECOND_SEAT = 'O',
-	SUPER_SOFT_SLEEPER = '6',
-	SOFT_SLEEPER= '4',
-	HARD_SLEEPER = '3',
-	SOFT_SEAT = '2',
-	HARD_SEAT = '1',
-	SUPER_SOFT_SEAT = 'E',
-	NO_SEAT = 'X',	// not sure
-	OTHER = 'Z'		// not sure
-};
-
 struct PassengerInfo
 {
 	CString passengerTickets;

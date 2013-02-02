@@ -40,13 +40,11 @@ BOOL CSelectUser::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  Add extra initialization here
-	// display user list except the user outside
+	
+	// display user list
 	CArray<UserInfo>& userlist = CConfig::GetConfig().GetUser();
 	for(int i = 0; i < userlist.GetCount(); i++)
 	{
-		if(userlist[i].name == userOutside)
-			continue;
 		listboxUser.InsertString(0, userlist[i].name);
 	}
 

@@ -134,10 +134,10 @@ void CConfig::LoadUserInfo( CFile &file, UserInfo& userinfo )
 void CConfig::LoadPassInfo( CFile &file, PassInfo& passinfo )
 {
 	LoadString(file, passinfo.name);
-	LoadDword(file, passinfo.passTyp);
+	LoadString(file, passinfo.passTyp);
 	LoadString(file, passinfo.passNo);
 	LoadString(file, passinfo.mobileNo);
-	LoadDword(file, passinfo.seatTyp);
+	LoadString(file, passinfo.seatTyp);
 }
 
 void CConfig::LoadUserList( CFile &file, UserList& userlist )
@@ -200,14 +200,16 @@ void CConfig::WriteUserInfo( CFile &file, UserInfo& userinfo )
 void CConfig::WritePassInfo( CFile &file, PassInfo& passinfo )
 {
 	WriteString(file, passinfo.name);
-	WriteDword(file, passinfo.passTyp);
+	WriteString(file, passinfo.passTyp);
 	WriteString(file, passinfo.passNo);
 	WriteString(file, passinfo.mobileNo);
-	WriteDword(file, passinfo.seatTyp);
+	WriteString(file, passinfo.seatTyp);
 }
 
 void CConfig::WriteUserList( CFile &file, UserList& userlist )
 {
+	userlist.count = userlist.user.GetCount();
+
 	WriteDword(file, userlist.count);
 
 	for(DWORD i = 0; i < userlist.count; i++)
@@ -219,6 +221,8 @@ void CConfig::WriteUserList( CFile &file, UserList& userlist )
 
 void CConfig::WritePassList( CFile &file, PassList& passlist )
 {
+	passlist.count = passlist.pass.GetCount();
+
 	WriteDword(file, passlist.count);
 
 	for(DWORD i = 0; i < passlist.count; i++)
@@ -230,6 +234,8 @@ void CConfig::WritePassList( CFile &file, PassList& passlist )
 
 void CConfig::WriteCDNList( CFile &file, CDNList& cdnlist )
 {
+	cdnlist.count = cdnlist.ip.GetCount();
+
 	WriteDword(file, cdnlist.count);
 
 	for(DWORD i = 0; i < cdnlist.count; i++)

@@ -28,7 +28,7 @@ END_MESSAGE_MAP()
 
 CHTTPSWebClientApp::CHTTPSWebClientApp()
 {
-	// TODO: 在此处添加构造代码，
+	
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
@@ -61,13 +61,9 @@ BOOL CHTTPSWebClientApp::InitInstance()
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-		// TODO: 在此放置处理何时用
-		//  “确定”来关闭对话框的代码
 	}
 	else if (nResponse == IDCANCEL)
 	{
-		// TODO: 在此放置处理何时用
-		//  “取消”来关闭对话框的代码
 	}
 
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，

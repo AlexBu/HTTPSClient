@@ -283,7 +283,7 @@
  * a storage class (this is unlikely.)
  */
 #ifndef PNG_FUNCTION
-#  define PNG_FUNCTION(type, name, args, attributes) attributes type name args
+#  define PNG_FUNCTION(type, passname, args, attributes) attributes type passname args
 #endif
 
 #ifndef PNG_EXPORT_TYPE
@@ -296,8 +296,8 @@
     */
 #ifndef PNG_EXPORTA
 
-#  define PNG_EXPORTA(ordinal, type, name, args, attributes)\
-      PNG_FUNCTION(PNG_EXPORT_TYPE(type),(PNGAPI name),PNGARG(args), \
+#  define PNG_EXPORTA(ordinal, type, passname, args, attributes)\
+      PNG_FUNCTION(PNG_EXPORT_TYPE(type),(PNGAPI passname),PNGARG(args), \
         extern attributes)
 #endif
 
@@ -306,16 +306,16 @@
  */
 #define PNG_EMPTY /*empty list*/
 
-#define PNG_EXPORT(ordinal, type, name, args)\
-   PNG_EXPORTA(ordinal, type, name, args, PNG_EMPTY)
+#define PNG_EXPORT(ordinal, type, passname, args)\
+   PNG_EXPORTA(ordinal, type, passname, args, PNG_EMPTY)
 
 /* Use PNG_REMOVED to comment out a removed interface. */
 #ifndef PNG_REMOVED
-#  define PNG_REMOVED(ordinal, type, name, args, attributes)
+#  define PNG_REMOVED(ordinal, type, passname, args, attributes)
 #endif
 
 #ifndef PNG_CALLBACK
-#  define PNG_CALLBACK(type, name, args) type (PNGCBAPI name) PNGARG(args)
+#  define PNG_CALLBACK(type, passname, args) type (PNGCBAPI passname) PNGARG(args)
 #endif
 
 /* Support for compiler specific function attributes.  These are used
@@ -401,18 +401,18 @@
 #endif
 #ifndef PNG_FP_EXPORT     /* A floating point API. */
 #  ifdef PNG_FLOATING_POINT_SUPPORTED
-#     define PNG_FP_EXPORT(ordinal, type, name, args)\
-         PNG_EXPORT(ordinal, type, name, args);
+#     define PNG_FP_EXPORT(ordinal, type, passname, args)\
+         PNG_EXPORT(ordinal, type, passname, args);
 #  else                   /* No floating point APIs */
-#     define PNG_FP_EXPORT(ordinal, type, name, args)
+#     define PNG_FP_EXPORT(ordinal, type, passname, args)
 #  endif
 #endif
 #ifndef PNG_FIXED_EXPORT  /* A fixed point API. */
 #  ifdef PNG_FIXED_POINT_SUPPORTED
-#     define PNG_FIXED_EXPORT(ordinal, type, name, args)\
-         PNG_EXPORT(ordinal, type, name, args);
+#     define PNG_FIXED_EXPORT(ordinal, type, passname, args)\
+         PNG_EXPORT(ordinal, type, passname, args);
 #  else                   /* No fixed point APIs */
-#     define PNG_FIXED_EXPORT(ordinal, type, name, args)
+#     define PNG_FIXED_EXPORT(ordinal, type, passname, args)
 #  endif
 #endif
 

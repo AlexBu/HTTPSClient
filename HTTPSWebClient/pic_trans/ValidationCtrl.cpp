@@ -43,7 +43,7 @@ END_MESSAGE_MAP()
 void CValPicCtrl::OnPaint()
 {
 	CPaintDC dc(this); // device context for painting
-	// TODO: Add your message handler code here
+
 	// Do not call CStatic::OnPaint() for painting messages
 
 	if(hasData == FALSE)

@@ -112,6 +112,45 @@ BEGIN
     CONTROL         "",IDC_STATIC_VALIDATE_DISPLAY,"Static",SS_BLACKRECT | SS_CENTERIMAGE,7,7,92,33
 END
 
+IDD_DIALOG_SELECT_USER DIALOGEX 0, 0, 214, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Account"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,157,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,157,29,50,14
+    LISTBOX         IDC_LIST_USER,7,7,126,166,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DIALOG_SELECT_PASSENGER DIALOGEX 0, 0, 214, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Passenger"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,157,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,157,29,50,14
+    LISTBOX         IDC_LIST_PASSENGER,7,7,126,166,LBS_SORT | LBS_MULTIPLESEL | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DIALOG_EDIT_PASSENGER DIALOGEX 0, 0, 353, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Passenger"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_EDIT_PASSENGER_NAME,100,26,141,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_COMBO_PASSENGER_SEAT,100,48,141,89,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_PASSENGER_IDTYPE,100,70,141,81,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT_PASSENGER_IDNO,100,92,141,12,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PASSENGER_MOBILE,100,114,141,12,ES_AUTOHSCROLL | ES_NUMBER
+    DEFPUSHBUTTON   "OK",IDOK,296,136,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,296,159,50,14
+    LTEXT           "Name",IDC_STATIC,39,27,51,9
+    LTEXT           "Identity Type",IDC_STATIC,39,71,51,9
+    LTEXT           "Identity No",IDC_STATIC,39,94,51,9
+    LTEXT           "Mobile",IDC_STATIC,39,115,51,9
+    LTEXT           "Seat Type",IDC_STATIC,39,49,51,9
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -172,56 +211,7 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 79
     END
-END
-#endif    // APSTUDIO_INVOKED
 
-#endif    // Chinese (P.R.C.) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-#pragma code_page(1252)
-#endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_DIALOG_SELECT_USER DIALOGEX 0, 0, 214, 180
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Select Account"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,157,7,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,157,29,50,14
-    LISTBOX         IDC_LIST_USER,7,7,126,166,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-END
-
-IDD_DIALOG_SELECT_PASSENGER DIALOGEX 0, 0, 214, 180
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Select Passenger"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,157,7,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,157,29,50,14
-    LISTBOX         IDC_LIST_PASSENGER,7,7,126,166,LBS_SORT | LBS_MULTIPLESEL | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
-BEGIN
     IDD_DIALOG_SELECT_USER, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -237,9 +227,29 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 173
     END
+
+    IDD_DIALOG_EDIT_PASSENGER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 346
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

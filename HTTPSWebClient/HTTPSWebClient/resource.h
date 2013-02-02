@@ -8,6 +8,7 @@
 #define IDD_DIALOG_SELECT_USER          130
 #define IDD_DIALOG_SELECT_PASS          131
 #define IDD_DIALOG_SELECT_PASSENGER     131
+#define IDD_DIALOG_EDIT_PASSENGER       132
 #define IDC_EDIT_URL                    1000
 #define IDC_EDIT_POST                   1001
 #define IDC_EDIT_GET                    1002
@@ -70,14 +71,19 @@
 #define IDC_LIST_USER                   1050
 #define IDC_BUTTON_SELECT_PASS          1050
 #define IDC_LIST_PASSENGER              1051
+#define IDC_COMBO_PASSENGER_IDTYPE      1052
+#define IDC_COMBO_PASSENGER_SEAT        1053
+#define IDC_EDIT_PASSENGER_NAME         1054
+#define IDC_EDIT_PASSENGER_IDNO         1055
+#define IDC_EDIT_PASSENGER_MOBILE       1056
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1052
+#define _APS_NEXT_CONTROL_VALUE         1057
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -7,6 +7,11 @@
 
 #include "ValidationCtrl.h"
 
+#include "Config.h"
+#include "SelectUser.h"
+#include "SelectPassenger.h"
+#include "EditPassenger.h"
+
 // CHTTPSWebClientDlg ¶Ô»°¿ò
 class CHTTPSWebClientDlg : public CDialog
 {
@@ -34,6 +39,10 @@ protected:
 	afx_msg LRESULT OnGetCode(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnBook();
 	afx_msg void OnSelectUser();
+	afx_msg void OnSelectPassenger();
+	afx_msg void OnNMDblclkListPassengerBoard(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnAddPassenger();
+	afx_msg void OnRemovePassenger();
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -43,6 +52,16 @@ public:
 	void GetUserInfo();
 
 	void LoadConfig();
+
+	void UpdatePassengerListCtrl();
+	void InitPassengerListCtrl();
+
+	void UpdateUser( UserInfo &userinfo );
+	void UpdateOneBoardPassenger( PassInfo& passinfo );
+
+	void UpdateUserListConfig();
+	void UpdatePassListConfig();
+
 private:
 	CString dateString;	
 	CString usernameStr;
@@ -80,7 +99,9 @@ private:
 public:
 
 	CEdit outputBox;
-	CListCtrl listPassengers;
+	CListCtrl listctrlPassengers;
+	UserInfo infoUser;
+	CArray<PassInfo> listPassengers;
+
 	
-	afx_msg void OnSelectPassenger();
 };

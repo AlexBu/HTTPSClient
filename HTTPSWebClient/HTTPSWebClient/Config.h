@@ -15,10 +15,10 @@ struct UserList
 struct PassInfo
 {
 	CString name;
-	DWORD passTyp;
+	CString passTyp;
 	CString passNo;
 	CString mobileNo;
-	DWORD seatTyp;
+	CString seatTyp;
 };
 
 struct PassList

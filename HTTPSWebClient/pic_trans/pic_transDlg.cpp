@@ -50,7 +50,6 @@ BOOL Cpic_transDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	// TODO: 在此添加额外的初始化代码
 	slider_lab.SetRange(0,255);
 	slider_lab.SetPos(255);
 
@@ -97,7 +96,6 @@ HCURSOR Cpic_transDlg::OnQueryDragIcon()
 void Cpic_transDlg::OnNMCustomdrawSliderLab(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	// TODO: Add your control notification handler code here
 
 	CString str;
 	DWORD pos = slider_lab.GetPos();

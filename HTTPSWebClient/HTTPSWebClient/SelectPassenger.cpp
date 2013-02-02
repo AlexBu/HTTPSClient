@@ -36,27 +36,14 @@ BOOL CSelectPassenger::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  Add extra initialization here
-	// display passenger list except the passengers outside
+	
+	// display passenger list
 	CArray<PassInfo>& passlist = CConfig::GetConfig().GetPassenger();
 	for(int i = 0; i < passlist.GetCount(); i++)
 	{
-		for(int j = 0; j < passOutside.GetCount(); j++)
-		{
-			if(passlist[i].name == passOutside[j])
-				continue;
-		}
 		listboxPassenger.InsertString(0, passlist[i].name);
 	}
 
-	// test code
-	listboxPassenger.InsertString(0, L"test1");
-	listboxPassenger.InsertString(0, L"test1");
-	listboxPassenger.InsertString(0, L"test1");
-	listboxPassenger.InsertString(0, L"test1");
-	listboxPassenger.InsertString(0, L"test1");
-	listboxPassenger.InsertString(0, L"test1");
-	listboxPassenger.InsertString(0, L"test1");
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -74,7 +61,7 @@ void CSelectPassenger::OnSelectPassenger()
 		for(int j = 0; j < selectedIndex.GetCount(); j++)
 		{
 			CString str;
-			listboxPassenger.GetText(j, str);
+			listboxPassenger.GetText(selectedIndex[j], str);
 			if(passlist[i].name == str)
 			{
 				selectedpass.Add(passlist[i]);

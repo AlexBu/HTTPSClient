@@ -25,6 +25,5 @@ public:
 
 public:
 	CListBox listboxPassenger;
-	CStringArray passOutside;
 	CArray<PassInfo> selectedpass;
 };
