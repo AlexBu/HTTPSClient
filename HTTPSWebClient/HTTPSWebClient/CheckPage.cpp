@@ -18,11 +18,7 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 
 	reqData.Format(L"org.apache.struts.taglib.html.TOKEN=%s"
 		L"&leftTicketStr=%s"
-		L"&textfield=%s"
-		//L"&checkbox0=0"
-		//L"&checkbox2=2"
-		//L"&checkbox4=4"
-		//L"&checkbox5=5"
+		L"&textfield="
 		L"&orderRequest.train_date=%s"
 		L"&orderRequest.train_no=%s"
 		L"&orderRequest.station_train_code=%s"
@@ -37,51 +33,13 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		L"&orderRequest.to_station_name=%s"
 		L"&orderRequest.cancel_flag=%s"
 		L"&orderRequest.id_mode=%s"
-		
 		L"&passengerTickets=%s"
-		//L"&oldPassengers=%s"
-		//L"&passenger_1_seat=%s"
-		//L"&passenger_1_ticket=%s"
-		//L"&passenger_1_name=%s"
-		//L"&passenger_1_cardtype=%s"
-		//L"&passenger_1_cardno=%s"
-		//L"&passenger_1_mobileno=%s"
-
 		L"&passengerTickets=%s"
-		//L"&oldPassengers=%s"
-		//L"&passenger_2_seat=%s"
-		//L"&passenger_2_ticket=%s"
-		//L"&passenger_2_name=%s"
-		//L"&passenger_2_cardtype=%s"
-		//L"&passenger_2_cardno=%s"
-		//L"&passenger_2_mobileno=%s"
-
-		//L"&passengerTickets=%s"
-		//L"&oldPassengers=%s"
-		//L"&passenger_3_seat=%s"
-		//L"&passenger_3_ticket=%s"
-		//L"&passenger_3_name=%s"
-		//L"&passenger_3_cardtype=%s"
-		//L"&passenger_3_cardno=%s"
-		//L"&passenger_3_mobileno=%s"
-		
-		//L"&passengerTickets=%s"
-		//L"&oldPassengers=%s"
-		//L"&passenger_4_seat=%s"
-		//L"&passenger_4_ticket=%s"
-		//L"&passenger_4_name=%s"
-		//L"&passenger_4_cardtype=%s"
-		//L"&passenger_4_cardno=%s"
-		//L"&passenger_4_mobileno=%s"
-		//L"&oldPassengers="
-		//L"&checkbox9=Y"
-
 		L"&randCode=%s"
-		L"&orderRequest.reserve_flag=%s"
+		L"&orderRequest.reserve_flag=A"
 		L"&tFlag=%s"
 		,input.token
 		,input.leftTicketStr
-		,textfieldGet(input)
 		,input.train_date
 		,input.train_no
 		,input.station_train_code
@@ -95,39 +53,8 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		,input.cancel_flag
 		,input.id_mode
 		,passengerTicketsGet(input.passengers[0])
-		//,oldPassengersGet(input.passengers[0])
-		//,input.passengers[0].seat
-		//,ticketGet(input.passengers[0])
-		//,nameGet(input.passengers[0])
-		//,input.passengers[0].cardtype
-		//,input.passengers[0].cardno
-		//,input.passengers[0].mobileno
 		,passengerTicketsGet(input.passengers[1])
-		//,oldPassengersGet(input.passengers[1])
-		//,input.passengers[1].seat
-		//,ticketGet(input.passengers[1])
-		//,nameGet(input.passengers[1])
-		//,input.passengers[1].cardtype
-		//,input.passengers[1].cardno
-		//,input.passengers[1].mobileno
-		//,passengerTicketsGet(input.passengers[2])
-		//,oldPassengersGet(input.passengers[2])
-		//,input.passengers[2].seat
-		//,ticketGet(input.passengers[2])
-		//,nameGet(input.passengers[2])
-		//,input.passengers[2].cardtype
-		//,input.passengers[2].cardno
-		//,input.passengers[2].mobileno
-		//,passengerTicketsGet(input.passengers[3])
-		//,oldPassengersGet(input.passengers[3])
-		//,input.passengers[3].seat
-		//,ticketGet(input.passengers[3])
-		//,nameGet(input.passengers[3])
-		//,input.passengers[3].cardtype
-		//,input.passengers[3].cardno
-		//,input.passengers[3].mobileno
 		,input.randCode
-		,reserve_flagGet(input)
 		,input.tFlag
 		);
 
@@ -179,22 +106,6 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		}
 		else
 		{
-			//// remove last part of str
-			//pattern = L"{.*}&tFlag=.*$";
-			//matchStr = reqData;
-			//regex.patternLoad(pattern);
-			//if(regex.contextMatch(matchStr, restStr) == TRUE)
-			//{
-			//	regex.matchGet(0, output.orderInfo);
-			//	CLog::GetLog().AddLog(L"check page success!");
-			//	status = ERROR_OK;
-			//}
-			//else
-			//{
-			//	CLog::GetLog().AddLog(L"parse confirm string failed!");
-			//	status = ERROR_GENERAL;
-			//}
-
 			CLog::GetLog().AddLog(L"check page success!");
 			status = ERROR_OK;
 		}
@@ -215,11 +126,6 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 		CLog::GetLog().AddLog(L"general error!");
 		status = ERROR_GENERAL;
 	}
-}
-
-CString CCheckPage::textfieldGet( TicketInfo& input )
-{
-	return L"%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D";
 }
 
 CString CCheckPage::start_timeGet( TicketInfo& input )
@@ -246,43 +152,15 @@ CString CCheckPage::to_station_nameGet( TicketInfo& input )
 	return GetUTF8Str(input.to_station_name);
 }
 
-CString CCheckPage::reserve_flagGet( TicketInfo& input )
-{
-	return L"A";
-}
-
-CString CCheckPage::passengerTicketsGet( PassengerInfo& passenger )
+CString CCheckPage::passengerTicketsGet( PassInfo& passenger )
 {
 	CString str(L"");
-	str.Format(L"%s%%2C0%%2C%s%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
-		passenger.seat,
-		ticketGet(passenger),
+	str.Format(L"%s%%2C0%%2C1%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
+		passenger.seatTyp,
 		GetUTF8Str(passenger.name),
-		passenger.cardtype,
-		passenger.cardno,
-		passenger.mobileno
+		passenger.passTyp,
+		passenger.passNo,
+		passenger.mobileNo
 		);
 	return str;
 }
-
-CString CCheckPage::oldPassengersGet( PassengerInfo& passenger )
-{
-	CString str(L"");
-	str.Format(L"%s%%2C%s%%2C%s",
-		GetUTF8Str(passenger.name),
-		passenger.cardtype,
-		passenger.cardno
-		);
-	return str;
-}
-
-CString CCheckPage::ticketGet( PassengerInfo& passenger )
-{
-	return L"1";
-}
-
-CString CCheckPage::nameGet( PassengerInfo& passenger )
-{
-	return GetUTF8Str(passenger.name);
-}
-

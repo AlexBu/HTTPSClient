@@ -18,15 +18,15 @@ void CBookPage::BuildRequest( TrainInfo& input )
  		L"&seattype_num="
  		L"&from_station_telecode=%s"
  		L"&to_station_telecode=%s"
- 		L"&include_student=%s"
+ 		L"&include_student=00"
  		L"&from_station_telecode_name=%s"
  		L"&to_station_telecode_name=%s"
  		L"&round_train_date=%s"
- 		L"&round_start_time_str=%s"
- 		L"&single_round_type=%s"
- 		L"&train_pass_type=%s"
- 		L"&train_class_arr=%s"
- 		L"&start_time_str=%s"
+ 		L"&round_start_time_str=00%%3A00--24%%3A00"
+ 		L"&single_round_type=1"
+ 		L"&train_pass_type=QB"
+ 		L"&train_class_arr=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
+ 		L"&start_time_str=00%%3A00--24%%3A00"
  		L"&lishi=%s"
  		L"&train_start_time=%s"
  		L"&trainno4=%s"
@@ -42,15 +42,9 @@ void CBookPage::BuildRequest( TrainInfo& input )
  		input.trainDate,
  		input.stationFromCode,
  		input.stationToCode,
- 		studentGet(input),
  		stationFromTeNameGet(input),
  		stationToTeNameGet(input),
  		input.trainRoundDate,
-		trainRoundTimeStrGet(input),
- 		roundTypeGet(input),
- 		passTypeGet(input),
- 		trainClassGet(input),
- 		timeStartStrGet(input),
  		durationGet(input),
  		trainStartTimeGet(input),
  		input.trainNo,
@@ -266,9 +260,9 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	restStr.Empty();
 	// find proper seat
 	// priority: <passenger select>, O, M, 9, 3, 4, 2, 1
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < output.passengers.GetCount(); i++)
 	{
-		CString& passenger_seat = output.passengers[i].seat;
+		CString& passenger_seat = output.passengers[i].seatTyp;
 		if(seatOptions.Find(passenger_seat) != -1)
 		{
 			// this is what passenger want!
@@ -333,12 +327,6 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	status = ERROR_OK;
 	CLog::GetLog().AddLog(L"book page success!");
 }
-
-CString CBookPage::studentGet( TrainInfo& input )
-{
-	return L"00";
-}
-
 CString CBookPage::stationFromTeNameGet( TrainInfo& input )
 {
 	return GetUTF8Str(input.stationFromTeName);
@@ -347,31 +335,6 @@ CString CBookPage::stationFromTeNameGet( TrainInfo& input )
 CString CBookPage::stationToTeNameGet( TrainInfo& input )
 {
 	return GetUTF8Str(input.stationToTeName);
-}
-
-CString CBookPage::trainRoundTimeStrGet( TrainInfo& input )
-{
-	return L"00%3A00--24%3A00";
-}
-
-CString CBookPage::roundTypeGet( TrainInfo& input )
-{
-	return L"1";
-}
-
-CString CBookPage::passTypeGet( TrainInfo& input )
-{
-	return L"QB";
-}
-
-CString CBookPage::trainClassGet( TrainInfo& input )
-{
-	return L"QB%23D%23Z%23T%23K%23QT%23";
-}
-
-CString CBookPage::timeStartStrGet( TrainInfo& input )
-{
-	return L"00%3A00--24%3A00";
 }
 
 CString CBookPage::durationGet( TrainInfo& input )

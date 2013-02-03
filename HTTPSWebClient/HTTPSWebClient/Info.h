@@ -1,5 +1,24 @@
 #pragma once
 
+struct UserInfo
+{
+	CString name;
+	CString pass;
+};
+
+
+
+struct PassInfo
+{
+	CString name;
+	CString passTyp;
+	CString passNo;
+	CString mobileNo;
+	CString seatTyp;
+};
+
+
+
 struct LoginInfo
 {
 	CString rand;
@@ -27,19 +46,6 @@ struct QueryInfo
 	CString toStation;
 };
 
-struct PassengerInfo
-{
-	CString passengerTickets;
-	CString oldPassengers;
-	CString seat;
-	CString seat_detail;
-	CString ticket;
-	CString name;
-	CString cardtype;
-	CString cardno;
-	CString mobileno;
-};
-
 struct TicketInfo
 {
 	CString token;
@@ -58,7 +64,7 @@ struct TicketInfo
 	CString cancel_flag;
 	CString id_mode;
 
-	PassengerInfo passengers[5];
+	CArray<PassInfo> passengers;
 
 	CString checkbox9;
 	CString randCode;

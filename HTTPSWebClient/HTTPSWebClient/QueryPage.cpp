@@ -18,15 +18,13 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 		L"&orderRequest.train_no="
 		L"&trainPassType=QB"
 		L"&trainClass=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
-		//L"&trainClass=QB#D#Z#T#K#QT#"
 		L"&includeStudent=00"
 		L"&seatTypeAndNum="
-		L"&orderRequest.start_time_str=00:00--24:00",
+		L"&orderRequest.start_time_str=00%%3A00--24%%3A00",
 		input.departDate,
 		from_station_telecodeGet(input),
 		to_station_telecodeGet(input)
 		);
-	//reqStr = GetUTF8Str(reqStr);
 	refStr = L"/otsweb/order/querySingleAction.do?method=init";
 }
 

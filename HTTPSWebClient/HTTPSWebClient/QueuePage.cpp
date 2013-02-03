@@ -22,7 +22,7 @@ void CQueuePage::BuildRequest( TicketInfo& input )
 		input.train_date,
 		input.train_no,
 		input.station_train_code,
-		input.passengers[0].seat,	// the first passenger's seat type
+		input.passengers[0].seatTyp,	// the first passenger's seat type
 		input.from_station_telecode,
 		input.to_station_telecode,
 		input.leftTicketStr

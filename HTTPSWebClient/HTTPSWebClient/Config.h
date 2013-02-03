@@ -1,24 +1,11 @@
 #pragma once
 
-struct UserInfo
-{
-	CString name;
-	CString pass;
-};
+#include "Info.h"
 
 struct UserList
 {
 	DWORD count;
 	CArray<UserInfo> user;
-};
-
-struct PassInfo
-{
-	CString name;
-	CString passTyp;
-	CString passNo;
-	CString mobileNo;
-	CString seatTyp;
 };
 
 struct PassList

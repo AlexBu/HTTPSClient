@@ -16,7 +16,7 @@ void CConfirmPage::BuildRequest( TicketInfo& input )
 
 	reqData.Format(L"org.apache.struts.taglib.html.TOKEN=%s"
 		L"&leftTicketStr=%s"
-		L"&textfield=%s"
+		L"&textfield="
 		L"&orderRequest.train_date=%s"
 		L"&orderRequest.train_no=%s"
 		L"&orderRequest.station_train_code=%s"
@@ -34,10 +34,9 @@ void CConfirmPage::BuildRequest( TicketInfo& input )
 		L"&passengerTickets=%s"
 		L"&passengerTickets=%s"
 		L"&randCode=%s"
-		L"&orderRequest.reserve_flag=%s"
+		L"&orderRequest.reserve_flag=A"
 		,input.token
 		,input.leftTicketStr
-		,textfieldGet(input)
 		,input.train_date
 		,input.train_no
 		,input.station_train_code
@@ -53,7 +52,6 @@ void CConfirmPage::BuildRequest( TicketInfo& input )
 		,passengerTicketsGet(input.passengers[0])
 		,passengerTicketsGet(input.passengers[1])
 		,input.randCode
-		,reserve_flagGet(input)
 		);
 
 	refStr = L"/otsweb/order/confirmPassengerAction.do?method=init";
@@ -108,11 +106,6 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 
 }
 
-CString CConfirmPage::textfieldGet( TicketInfo& input )
-{
-	return L"%E4%B8%AD%E6%96%87%E6%88%96%E6%8B%BC%E9%9F%B3%E9%A6%96%E5%AD%97%E6%AF%8D";
-}
-
 CString CConfirmPage::start_timeGet( TicketInfo& input )
 {
 	CString str = input.start_time;
@@ -137,26 +130,15 @@ CString CConfirmPage::to_station_nameGet( TicketInfo& input )
 	return GetUTF8Str(input.to_station_name);
 }
 
-CString CConfirmPage::reserve_flagGet( TicketInfo& input )
-{
-	return L"A";
-}
-
-CString CConfirmPage::passengerTicketsGet( PassengerInfo& passenger )
+CString CConfirmPage::passengerTicketsGet( PassInfo& passenger )
 {
 	CString str(L"");
-	str.Format(L"%s%%2C0%%2C%s%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
-		passenger.seat,
-		ticketGet(passenger),
+	str.Format(L"%s%%2C0%%2C1%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
+		passenger.seatTyp,
 		GetUTF8Str(passenger.name),
-		passenger.cardtype,
-		passenger.cardno,
-		passenger.mobileno
+		passenger.passTyp,
+		passenger.passNo,
+		passenger.mobileNo
 		);
 	return str;
-}
-
-CString CConfirmPage::ticketGet( PassengerInfo& passenger )
-{
-	return L"1";
 }
