@@ -13,19 +13,7 @@ pages:
 /otsweb/order/querySingleAction.do?method=submutOrderRequest	Post
 /otsweb/order/confirmPassengerAction.do?method=checkOrderInfo	Post
 /otsweb/order/confirmPassengerAction.do?method=getQueueCount
-/otsweb/order/myOrderAction.do?method=getOrderWaitTime
-
-CLoginValPic
-CLoginRand
-CLoginPage
-
-CQueryTicket
-COrderTicket
-
-CBookValPic
-CCheckOrder
-CGetQueue
-CWaitTime
+/otsweb/order/myOrderAction.do?method=queryOrderWaitTime
 
 stations
 /otsweb/js/common/station_name.js?version=5.42
@@ -47,7 +35,6 @@ GET
 
 POST
 /otsweb/loginAction.do?method=loginAysnSuggest
-<content empty>
 
 respond
 {"loginRand":"434","randError":"Y"}
@@ -90,31 +77,6 @@ GET
 
 tip: time period can be tuned, 05:23-06:34
 
-GET
-/otsweb/order/querySingleAction.do?method=queryLeftTicket
-&orderRequest.train_date=2013-01-07
-&orderRequest.from_station_telecode=NJH
-&orderRequest.to_station_telecode=SHH
-&orderRequest.train_no=240000D31307
-&trainPassType=QB
-&trainClass=D%23
-&includeStudent=00
-&seatTypeAndNum=
-&orderRequest.start_time_str=00%3A00--24%3A00
-
-GET 
-/otsweb/order/querySingleAction.do?method=queryLeftTicket
-&orderRequest.train_date=2013-01-07
-&orderRequest.from_station_telecode=NJH
-&orderRequest.to_station_telecode=SHH
-&orderRequest.train_no=
-&trainPassType=QB
-&trainClass=QB%23D%23Z%23T%23K%23QT%23
-&includeStudent=00
-&seatTypeAndNum=
-&orderRequest.start_time_str=00%3A00--24%3A00
-
-
 header
 x-requested-with: XMLHttpRequest
 Content-Type: application/x-www-form-urlencoded
@@ -131,41 +93,8 @@ Content-Type: application/x-www-form-urlencoded
 response
 (second line)
 1,
-<span 
-id='id_54000G703120' 
-class='base_txtdiv' 
-onmouseover=javascript:onStopHover('54000G703120#NJH#SHH') 
-onmouseout='onStopOut()'
->G7031</span>,
-<img src='/otsweb/images/tips/first.gif'>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-南京
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;
-05:53,
-<img src='/otsweb/images/tips/last.gif'>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-上海
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;
-07:41,
-01:48,
-<font color='#008800'>有</font>,
---,
-<font color='#008800'>有</font>,
-<font color='#008800'>有</font>,
---,--,--,--,--,
-<font color='#008800'>有</font>,
---,
-<input 
-type='button' 
-class='yuding_u' 
-onmousemove=this.className='yuding_u_over' 
-onmousedown=this.className='yuding_u_down' 
-onmouseout=this.className='yuding_u' 
-onclick=
+...>G7031</span>,
+...,
 javascript:getSelected(
 'G7031#
 01:48#
@@ -181,44 +110,7 @@ value='预订'>
 </input>
 \n
 
-<span id='id_490000G23602' 
-class='base_txtdiv' 
-onmouseover=javascript:onStopHover('490000G23602#NKH#AOH') 
-onmouseout='onStopOut()'>
-G233
-</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-南京南&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;
-22:04,
-<img src='/otsweb/images/tips/last.gif'>&nbsp;&nbsp;
-上海虹桥&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;
-23:11,01:07,
-<font color='#008800'>有</font>,--,<font color='#008800'>有</font>,<font color='#008800'>有</font>,
---,--,--,--,--,--,--,
-<input type='button' class='yuding_u' onmousemove=this.className='yuding_u_over' onmousedown=this.className='yuding_u_down' 
-onmouseout=this.className='yuding_u' 
-onclick=javascript:getSelected('
-G233#01:07#22:04#490000G23602#NKH#AOH#23:11#南京南#上海虹桥#O*****0134M*****00589*****0022#D6B32D7E8064C166E203BC0452F4C34F951A608486F27CD889CFDE8B
-') value='预订'></input>
-
-
 17 columns, seperated by comma
-0,
-<span id='id_240000D31307' class='base_txtdiv' onmouseover=javascript:onStopHover('240000D31307#NJH#SHH') onmouseout='onStopOut()'>D313</span>,
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;南京&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;04:48,
-<img src='/otsweb/images/tips/last.gif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上海&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;07:15,
-02:27,
---,
---,
---,
-<font color='#008800'>有</font>,
---,
-<font color='#008800'>有</font>,
---,
---,
---,
-<font color='darkgray'>无</font>,
---,
-<a name='btn130_2' class='btn130_2' style='text-decoration:none;' onclick=javascript:getSelected('D313#02:27#04:48#240000D31307#NJH#SHH#07:15#南京#上海#02#04#O*****00384*****0036O*****3000#D89A7A67C269BCCCB45005A254F49C92B15F68BBF6BA89B844CF76D4#P2')>预&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订</a>\n
 
 click book ticket button
 POST
@@ -252,30 +144,6 @@ station_train_code=D313
 &mmStr=D2C97D0945DA6BAD2A5CE98309C7417D667CC38A85EBF9032131D4E5
 &locationCode=P2
 
-
-
-station_train_code=G233
-&train_date=2012-11-18
-&seattype_num=
-&from_station_telecode=NKH
-&to_station_telecode=AOH
-&include_student=00
-&from_station_telecode_name=%E5%8D%97%E4%BA%AC
-&to_station_telecode_name=%E4%B8%8A%E6%B5%B7
-&round_train_date=2012-11-18
-&round_start_time_str=00%3A00--24%3A00
-&single_round_type=1
-&train_pass_type=QB
-&train_class_arr=D%23
-&start_time_str=00%3A00--24%3A00
-&lishi=01%3A07
-&train_start_time=22%3A04
-&trainno4=490000G23602
-&arrive_time=23%3A11
-&from_station_name=%E5%8D%97%E4%BA%AC%E5%8D%97
-&to_station_name=%E4%B8%8A%E6%B5%B7%E8%99%B9%E6%A1%A5
-&ypInfoDetail=O*****0134M*****00589*****0022
-&mmStr=D6B32D7E8064C166E203BC0452F4C34F951A608486F27CD889CFDE8B
 
 response
 320 move
@@ -374,18 +242,6 @@ GET
 response
 {"countT":0,"count":23,"ticket":"O0144505089031650027O014453000M022950142","op_1":true,"op_2":false}
 
-GET
-/otsweb/order/confirmPassengerAction.do?method=getQueueCount
-&train_date=2013-01-07
-&train_no=240000D31307
-&station=D313
-&seat=O
-&from=NJH
-&to=SHH
-&ticket=O0087500354018950032O008753000
-
-response
-{"countT":0,"count":8,"ticket":"O*****00324*****0032O*****3000","op_1":true,"op_2":false}
 
 confirm page again
 
@@ -509,89 +365,6 @@ GET
 /otsweb/sysuser/passCodeAction.do?rand=sjrand
 
 
-pay online(new page from here)
-POST https://epay.12306.cn/pay/payGateway
-interfaceName=PAY_SERVLET&interfaceVersion=1.0
-&tranData=PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iR0JLIj8%2BCjxQYXlSZXE%2BP
-GludGVyZmFjZU5h%0D%0AbWU%2BUEFZX1NFUlZMRVQ8L2ludGVyZmFjZU5hbWU%2BPGludGVyZm
-FjZVZlcnNpb24%2BMS4wPC9pbnRl%0D%0AcmZhY2VWZXJzaW9uPjxvcmRlckRhdGU%2BMjAxMjE
-xMTgxMjU5NTY8L29yZGVyRGF0ZT48b3JkZXJU%0D%0AaW1lb3V0RGF0ZT4yMDEyMTExODEzNDQ1
-Njwvb3JkZXJUaW1lb3V0RGF0ZT48b3JkZXJJZD4xRTI5%0D%0AOTE1MjQ2NzAwMTAwMTEyNTk1N
-jU2Njwvb3JkZXJJZD48YW1vdW50PjIzMDAwPC9hbW91bnQ%2BPGFw%0D%0AcElkPjAwMDE8L2Fw
-cElkPjxjdXJUeXBlPjE1NjwvY3VyVHlwZT48b3JkZXJSZW1hcmsvPjxtZXJV%0D%0AUkw%2BaHR
-0cDovL2R5bmFtaWMuMTIzMDYuY24vb3RzcGF5Ly9vcmRlci9lTm90aWZ5QWN0aW9uLmRv%0D%0A
-P21ldGhvZD1lcGF5U3RhdHVzJmFtcDt1c2VyX25hbWU9WW10d09EUXpNelU9JmFtcDtzZXF1ZW5
-j%0D%0AZV9ubz1SVEk1T1RFMU1qUTJOdz09JmFtcDtwYXlPcmRlcklEPU1VVXlPVGt4TlRJME5q
-Y3dNREV3%0D%0ATURFeE1qVTVOVFkxTmpZPSZhbXA7cmVkaXJlY3RVUkw9YUhSMGNITTZMeTlrZ
-Vc1aGJXbGpMakV5%0D%0ATXpBMkxtTnVMMjkwYzNkbFlpOHZiM0prWlhJdlpVNXZkR2xtZVVGam
-RHbHZiaTVrYno5dA0KWlhS%0D%0Ab2IyUTljWFZsY25sTmVVOXlaR1Z5VTNSaGRHbGpKbk5sY1h
-WbGJtTmxYMjV2UFVVeU9Ua3hOVEkw%0D%0ATmpjPSZhbXA7cGF5U3RhcnQ9TVE9PSZhbXA7YmF0
-Y2hfbm89TVNNPSZhbXA7bG9naW5faWQ9VkRj%0D%0AemJUZFVUemxqZFZkRlptVmlOM28xVDNGb
-lUxVmtiMDFoZEhWdSZhbXA7dG91cl9mbGFnPVpHTT0m%0D%0AYW1wO3JldHVybl90b3RhbD0mYW
-1wO3JldHVybl9jb3N0PSZhbXA7b2xkX3RpY2tldF9wcmljZT0m%0D%0AYW1wO3BheV9tb2RlPSZ
-hbXA7Y2hhbm5lbD1SUT09PC9tZXJVUkw%2BPGFwcFVSTD5odHRwczovLzEw%0D%0ALjEuMjE0Lj
-EzNTo0NDMvb3RzcGF5L29yZGVyL2VOb3RpZnlBY3Rpb24uZG8%2FbWV0aG9kPWVwYXlO%0D%0Ab
-3RpZnk8L2FwcFVSTD48aW5uZXJVUkw%2BaHR0cDovLzEwLjEuMTk5LjEwNjo4MjAwL290c3dzL3
-Bh%0D%0AeUNhbGxCYWNrPC9pbm5lclVSTD48bWVyVkFSPlltdHdPRFF6TXpVNlZEY3piVGRVVHp
-samRWZEZa%0D%0AbVZpTjNvMVQzRm5VMVZrYjAxaGRIVnVPa1V5T1RreE5USTBOamM2TVNNNk1U
-b3gNCk9Ea3hNamsx%0D%0ATWpFd05qbzZPam82T2pvNlpHTTZSUT09PC9tZXJWQVI%2BPHRyYW5
-zVHlwZT4wMTwvdHJhbnNUeXBl%0D%0APjwvUGF5UmVxPg%3D%3D&merSignMsg=VH3E8cVs5%2B
-LlfgY93dyzZWqT1TmanHQhSU69c4zAyFC5Hl9zsPBgC1csQmZfi%2FDb6MK3BiSB4BqG%0D%0Ao
-O%2FwDFsO9pFVmSTCixXiaHctLhsVi5DYZVOVjVZ%2BCaGWqugLSCChrrXwS114HkmOdzMo4gmM
-EXAo%0D%0AwxLT91omwSJTg88KraM%3D
-&appId=0001
-&transType=01
-
-POST https://epay.12306.cn/pay/webBusiness HTTP/1.1
-tranData=PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iR0JLIj8%2BCjxQYXlSZXE%2BPG
-ludGVyZmFjZU5h%0D%0AbWU%2BUEFZX1NFUlZMRVQ8L2ludGVyZmFjZU5hbWU%2BPGludGVyZmF
-jZVZlcnNpb24%2BMS4wPC9pbnRl%0D%0AcmZhY2VWZXJzaW9uPjxvcmRlckRhdGU%2BMjAxMjEx
-MTgxMjU5NTY8L29yZGVyRGF0ZT48b3JkZXJU%0D%0AaW1lb3V0RGF0ZT4yMDEyMTExODEzNDQ1N
-jwvb3JkZXJUaW1lb3V0RGF0ZT48b3JkZXJJZD4xRTI5%0D%0AOTE1MjQ2NzAwMTAwMTEyNTk1Nj
-U2Njwvb3JkZXJJZD48YW1vdW50PjIzMDAwPC9hbW91bnQ%2BPGFw%0D%0AcElkPjAwMDE8L2Fwc
-ElkPjxjdXJUeXBlPjE1NjwvY3VyVHlwZT48b3JkZXJSZW1hcmsvPjxtZXJV%0D%0AUkw%2BaHR0
-cDovL2R5bmFtaWMuMTIzMDYuY24vb3RzcGF5Ly9vcmRlci9lTm90aWZ5QWN0aW9uLmRv%0D%0AP
-21ldGhvZD1lcGF5U3RhdHVzJmFtcDt1c2VyX25hbWU9WW10d09EUXpNelU9JmFtcDtzZXF1ZW5j
-%0D%0AZV9ubz1SVEk1T1RFMU1qUTJOdz09JmFtcDtwYXlPcmRlcklEPU1VVXlPVGt4TlRJME5qY
-3dNREV3%0D%0ATURFeE1qVTVOVFkxTmpZPSZhbXA7cmVkaXJlY3RVUkw9YUhSMGNITTZMeTlrZV
-c1aGJXbGpMakV5%0D%0ATXpBMkxtTnVMMjkwYzNkbFlpOHZiM0prWlhJdlpVNXZkR2xtZVVGamR
-HbHZiaTVrYno5dA0KWlhS%0D%0Ab2IyUTljWFZsY25sTmVVOXlaR1Z5VTNSaGRHbGpKbk5sY1hW
-bGJtTmxYMjV2UFVVeU9Ua3hOVEkw%0D%0ATmpjPSZhbXA7cGF5U3RhcnQ9TVE9PSZhbXA7YmF0Y
-2hfbm89TVNNPSZhbXA7bG9naW5faWQ9VkRj%0D%0AemJUZFVUemxqZFZkRlptVmlOM28xVDNGbl
-UxVmtiMDFoZEhWdSZhbXA7dG91cl9mbGFnPVpHTT0m%0D%0AYW1wO3JldHVybl90b3RhbD0mYW1
-wO3JldHVybl9jb3N0PSZhbXA7b2xkX3RpY2tldF9wcmljZT0m%0D%0AYW1wO3BheV9tb2RlPSZh
-bXA7Y2hhbm5lbD1SUT09PC9tZXJVUkw%2BPGFwcFVSTD5odHRwczovLzEw%0D%0ALjEuMjE0LjE
-zNTo0NDMvb3RzcGF5L29yZGVyL2VOb3RpZnlBY3Rpb24uZG8%2FbWV0aG9kPWVwYXlO%0D%0Ab3
-RpZnk8L2FwcFVSTD48aW5uZXJVUkw%2BaHR0cDovLzEwLjEuMTk5LjEwNjo4MjAwL290c3dzL3B
-h%0D%0AeUNhbGxCYWNrPC9pbm5lclVSTD48bWVyVkFSPlltdHdPRFF6TXpVNlZEY3piVGRVVHps
-amRWZEZa%0D%0AbVZpTjNvMVQzRm5VMVZrYjAxaGRIVnVPa1V5T1RreE5USTBOamM2TVNNNk1Ub
-3gNCk9Ea3hNamsx%0D%0ATWpFd05qbzZPam82T2pvNlpHTTZSUT09PC9tZXJWQVI%2BPHRyYW5z
-VHlwZT4wMTwvdHJhbnNUeXBl%0D%0APjwvUGF5UmVxPg%3D%3D&transType=01&channelId=1
-&appId=0001&merSignMsg=VH3E8cVs5%2BLlfgY93dyzZWqT1TmanHQhSU69c4zAyFC5Hl9zsP
-BgC1csQmZfi%2FDb6MK3BiSB4BqG%0D%0AoO%2FwDFsO9pFVmSTCixXiaHctLhsVi5DYZVOVjVZ
-%2BCaGWqugLSCChrrXwS114HkmOdzMo4gmMEXAo%0D%0AwxLT91omwSJTg88KraM%3D
-&merCustomIp=114.222.68.81
-&orderTimeoutDate=20121118134456
-&bankId=0308000
-
-POST https://netpay.cmbchina.com/netpayment/BaseHttp.dll?PrePayC2 HTTP/1.1
-Amount=230.00
-&MerchantCode=%7CQOpU*zT79aR8PuKDjGxYErdE7xqZ%2FZzvDImPAQDhForDNvy9%7Cafd6b044d48046f192dc8e3b294f702a6452603f
-&BillNo=W2012111895909116
-&Date=20121118
-&MerchantUrl=http%3A%2F%2Fepay.12306.cn%2Fpay%2FpayResponse
-&CoNo=006958&BranchID=0010
-&MerchantPara=TRANS_ID%3DW2012111895909116%7CbankId%3D03080000%7CExpireTime%3D20121118134456
-
-pay success(old page)
-POST
-/otsweb/order/payConfirmOnlineSingleAction.do?method=payConfirmOnlineSingleEpaySuccess HTTP/1.1
-org.apache.struts.taglib.html.TOKEN=1c8318257d5e839228f64506f20c8c68
-&sequence_no=E299152467
-&batch_no=1%23
-&isSendMsg=Y
-
-
 confirmPassengerAction.do?method=checkOrderInfo
 at save_passenger_info.js?version=5.45
 at submit_form_confirm()
@@ -600,6 +373,8 @@ confirmPassengerAction.do?method=getQueueCount
 at save_passenger_info.js?version=5.45
 at showOrderDialog()
 
+
+{"countT":0,"count":23,"ticket":"O0144505089031650027O014453000M022950142","op_1":true,"op_2":false}
 count:	deprecated
 op_1:	deprecated
 countT:
@@ -641,12 +416,9 @@ M 02295 0 020
 O ***** 0 017
 4 ***** 0 046
 
-O0134
-50035	二等: 35
-M0229
-50020	一等: 20
-90429
-50002	商务: 2
+O 01345 0 035	二等: 35
+M 02295 0 020	一等: 20
+9 04295 0 002	商务: 2
 
 
 40: 软卧

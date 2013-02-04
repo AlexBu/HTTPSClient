@@ -37,6 +37,8 @@ struct OrderInfo
 	CString checkHuimd;
 	CString check608;
 	CString msg;
+	CString isQueue;
+	CString queueNo;
 };
 
 struct QueryInfo

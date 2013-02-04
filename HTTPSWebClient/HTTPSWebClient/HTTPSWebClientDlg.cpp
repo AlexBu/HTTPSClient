@@ -436,7 +436,7 @@ void CHTTPSWebClientDlg::UpdateUser( UserInfo &userinfo )
 void CHTTPSWebClientDlg::InitDate()
 {
 	CTime orderdate = CTime::GetCurrentTime();
-	CTimeSpan orderspan(20, 0, 0, 0);
+	CTimeSpan orderspan(19, 0, 0, 0);
 	orderdate += orderspan;
 	ctrlDate.SetTime(&orderdate);
 }

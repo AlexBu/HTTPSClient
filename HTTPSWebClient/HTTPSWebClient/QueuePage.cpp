@@ -38,22 +38,40 @@ void CQueuePage::ParseOutput( OrderInfo& output )
 	CRegex regex;
 	CString pattern, restStr, matchStr;
 
+	pattern = L"\\\"op_2\\\":{\\w}";
+	regex.patternLoad(pattern);
 	matchStr = respStr;
+	if(regex.contextMatch(matchStr, restStr) == TRUE)
+	{
+		regex.matchGet(0, output.isQueue);
+		if(output.isQueue == L"true")
+		{
+			status = ERROR_OVERLOAD;
+			return;
+		}
+	}
+
+	pattern = L"\\\"countT\\\":{\\d+}";
+	regex.patternLoad(pattern);
+	matchStr = respStr;
+	if(regex.contextMatch(matchStr, restStr) == TRUE)
+	{
+		regex.matchGet(0, output.queueNo);
+	}
 
 	pattern = L"\\\"ticket\\\":\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-
-	if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 1) )
+	matchStr = respStr;
+	if(regex.contextMatch(matchStr, restStr) == TRUE)
 	{
-		status = 0;
+		status = ERROR_OK;
 		regex.matchGet(0, output.ticketStr);
 		CLog::GetLog().AddLog(L"queue page success!");
 	}
 	else
 	{
-		status = -1;
+		status = ERROR_GENERAL;
 		CLog::GetLog().AddLog(L"general error!");
 	}
-	matchStr = restStr;
-	restStr.Empty();
+
 }

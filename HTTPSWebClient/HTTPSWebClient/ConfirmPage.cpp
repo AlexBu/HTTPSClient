@@ -31,8 +31,7 @@ void CConfirmPage::BuildRequest( TicketInfo& input )
 		L"&orderRequest.to_station_name=%s"
 		L"&orderRequest.cancel_flag=%s"
 		L"&orderRequest.id_mode=%s"
-		L"&passengerTickets=%s"
-		L"&passengerTickets=%s"
+		L"=%s"
 		L"&randCode=%s"
 		L"&orderRequest.reserve_flag=A"
 		,input.token
@@ -49,8 +48,7 @@ void CConfirmPage::BuildRequest( TicketInfo& input )
 		,to_station_nameGet(input)
 		,input.cancel_flag
 		,input.id_mode
-		,passengerTicketsGet(input.passengers[0])
-		,passengerTicketsGet(input.passengers[1])
+		,passengerStrBuild(input.passengers)
 		,input.randCode
 		);
 
@@ -78,6 +76,11 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 			CLog::GetLog().AddLog(L"confirm page success!");
 			status = ERROR_OK;
 		}
+		else if(output.errMsg.Find(L"网络可能存在问题") != -1)
+		{
+			// logic error
+			status = ERROR_SERVER;
+		}
 		else if(output.errMsg.Find(L"非法") != -1)
 		{
 			// logic error
@@ -101,7 +104,7 @@ void CConfirmPage::ParseOutput( OrderInfo& output )
 		status = ERROR_GENERAL;
 	}
 	matchStr = restStr;
-	restStr.Empty();
+
 
 
 }
@@ -140,5 +143,15 @@ CString CConfirmPage::passengerTicketsGet( PassInfo& passenger )
 		passenger.passNo,
 		passenger.mobileNo
 		);
+	return str;
+}
+
+CString CConfirmPage::passengerStrBuild(CArray<PassInfo>& passengers)
+{
+	CString str;
+	for(int i = 0; i < passengers.GetCount(); i++)
+	{
+		str.AppendFormat(L"&passengerTickets=%s", passengerTicketsGet(passengers[i]));
+	}
 	return str;
 }

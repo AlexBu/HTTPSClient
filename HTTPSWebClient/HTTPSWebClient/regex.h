@@ -9,13 +9,8 @@ class CRegex
 {
 public:
 	// wrap regex of atl
-	CRegex();
-	virtual ~CRegex();
-
 	BOOL patternLoad(CString& pattern);
-	CString patternGet();	// maybe no use
 	BOOL contextMatch(CString& context, CString& rest);
-	DWORD matchCount();
 	BOOL matchGet(DWORD matchIndex, CString& result);
 
 private:

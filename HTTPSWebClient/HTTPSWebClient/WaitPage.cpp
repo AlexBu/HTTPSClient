@@ -25,10 +25,10 @@ void CWaitPage::ParseOutput( OrderInfo& output )
 
 	pattern = L"\\\"waitTime\\\":{-?\\d+}";
 	regex.patternLoad(pattern);
-	if( (regex.contextMatch(respStr, restStr) == TRUE) && (regex.matchCount() == 1) )
+	if(regex.contextMatch(respStr, restStr) == TRUE)
 	{
 		regex.matchGet(0, output.waitTime);
-		status = 0;
+		status = ERROR_OK;
 		CLog::GetLog().AddLog(L"wait page success!");
 		CLog::GetLog().AddLog(output.waitTime);
 
@@ -45,10 +45,25 @@ void CWaitPage::ParseOutput( OrderInfo& output )
 			// time out
 			status = ERROR_OK;
 
+			pattern = L"\\\"msg\\\":\\\"{[^\\\"]+}\\\"";
+			regex.patternLoad(pattern);
+			if(regex.contextMatch(respStr, restStr) == TRUE)
+			{
+				regex.matchGet(0, output.msg);
+				if(output.msg.Find(L"请不要输入重复的证件号码") != -1)
+				{
+					status = ERROR_REAL_NAME;
+					return;
+				}
+			}
+			else
+			{
+				output.msg.Empty();
+			}
 			// get request id info
 			pattern = L"\\\"orderId\\\":\\\"{E\\d+}\\\"";
 			regex.patternLoad(pattern);
-			if( (regex.contextMatch(respStr, restStr) == TRUE) && (regex.matchCount() == 1) )
+			if(regex.contextMatch(respStr, restStr) == TRUE)
 			{
 				regex.matchGet(0, output.orderId);
 			}

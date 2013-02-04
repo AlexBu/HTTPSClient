@@ -25,7 +25,7 @@ void CRandPage::ParseOutput( LoginInfo& output )
 	regex.patternLoad(patternRand);
 	CString restStr;
 
-	if( (regex.contextMatch(respStr, restStr) == TRUE) && (regex.matchCount() == 1) )
+	if(regex.contextMatch(respStr, restStr) == TRUE)
 	{
 		regex.matchGet(0, output.rand);
 		CLog::GetLog().AddLog(L"login rand page success!");

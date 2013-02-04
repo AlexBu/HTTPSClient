@@ -79,7 +79,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"org\\.apache\\.struts\\.taglib\\.html\\.TOKEN\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -87,11 +87,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.token);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"left_ticket\\\"\\b*\\n\\b*value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -99,11 +98,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.leftTicketStr);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.train_date\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -111,11 +109,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.train_date);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.train_no\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -123,11 +120,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.train_no);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.station_train_code\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -135,11 +131,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.station_train_code);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.from_station_telecode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -147,11 +142,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.from_station_telecode);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.to_station_telecode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -159,11 +153,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.to_station_telecode);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.bed_level_order_num\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -171,11 +164,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.bed_level_order_num);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.start_time\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -183,11 +175,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.start_time);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.end_time\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -195,11 +186,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.end_time);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.from_station_name\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -207,11 +197,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.from_station_name);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.to_station_name\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -219,11 +208,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.to_station_name);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.cancel_flag\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -231,11 +219,10 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.cancel_flag);
 	matchStr = restStr;
-	restStr.Empty();
 
 	pattern = L"orderRequest\\.id_mode\\\" value=\\\"{[^\\\"]+}\\\"";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -243,12 +230,11 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.id_mode);
 	matchStr = restStr;
-	restStr.Empty();
 
 	// add seat type select logic
 	pattern = L"id=\"passenger_1_seat\">{.+?}</select>";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -257,7 +243,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	CString seatOptions;
 	regex.matchGet(0, seatOptions);
 	matchStr = restStr;
-	restStr.Empty();
+
 	// find proper seat
 	// priority: <passenger select>, O, M, 9, 3, 4, 2, 1
 	for(int i = 0; i < output.passengers.GetCount(); i++)
@@ -314,7 +300,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 
 	pattern = L"submit_form_confirm\\(\\\'confirmPassenger\\\',\\\'{[^\\\']+}\\\'";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() == 0) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		CLog::GetLog().AddLog(L"ticket info cannot found!");
 		status = ERROR_GENERAL;
@@ -322,7 +308,7 @@ void CBookPage::ParseOutput( TicketInfo& output )
 	}
 	regex.matchGet(0, output.tFlag);
 	matchStr = restStr;
-	restStr.Empty();
+
 
 	status = ERROR_OK;
 	CLog::GetLog().AddLog(L"book page success!");

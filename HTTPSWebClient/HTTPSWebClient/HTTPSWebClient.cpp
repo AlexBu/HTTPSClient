@@ -9,7 +9,7 @@
 #include <atlrx.h>
 
 // delay second
-#define GENERAL_DELAY		(5)
+#define GENERAL_DELAY		(0)
 
 
 #ifdef _DEBUG
@@ -93,9 +93,9 @@ UINT AFX_CDECL CHTTPSWebClientApp::BookWorker( LPVOID param )
 		{QUERY,		LOGINV,	START,	EXIT,	LOGINV,	EXIT,	EXIT,	RAND,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	LOGIN,	EXIT	},	//LOGIN
 		{BOOK,		QUERY,	START,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT	},	//QUERY
 		{BOOKV,		QUERY,	START,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOK,	EXIT	},	//BOOK
-		{CHECK,		BOOKV,	START,	EXIT,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOKV,	EXIT,	BOOKV,	EXIT	},	//BOOKV
+		{CHECK,		BOOKV,	START,	EXIT,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOKV,	EXIT	},	//BOOKV
 		{QUEUE,		CHECK,	START,	BOOK,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	CHECK,	EXIT	},	//CHECK
-		{CONFRM,	QUEUE,	START,	BOOK,	QUEUE,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUEUE,	EXIT	},	//QUEUE
+		{CONFRM,	QUEUE,	START,	BOOK,	QUEUE,	EXIT,	EXIT,	QUEUE,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUEUE,	EXIT	},	//QUEUE
 		{WAIT,		CONFRM,	START,	BOOK,	CONFRM,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	CONFRM,	EXIT	},	//CONFRM
 		{EXIT,		WAIT,	EXIT,	EXIT,	WAIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	WAIT,	WAIT,	EXIT	},	//WAIT
 		{EXIT,		EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT	},	//EXIT
@@ -382,7 +382,7 @@ int CHTTPSWebClientApp::GetQueryPageAction()
 	int queryStatus = queryPage.GetStatus();
 	if(queryStatus == ERROR_OK)
 	{
-		statusMsg.Format(L"query success!");
+		statusMsg.Format(L"query success!\r\nticket info: %s", getFormatLeftTicketInfo(trainInfo.infoDetail));
 		SendString(statusMsg);
 	}
 	else if(queryStatus == ERROR_HTTP)
@@ -488,7 +488,8 @@ int CHTTPSWebClientApp::GetQueuePageAction()
 		// update ticket info if success
 		ticketInfo.leftTicketStr = orderInfo.ticketStr;
 
-		statusMsg.Format(L"queue success!");
+		statusMsg.Format(L"queue success! queue number: %s", orderInfo.queueNo);
+		statusMsg.AppendFormat(L"ticket info: %s", getFormatLeftTicketInfo(orderInfo.ticketStr));
 		SendString(statusMsg);
 	}
 	else if(queueStatus == ERROR_HTTP)

@@ -2160,3 +2160,67 @@ CString getNamebyTeleCode(CString& code)
 	}
 	return L"";
 }
+
+CString getFormatLeftTicketInfo(CString ticket)
+{
+	// O 01345 0 035
+	int len = ticket.GetLength();
+	CString formattedStr;
+	for(int i = 0; i < len / 10; i++)
+	{
+		// no seat takes priority
+		TCHAR subtyp = ticket[i * 10 + 6];
+		TCHAR typ = ticket[i * 10];
+		CString num = ticket.Mid(i * 10 + 7, 3);
+		if(subtyp == L'3')
+		{
+			formattedStr.AppendFormat(L"no seat: %s ", num);
+		}
+		else if(typ == L'9')
+		{
+			formattedStr.AppendFormat(L"business seat: %s ", num);
+		}
+		else if(typ == L'P')
+		{
+			formattedStr.AppendFormat(L"super seat: %s ", num);
+		}
+		else if(typ == L'M')
+		{
+			formattedStr.AppendFormat(L"first class seat: %s ", num);
+		}
+		else if(typ == L'O')
+		{
+			formattedStr.AppendFormat(L"second class seat: %s ", num);
+		}
+		else if(typ == L'6')
+		{
+			formattedStr.AppendFormat(L"super soft sleeper: %s ", num);
+		}
+		else if(typ == L'4')
+		{
+			formattedStr.AppendFormat(L"soft sleeper: %s ", num);
+		}
+		else if(typ == L'3')
+		{
+			formattedStr.AppendFormat(L"hard sleeper: %s ", num);
+		}
+		else if(typ == L'2')
+		{
+			formattedStr.AppendFormat(L"soft seat: %s ", num);
+		}
+		else if(typ == L'1')
+		{
+			formattedStr.AppendFormat(L"hard seat: %s ", num);
+		}
+		else if(typ == L'E')
+		{
+			formattedStr.AppendFormat(L"super soft seat: %s ", num);
+		}
+		else
+		{
+			formattedStr.AppendFormat(L"other seat: %s ", num);
+		}
+	}
+
+	return formattedStr;
+}

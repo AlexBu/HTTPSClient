@@ -34,7 +34,7 @@ protected:
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 
-	void InitDate();
+	
 
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
@@ -63,18 +63,15 @@ public:
 
 	void UpdateUserListConfig();
 	void UpdatePassListConfig();
-
+	void InitDate();
 private:
 	CString usernameStr;
 	CString passwordStr;
-
 	CString trainNo;
-
 	CString stationFrom;
 	CString stationTo;
 
 public:
-
 	CEdit outputBox;
 	CListCtrl listctrlPassengers;
 	UserInfo infoUser;

@@ -13,4 +13,5 @@ public:
 	CString from_station_nameGet( TicketInfo& input );
 	CString to_station_nameGet( TicketInfo& input );
 	CString passengerTicketsGet( PassInfo& passenger );
+	CString passengerStrBuild(CArray<PassInfo>& passengers);
 };

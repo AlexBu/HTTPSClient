@@ -33,8 +33,7 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		L"&orderRequest.to_station_name=%s"
 		L"&orderRequest.cancel_flag=%s"
 		L"&orderRequest.id_mode=%s"
-		L"&passengerTickets=%s"
-		L"&passengerTickets=%s"
+		L"%s"
 		L"&randCode=%s"
 		L"&orderRequest.reserve_flag=A"
 		L"&tFlag=%s"
@@ -52,8 +51,7 @@ void CCheckPage::BuildRequest( TicketInfo& input )
 		,to_station_nameGet(input)
 		,input.cancel_flag
 		,input.id_mode
-		,passengerTicketsGet(input.passengers[0])
-		,passengerTicketsGet(input.passengers[1])
+		,passengerStrBuild(input.passengers)
 		,input.randCode
 		,input.tFlag
 		);
@@ -73,7 +71,7 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 	matchStr = respStr;
 	pattern = L"\\\"errMsg\\\":{\\q}";
 	regex.patternLoad(pattern);
-	if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 1))
+	if(regex.contextMatch(matchStr, restStr) == TRUE)
 	{
 		regex.matchGet(0, output.errMsg);
 	}
@@ -82,17 +80,17 @@ void CCheckPage::ParseOutput( OrderInfo& output )
 	{
 		// get rest fields
 		matchStr = respStr;
-		restStr.Empty();
+
 		pattern = L"\\\"checkHuimd\\\":{\\q},\\\"check608\\\":{\\q},\\\"msg\\\":{\\q}";
 		regex.patternLoad(pattern);
-		if((regex.contextMatch(matchStr, restStr) == TRUE) && (regex.matchCount() == 3))
+		if(regex.contextMatch(matchStr, restStr) == TRUE)
 		{
 			regex.matchGet(0, output.checkHuimd);
 			regex.matchGet(1, output.check608);
 			regex.matchGet(2, output.msg);
 		}
 		matchStr = restStr;
-		restStr.Empty();
+
 
 		if(output.checkHuimd == L"\"N\"")
 		{
@@ -162,5 +160,15 @@ CString CCheckPage::passengerTicketsGet( PassInfo& passenger )
 		passenger.passNo,
 		passenger.mobileNo
 		);
+	return str;
+}
+
+CString CCheckPage::passengerStrBuild(CArray<PassInfo>& passengers)
+{
+	CString str;
+	for(int i = 0; i < passengers.GetCount(); i++)
+	{
+		str.AppendFormat(L"&passengerTickets=%s", passengerTicketsGet(passengers[i]));
+	}
 	return str;
 }

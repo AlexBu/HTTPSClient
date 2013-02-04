@@ -7,11 +7,6 @@ BOOL CRegex::patternLoad(CString& pattern)
 	return ( regularExpression.Parse( pattern ) != REPARSE_ERROR_OK ) ? FALSE : TRUE;
 }
 
-CString CRegex::patternGet()
-{
-	return patternString;
-}
-
 BOOL CRegex::contextMatch(CString& context, CString& rest)
 {
 	LPCTSTR afterMatch = NULL;
@@ -20,22 +15,16 @@ BOOL CRegex::contextMatch(CString& context, CString& rest)
 		rest = afterMatch;
 		return TRUE;
 	}
-	else
-	{
-		rest.Empty();
-		return FALSE;
-	}
-}
-
-DWORD CRegex::matchCount()
-{
-	return matchContext.m_uNumGroups;
+	return FALSE;
 }
 
 BOOL CRegex::matchGet( DWORD matchIndex, CString& result )
 {
 	if(matchIndex >= matchContext.m_uNumGroups)
+	{
+		result.Empty();
 		return FALSE;
+	}
 
 	const CAtlREMatchContext<>::RECHAR* szStart = 0;
 	const CAtlREMatchContext<>::RECHAR* szEnd = 0;
@@ -47,14 +36,4 @@ BOOL CRegex::matchGet( DWORD matchIndex, CString& result )
 	result.ReleaseBuffer(strSize);
 
 	return TRUE;
-}
-
-CRegex::CRegex()
-{
-
-}
-
-CRegex::~CRegex()
-{
-
 }

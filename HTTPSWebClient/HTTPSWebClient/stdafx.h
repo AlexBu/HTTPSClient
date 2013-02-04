@@ -39,6 +39,10 @@
 
 #include <winhttp.h>
 
+//#define LOG_TO_FILE
+//#define HTTPS_12306
+#define CDN_SWITCH
+
 // customized message
 #define WM_SETSTR	(WM_USER + 1)
 #define WM_LOGIN	(WM_USER + 2)

@@ -50,7 +50,7 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 	regex.patternLoad(pattern);
 
 	matchStr = respStr;
-	if( (regex.contextMatch(matchStr, restStr) == FALSE) || (regex.matchCount() != 1) )
+	if(regex.contextMatch(matchStr, restStr) == FALSE)
 	{
 		// no train
 		status = ERROR_NOTRAIN;
@@ -67,36 +67,34 @@ void CQueryPage::ParseOutput( TrainInfo& output )
 
 	matchStr = respStr;
 
-	status = -1;
+	status = ERROR_GENERAL;
 	while(regex.contextMatch(matchStr, restStr))
 	{
-		if(regex.matchCount() == 14)
+		CString groupStr;
+		regex.matchGet(0, groupStr);
+		// no ticket and no train
+		if(output.trainCode == groupStr)
 		{
-			CString groupStr;
-			regex.matchGet(0, groupStr);
-			// no ticket and no train
-			if(output.trainCode == groupStr)
-			{
-				regex.matchGet(1, output.duration);
-				regex.matchGet(2, output.trainStartTime);
-				regex.matchGet(3, output.trainNo);
-				regex.matchGet(4, output.stationFromCode);
-				regex.matchGet(5, output.stationToCode);
-				regex.matchGet(6, output.timeArrive);
-				regex.matchGet(7, output.stationFromName);
-				regex.matchGet(8, output.stationToName);
-				regex.matchGet(9, output.stationFromNo);
-				regex.matchGet(10, output.stationToNo);
-				regex.matchGet(11, output.infoDetail);
-				regex.matchGet(12, output.mmStr);
-				regex.matchGet(13, output.locationCode);
+			regex.matchGet(1, output.duration);
+			regex.matchGet(2, output.trainStartTime);
+			regex.matchGet(3, output.trainNo);
+			regex.matchGet(4, output.stationFromCode);
+			regex.matchGet(5, output.stationToCode);
+			regex.matchGet(6, output.timeArrive);
+			regex.matchGet(7, output.stationFromName);
+			regex.matchGet(8, output.stationToName);
+			regex.matchGet(9, output.stationFromNo);
+			regex.matchGet(10, output.stationToNo);
+			regex.matchGet(11, output.infoDetail);
+			regex.matchGet(12, output.mmStr);
+			regex.matchGet(13, output.locationCode);
 
-				status = 0;
-				break;
-			}
+			status = ERROR_OK;
+			break;
 		}
+
 		matchStr = restStr;
-		restStr.Empty();
+
 	}
 	if(status == ERROR_OK)
 	{

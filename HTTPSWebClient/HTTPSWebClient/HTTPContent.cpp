@@ -4,9 +4,6 @@
 #define MAX_CONTENT_SIZE	(1L*1024*1024)
 #define GB2312_CODEPAGE		(936)
 
-//#define HTTPS_12306
-//#define CDN_SWITCH
-
 CHTTPContent::CHTTPContent()
 	:siteAdr(L"")
 	,status(0)
