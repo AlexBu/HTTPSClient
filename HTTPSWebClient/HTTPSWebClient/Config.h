@@ -11,7 +11,7 @@ struct UserList
 struct PassList
 {
 	DWORD count;
-	CArray<PassInfo> pass;
+	CArray<PassengerInfo> pass;
 };
 
 struct CDNList
@@ -32,7 +32,7 @@ class CConfig
 {
 public:
 	CArray<UserInfo>& GetUser();
-	CArray<PassInfo>& GetPassenger();
+	CArray<PassengerInfo>& GetPassenger();
 	void SetUpdate();
 private:
 	BOOL LoadConfig();
@@ -41,7 +41,7 @@ private:
 	void LoadDword( CFile &file, DWORD& n );
 	void LoadString( CFile &file, CString& str );
 	void LoadUserInfo( CFile &file, UserInfo& userinfo );
-	void LoadPassInfo( CFile &file, PassInfo& passinfo );
+	void LoadPassInfo( CFile &file, PassengerInfo& passinfo );
 	void LoadUserList( CFile &file, UserList& userlist );
 	void LoadPassList( CFile &file, PassList& passlist );
 	void LoadCDNList( CFile &file, CDNList& cdnlist );
@@ -49,7 +49,7 @@ private:
 	void WriteDword( CFile &file, DWORD n );
 	void WriteString( CFile &file, CString& str );
 	void WriteUserInfo( CFile &file, UserInfo& userinfo );
-	void WritePassInfo( CFile &file, PassInfo& passinfo );
+	void WritePassInfo( CFile &file, PassengerInfo& passinfo );
 	void WriteUserList( CFile &file, UserList& userlist );
 	void WritePassList( CFile &file, PassList& passlist );
 	void WriteCDNList( CFile &file, CDNList& cdnlist );

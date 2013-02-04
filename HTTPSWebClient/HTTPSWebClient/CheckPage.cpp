@@ -150,7 +150,7 @@ CString CCheckPage::to_station_nameGet( TicketInfo& input )
 	return GetUTF8Str(input.to_station_name);
 }
 
-CString CCheckPage::passengerTicketsGet( PassInfo& passenger )
+CString CCheckPage::passengerTicketsGet( PassengerInfo& passenger )
 {
 	CString str(L"");
 	str.Format(L"%s%%2C0%%2C1%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
@@ -163,7 +163,7 @@ CString CCheckPage::passengerTicketsGet( PassInfo& passenger )
 	return str;
 }
 
-CString CCheckPage::passengerStrBuild(CArray<PassInfo>& passengers)
+CString CCheckPage::passengerStrBuild(CArray<PassengerInfo>& passengers)
 {
 	CString str;
 	for(int i = 0; i < passengers.GetCount(); i++)

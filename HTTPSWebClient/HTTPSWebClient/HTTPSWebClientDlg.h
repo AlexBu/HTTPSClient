@@ -44,9 +44,9 @@ protected:
 	afx_msg void OnBook();
 	afx_msg void OnSelectUser();
 	afx_msg void OnSelectPassenger();
-	afx_msg void OnNMDblclkListPassengerBoard(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnAddPassenger();
-	afx_msg void OnRemovePassenger();
+	afx_msg void OnNMDblclkListBoardPassenger(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnAddBoardPassenger();
+	afx_msg void OnRemoveBoardPassenger();
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -55,14 +55,14 @@ public:
 
 	void LoadConfig();
 
-	void UpdatePassengerListCtrl();
+	void UpdateBoardPassengerListCtrl();
 	void InitPassengerListCtrl();
 
 	void UpdateUser( UserInfo &userinfo );
-	void UpdateOneBoardPassenger( PassInfo& passinfo );
+	void UpdateOneBoardPassenger( PassengerInfo& passinfo );
 
 	void UpdateUserListConfig();
-	void UpdatePassListConfig();
+	void UpdatePassengerListConfig();
 	void InitDate();
 private:
 	CString usernameStr;
@@ -73,8 +73,8 @@ private:
 
 public:
 	CEdit outputBox;
-	CListCtrl listctrlPassengers;
-	UserInfo infoUser;
-	CArray<PassInfo> listPassengers;
+	CListCtrl ctrlPassengerList;
+	UserInfo dataUserInfo;
+	CArray<PassengerInfo> dataPassengerList;
 	CDateTimeCtrl ctrlDate;
 };

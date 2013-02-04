@@ -8,7 +8,7 @@ struct UserInfo
 
 
 
-struct PassInfo
+struct PassengerInfo
 {
 	CString name;
 	CString passTyp;
@@ -66,7 +66,7 @@ struct TicketInfo
 	CString cancel_flag;
 	CString id_mode;
 
-	CArray<PassInfo> passengers;
+	CArray<PassengerInfo> passengers;
 
 	CString checkbox9;
 	CString randCode;

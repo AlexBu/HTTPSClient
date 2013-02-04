@@ -25,5 +25,5 @@ public:
 
 public:
 	CListBox listboxPassenger;
-	CArray<PassInfo> selectedpass;
+	CArray<PassengerInfo> selectedpass;
 };

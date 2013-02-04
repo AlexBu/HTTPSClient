@@ -20,7 +20,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	PassInfo passenger;
+	PassengerInfo passenger;
 	virtual BOOL OnInitDialog();
 protected:
 	virtual void OnOK();

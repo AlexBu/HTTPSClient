@@ -38,7 +38,7 @@ BOOL CSelectPassenger::OnInitDialog()
 
 	
 	// display passenger list
-	CArray<PassInfo>& passlist = CConfig::GetConfig().GetPassenger();
+	CArray<PassengerInfo>& passlist = CConfig::GetConfig().GetPassenger();
 	for(int i = 0; i < passlist.GetCount(); i++)
 	{
 		listboxPassenger.InsertString(0, passlist[i].name);
@@ -51,7 +51,7 @@ BOOL CSelectPassenger::OnInitDialog()
 void CSelectPassenger::OnSelectPassenger()
 {
 	int selCount = listboxPassenger.GetSelCount();
-	CArray<PassInfo>& passlist = CConfig::GetConfig().GetPassenger();
+	CArray<PassengerInfo>& passlist = CConfig::GetConfig().GetPassenger();
 	CArray<int> selectedIndex;
 	selectedIndex.SetSize(selCount);
 	listboxPassenger.GetSelItems(selCount, selectedIndex.GetData());

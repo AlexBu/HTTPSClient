@@ -85,43 +85,43 @@ void CEditPassenger::LoadPassenger()
 	passidno = passenger.passNo;
 	passmobile = passenger.mobileNo;
 
-	if(passenger.passTyp == L"O")
-		cboxIdTyp.SetCurSel(0);
-	else if(passenger.passTyp == L"M")
-		cboxIdTyp.SetCurSel(1);
-	else if(passenger.passTyp == L"9")
-		cboxIdTyp.SetCurSel(2);
-	else if(passenger.passTyp == L"3")
-		cboxIdTyp.SetCurSel(3);
-	else if(passenger.passTyp == L"4")
-		cboxIdTyp.SetCurSel(4);
-	else if(passenger.passTyp == L"2")
-		cboxIdTyp.SetCurSel(5);
-	else if(passenger.passTyp == L"1")
-		cboxIdTyp.SetCurSel(6);
-	else if(passenger.passTyp == L"P")
-		cboxIdTyp.SetCurSel(7);
-	else if(passenger.passTyp == L"E")
-		cboxIdTyp.SetCurSel(8);
-	else if(passenger.passTyp == L"6")
-		cboxIdTyp.SetCurSel(9);
-	else if(passenger.passTyp == L"Z")
-		cboxIdTyp.SetCurSel(10);
-	else
-		cboxIdTyp.SetCurSel(0);
-
-	if(passenger.seatTyp == L"1")
+	if(passenger.seatTyp == L"O")
 		cboxSeatType.SetCurSel(0);
-	else if(passenger.seatTyp == L"2")
+	else if(passenger.seatTyp == L"M")
 		cboxSeatType.SetCurSel(1);
-	else if(passenger.seatTyp == L"C")
+	else if(passenger.seatTyp == L"9")
 		cboxSeatType.SetCurSel(2);
-	else if(passenger.seatTyp == L"G")
+	else if(passenger.seatTyp == L"3")
 		cboxSeatType.SetCurSel(3);
-	else if(passenger.seatTyp == L"B")
+	else if(passenger.seatTyp == L"4")
 		cboxSeatType.SetCurSel(4);
+	else if(passenger.seatTyp == L"2")
+		cboxSeatType.SetCurSel(5);
+	else if(passenger.seatTyp == L"1")
+		cboxSeatType.SetCurSel(6);
+	else if(passenger.seatTyp == L"P")
+		cboxSeatType.SetCurSel(7);
+	else if(passenger.seatTyp == L"E")
+		cboxSeatType.SetCurSel(8);
+	else if(passenger.seatTyp == L"6")
+		cboxSeatType.SetCurSel(9);
+	else if(passenger.seatTyp == L"Z")
+		cboxSeatType.SetCurSel(10);
 	else
 		cboxSeatType.SetCurSel(0);
+
+	if(passenger.passTyp == L"1")
+		cboxIdTyp.SetCurSel(0);
+	else if(passenger.passTyp == L"2")
+		cboxIdTyp.SetCurSel(1);
+	else if(passenger.passTyp == L"C")
+		cboxIdTyp.SetCurSel(2);
+	else if(passenger.passTyp == L"G")
+		cboxIdTyp.SetCurSel(3);
+	else if(passenger.passTyp == L"B")
+		cboxIdTyp.SetCurSel(4);
+	else
+		cboxIdTyp.SetCurSel(0);
 
 	UpdateData(FALSE);
 }
@@ -135,16 +135,16 @@ void CEditPassenger::SavePassenger()
 	passenger.mobileNo = passmobile;
 
 	CString idtypeList[] = {
-		L"O", L"M", L"9", 
-		L"3", L"4", L"2",
-		L"1", L"P", L"E",
-		L"6", L"Z"
+		L"1", L"2", L"C", L"G", L"B"
 	};
 
 	passenger.passTyp = idtypeList[cboxIdTyp.GetCurSel()];
 
 	CString seattypeList[] = {
-		L"1", L"2", L"C", L"G", L"B"
+		L"O", L"M", L"9", 
+		L"3", L"4", L"2",
+		L"1", L"P", L"E",
+		L"6", L"Z"
 	};
 
 	passenger.seatTyp = seattypeList[cboxSeatType.GetCurSel()];

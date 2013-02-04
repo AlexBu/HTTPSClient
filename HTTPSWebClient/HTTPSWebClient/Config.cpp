@@ -96,7 +96,7 @@ CArray<UserInfo>& CConfig::GetUser()
 	return cfgData.userlist.user;
 }
 
-CArray<PassInfo>& CConfig::GetPassenger()
+CArray<PassengerInfo>& CConfig::GetPassenger()
 {
 	return cfgData.passlist.pass;
 }
@@ -131,7 +131,7 @@ void CConfig::LoadUserInfo( CFile &file, UserInfo& userinfo )
 	LoadString(file, userinfo.pass);
 }
 
-void CConfig::LoadPassInfo( CFile &file, PassInfo& passinfo )
+void CConfig::LoadPassInfo( CFile &file, PassengerInfo& passinfo )
 {
 	LoadString(file, passinfo.name);
 	LoadString(file, passinfo.passTyp);
@@ -158,7 +158,7 @@ void CConfig::LoadPassList( CFile &file, PassList& passlist )
 
 	for(DWORD i = 0; i < passlist.count; i++)
 	{
-		PassInfo passinfo;
+		PassengerInfo passinfo;
 		LoadPassInfo(file, passinfo);
 		passlist.pass.Add(passinfo);
 	}
@@ -197,7 +197,7 @@ void CConfig::WriteUserInfo( CFile &file, UserInfo& userinfo )
 	WriteString(file, userinfo.pass);
 }
 
-void CConfig::WritePassInfo( CFile &file, PassInfo& passinfo )
+void CConfig::WritePassInfo( CFile &file, PassengerInfo& passinfo )
 {
 	WriteString(file, passinfo.name);
 	WriteString(file, passinfo.passTyp);
@@ -227,7 +227,7 @@ void CConfig::WritePassList( CFile &file, PassList& passlist )
 
 	for(DWORD i = 0; i < passlist.count; i++)
 	{
-		PassInfo& passinfo = passlist.pass[i];
+		PassengerInfo& passinfo = passlist.pass[i];
 		WritePassInfo(file, passinfo);
 	}
 }

@@ -34,7 +34,7 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
 	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
 	DDX_Control(pDX, IDC_EDIT_GET, outputBox);
-	DDX_Control(pDX, IDC_LIST_PASSENGER_BOARD, listctrlPassengers);
+	DDX_Control(pDX, IDC_LIST_PASSENGER_BOARD, ctrlPassengerList);
 	DDX_Control(pDX, IDC_DATETIMEPICKER_DATE, ctrlDate);
 }
 
@@ -49,9 +49,9 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_BOOK, &CHTTPSWebClientDlg::OnBook)
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_USER, &CHTTPSWebClientDlg::OnSelectUser)
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_PASS, &CHTTPSWebClientDlg::OnSelectPassenger)
-	ON_BN_CLICKED(IDC_BUTTON_ADDPASS, &CHTTPSWebClientDlg::OnAddPassenger)
-	ON_BN_CLICKED(IDC_BUTTON_REMOVEPASS, &CHTTPSWebClientDlg::OnRemovePassenger)
-	ON_NOTIFY(NM_DBLCLK, IDC_LIST_PASSENGER_BOARD, &CHTTPSWebClientDlg::OnNMDblclkListPassengerBoard)
+	ON_BN_CLICKED(IDC_BUTTON_ADDPASS, &CHTTPSWebClientDlg::OnAddBoardPassenger)
+	ON_BN_CLICKED(IDC_BUTTON_REMOVEPASS, &CHTTPSWebClientDlg::OnRemoveBoardPassenger)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST_PASSENGER_BOARD, &CHTTPSWebClientDlg::OnNMDblclkListBoardPassenger)
 END_MESSAGE_MAP()
 
 
@@ -135,11 +135,9 @@ void CHTTPSWebClientDlg::GetUserInfo()
 
 void CHTTPSWebClientDlg::GetPassengerInfo()
 {
-	//theApp.ticketInfo.randCode =  validateBookStr;
-
-	for(int i = 0; i < listPassengers.GetCount(); i++)
+	for(int i = 0; i < dataPassengerList.GetCount(); i++)
 	{
-		theApp.ticketInfo.passengers.Add(listPassengers[i]);
+		theApp.ticketInfo.passengers.Add(dataPassengerList[i]);
 	}
 
 	CTime departDate;
@@ -183,7 +181,7 @@ LRESULT CHTTPSWebClientDlg::OnLogin( WPARAM wParam, LPARAM lParam )
 	// update account
 	UpdateUserListConfig();
 	// update passenger
-	UpdatePassListConfig();
+	UpdatePassengerListConfig();
 
 	return 1;
 }
@@ -237,7 +235,7 @@ void CHTTPSWebClientDlg::OnSelectPassenger()
 		}
 
 		// update list ctrl
-		UpdatePassengerListCtrl();
+		UpdateBoardPassengerListCtrl();
 
 		UpdateData(FALSE);
 	}
@@ -245,24 +243,24 @@ void CHTTPSWebClientDlg::OnSelectPassenger()
 
 void CHTTPSWebClientDlg::InitPassengerListCtrl()
 {
-	listctrlPassengers.SetExtendedStyle(LVS_EX_FULLROWSELECT);
+	ctrlPassengerList.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
-	listctrlPassengers.InsertColumn(0, L"Name");
-	listctrlPassengers.InsertColumn(1, L"SeatTyp");
+	ctrlPassengerList.InsertColumn(0, L"Name");
+	ctrlPassengerList.InsertColumn(1, L"SeatTyp");
 
-	listctrlPassengers.SetColumnWidth(0, 150);
-	listctrlPassengers.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
+	ctrlPassengerList.SetColumnWidth(0, 150);
+	ctrlPassengerList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
 }
 
-void CHTTPSWebClientDlg::UpdatePassengerListCtrl()
+void CHTTPSWebClientDlg::UpdateBoardPassengerListCtrl()
 {
-	listctrlPassengers.DeleteAllItems();
-	for(int i = 0; i < listPassengers.GetCount(); i++)
+	ctrlPassengerList.DeleteAllItems();
+	for(int i = 0; i < dataPassengerList.GetCount(); i++)
 	{
-		PassInfo& passengerinfo = listPassengers[i];
+		PassengerInfo& passengerinfo = dataPassengerList[i];
 		// load into list ctrl
-		listctrlPassengers.InsertItem(i, passengerinfo.name);
-		listctrlPassengers.SetItemText(i, 1, passengerinfo.seatTyp);
+		ctrlPassengerList.InsertItem(i, passengerinfo.name);
+		ctrlPassengerList.SetItemText(i, 1, passengerinfo.seatTyp);
 	}
 }
 
@@ -296,25 +294,25 @@ void CHTTPSWebClientDlg::UpdateUserListConfig()
 		CConfig::GetConfig().SetUpdate();
 }
 
-void CHTTPSWebClientDlg::UpdatePassListConfig()
+void CHTTPSWebClientDlg::UpdatePassengerListConfig()
 {
 	// TODO
-	CArray<PassInfo>& passlist = CConfig::GetConfig().GetPassenger();
+	CArray<PassengerInfo>& passlist = CConfig::GetConfig().GetPassenger();
 	BOOL isFound = FALSE;
 	BOOL isUpdate = FALSE;
-	for(int i = 0; i < listPassengers.GetCount(); i++)
+	for(int i = 0; i < dataPassengerList.GetCount(); i++)
 	{
 		isFound = FALSE;
 		int needupdateindex = -1;
 		for(int j = 0; j < passlist.GetCount(); j++)
 		{
-			if(passlist[j].name == listPassengers[i].name)
+			if(passlist[j].name == dataPassengerList[i].name)
 			{
 				isFound = TRUE;
-				if( (passlist[j].passTyp != listPassengers[i].passTyp) 
-					|| (passlist[j].passNo != listPassengers[i].passNo) 
-					|| (passlist[j].mobileNo != listPassengers[i].mobileNo) 
-					|| (passlist[j].seatTyp != listPassengers[i].seatTyp) )
+				if( (passlist[j].passTyp != dataPassengerList[i].passTyp) 
+					|| (passlist[j].passNo != dataPassengerList[i].passNo) 
+					|| (passlist[j].mobileNo != dataPassengerList[i].mobileNo) 
+					|| (passlist[j].seatTyp != dataPassengerList[i].seatTyp) )
 				{
 					needupdateindex = j;
 				}
@@ -323,12 +321,12 @@ void CHTTPSWebClientDlg::UpdatePassListConfig()
 		}
 		if(needupdateindex > -1)
 		{
-			passlist[needupdateindex] = listPassengers[i];
+			passlist[needupdateindex] = dataPassengerList[i];
 			isUpdate = TRUE;
 		}
 		if(!isFound)
 		{
-			passlist.Add(listPassengers[i]);
+			passlist.Add(dataPassengerList[i]);
 			isUpdate = TRUE;
 		}
 	}
@@ -337,30 +335,30 @@ void CHTTPSWebClientDlg::UpdatePassListConfig()
 		CConfig::GetConfig().SetUpdate();
 }
 
-void CHTTPSWebClientDlg::OnAddPassenger()
+void CHTTPSWebClientDlg::OnAddBoardPassenger()
 {
-	if(listPassengers.GetCount() >= 5)
+	if(dataPassengerList.GetCount() >= 5)
 		MessageBox(L"can not add more passengers!", L"add passenger", MB_OK);
 	CEditPassenger dlg;
 	if(dlg.DoModal() == IDOK)
 	{
 		UpdateOneBoardPassenger(dlg.passenger);
-		UpdatePassengerListCtrl();
+		UpdateBoardPassengerListCtrl();
 	}
 }
 
-void CHTTPSWebClientDlg::OnRemovePassenger()
+void CHTTPSWebClientDlg::OnRemoveBoardPassenger()
 {
-	POSITION pos = listctrlPassengers.GetFirstSelectedItemPosition();
+	POSITION pos = ctrlPassengerList.GetFirstSelectedItemPosition();
 
 	while (pos)
 	{
-		int nItem = listctrlPassengers.GetNextSelectedItem(pos);
+		int nItem = ctrlPassengerList.GetNextSelectedItem(pos);
 		// remove this row
 		int rowtodel = -1;
-		for(int i = 0; i < listPassengers.GetCount(); i++)
+		for(int i = 0; i < dataPassengerList.GetCount(); i++)
 		{
-			if(listPassengers[i].name == listctrlPassengers.GetItemText(nItem, 0))
+			if(dataPassengerList[i].name == ctrlPassengerList.GetItemText(nItem, 0))
 			{
 				rowtodel = i;
 				break;
@@ -368,14 +366,14 @@ void CHTTPSWebClientDlg::OnRemovePassenger()
 		}
 		if(rowtodel > -1)
 		{
-			listPassengers.RemoveAt(rowtodel);
+			dataPassengerList.RemoveAt(rowtodel);
 		}
-		listctrlPassengers.DeleteItem(nItem);
+		ctrlPassengerList.DeleteItem(nItem);
 	}
 
 }
 
-void CHTTPSWebClientDlg::OnNMDblclkListPassengerBoard(NMHDR *pNMHDR, LRESULT *pResult)
+void CHTTPSWebClientDlg::OnNMDblclkListBoardPassenger(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	
@@ -384,45 +382,45 @@ void CHTTPSWebClientDlg::OnNMDblclkListPassengerBoard(NMHDR *pNMHDR, LRESULT *pR
 	if(pNMItemActivate->iItem == -1)
 		return;
 
-	for(int i = 0; i < listPassengers.GetCount(); i++)
+	for(int i = 0; i < dataPassengerList.GetCount(); i++)
 	{
-		if(listPassengers[i].name == listctrlPassengers.GetItemText(pNMItemActivate->iItem, 0))
+		if(dataPassengerList[i].name == ctrlPassengerList.GetItemText(pNMItemActivate->iItem, 0))
 		{
 			CEditPassenger dlg;
-			dlg.passenger = listPassengers[i];
+			dlg.passenger = dataPassengerList[i];
 			if(dlg.DoModal() == IDOK)
 			{
 				// update
 				UpdateOneBoardPassenger(dlg.passenger);
-				UpdatePassengerListCtrl();
+				UpdateBoardPassengerListCtrl();
 			}
 			break;
 		}
 	}
 }
 
-void CHTTPSWebClientDlg::UpdateOneBoardPassenger( PassInfo& passinfo )
+void CHTTPSWebClientDlg::UpdateOneBoardPassenger( PassengerInfo& passinfo )
 {
 	BOOL isFound = FALSE;
-	for(int j = 0; j < listPassengers.GetCount(); j++)
+	for(int j = 0; j < dataPassengerList.GetCount(); j++)
 	{
-		if(listPassengers[j].name == passinfo.name)
+		if(dataPassengerList[j].name == passinfo.name)
 		{
 			// overwrite
-			listPassengers[j] = passinfo;
+			dataPassengerList[j] = passinfo;
 			isFound = TRUE;
 			break;
 		}
 	}
 	if(isFound == FALSE)
 	{
-		if(listPassengers.GetCount() >= 5)
+		if(dataPassengerList.GetCount() >= 5)
 		{
 			// remove first
-			listPassengers.RemoveAt(0);
+			dataPassengerList.RemoveAt(0);
 		}
 		// append
-		listPassengers.Add(passinfo);
+		dataPassengerList.Add(passinfo);
 	}
 }
 
@@ -436,7 +434,7 @@ void CHTTPSWebClientDlg::UpdateUser( UserInfo &userinfo )
 void CHTTPSWebClientDlg::InitDate()
 {
 	CTime orderdate = CTime::GetCurrentTime();
-	CTimeSpan orderspan(19, 0, 0, 0);
+	CTimeSpan orderspan(20 - 1, 0, 0, 0);
 	orderdate += orderspan;
 	ctrlDate.SetTime(&orderdate);
 }

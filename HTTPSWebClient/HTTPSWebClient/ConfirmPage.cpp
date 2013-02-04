@@ -133,7 +133,7 @@ CString CConfirmPage::to_station_nameGet( TicketInfo& input )
 	return GetUTF8Str(input.to_station_name);
 }
 
-CString CConfirmPage::passengerTicketsGet( PassInfo& passenger )
+CString CConfirmPage::passengerTicketsGet( PassengerInfo& passenger )
 {
 	CString str(L"");
 	str.Format(L"%s%%2C0%%2C1%%2C%s%%2C%s%%2C%s%%2C%s%%2CN",
@@ -146,7 +146,7 @@ CString CConfirmPage::passengerTicketsGet( PassInfo& passenger )
 	return str;
 }
 
-CString CConfirmPage::passengerStrBuild(CArray<PassInfo>& passengers)
+CString CConfirmPage::passengerStrBuild(CArray<PassengerInfo>& passengers)
 {
 	CString str;
 	for(int i = 0; i < passengers.GetCount(); i++)
