@@ -26,3 +26,8 @@
 /samples
 /HTTPSWebClient/CDN_SWITCH_debug
 /HTTPSWebClient/HTTPSWebClient/CDN_SWITCH_debug
+/HTTPSWebClient/jpeglib/CDN_SWITCH_debug
+/HTTPSWebClient/pic_trans/CDN_SWITCH_debug
+
+/HTTPSWebClient/pnglib/CDN_SWITCH_debug
+/HTTPSWebClient/zlib/CDN_SWITCH_debug
