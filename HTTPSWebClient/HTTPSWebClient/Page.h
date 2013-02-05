@@ -1,7 +1,7 @@
 #pragma once
 #include "defines.h"
 #include "Info.h"
-#include "HTTPContent.h"
+#include "HTTPConnection.h"
 #include "regex.h"
 #include "Log.h"
 #include "Utility.h"
@@ -13,8 +13,8 @@ class CPage
 public:
 	CPage(void);
 	~CPage(void);
-	void GetPageStr( CHTTPContent& content );
-	void GetPageData( CHTTPContent& content );
+	void GetPageStr( CHTTPConnection& content );
+	void GetPageData( CHTTPConnection& content );
 	int GetStatus();
 	CString GetResponse();
 protected:

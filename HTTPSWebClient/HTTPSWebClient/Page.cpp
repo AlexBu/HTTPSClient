@@ -21,7 +21,7 @@ CPage::~CPage(void)
 	}
 }
 
-void CPage::GetPageStr( CHTTPContent& content )
+void CPage::GetPageStr( CHTTPConnection& content )
 {
 	CLog& log = CLog::GetLog();
 	BOOL sendResult;
@@ -66,7 +66,7 @@ CString CPage::GetResponse()
 	return respStr;
 }
 
-void CPage::GetPageData( CHTTPContent& content )
+void CPage::GetPageData( CHTTPConnection& content )
 {
 	CLog& log = CLog::GetLog();
 	BOOL sendResult;

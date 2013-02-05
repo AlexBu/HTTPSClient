@@ -9,7 +9,7 @@
 #include <atlrx.h>
 
 // delay second
-#define GENERAL_DELAY		(0)
+#define GENERAL_DELAY		(7)
 
 
 #ifdef _DEBUG

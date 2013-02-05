@@ -1,12 +1,16 @@
 #include "StdAfx.h"
-#include "HTTPContent.h"
+#include "HTTPConnection.h"
 
 #define MAX_CONTENT_SIZE	(1L*1024*1024)
 #define GB2312_CODEPAGE		(936)
 
-CHTTPContent::CHTTPContent()
+#define HTTP_OK					(0)
+#define HTTP_CONNECT_FAIL		(-1)
+#define HTTP_SEND_FAIL			(-2)
+
+CHTTPConnection::CHTTPConnection()
 	:siteAdr(L"")
-	,status(0)
+	,status(HTTP_OK)
 	,buffUsed(0)
 {
 	buff = new BYTE[MAX_CONTENT_SIZE];
@@ -31,7 +35,7 @@ CHTTPContent::CHTTPContent()
 #endif
 }
 
-CHTTPContent::~CHTTPContent(void)
+CHTTPConnection::~CHTTPConnection(void)
 {
 	if(buff)
 	{
@@ -39,7 +43,7 @@ CHTTPContent::~CHTTPContent(void)
 		buff = NULL;
 	}
 
-	if(status == 1)
+	if(status == HTTP_OK)
 	{
 		WinHttpCloseHandle(hConnect);
 		WinHttpCloseHandle(hSession);
@@ -49,37 +53,31 @@ CHTTPContent::~CHTTPContent(void)
 	buffUsed = 0;
 
 	cdnlist.RemoveAll();
-	/*while(!cdnlist.IsEmpty())
-	{
-		CString* str = cdnlist.GetAt(0);
-		cdnlist.RemoveAt(0);
-		delete str;
-	}*/
 }
 
-BOOL CHTTPContent::SendDatabyGet( const CString& URL )
+BOOL CHTTPConnection::SendDatabyGet( const CString& URL )
 {
 	SwitchSite();
 
 	HINTERNET hRequest = 0;
 
-	if (status == -1)
+	if (status == HTTP_CONNECT_FAIL)
 		goto SENDGETDATAFAIL;
 
 	buffUsed = 0;
 
 	// Create an HTTP request handle
 	hRequest = WinHttpOpenRequest( hConnect, L"GET",
-			URL,
-			NULL, 
-			WINHTTP_NO_REFERER,
-			WINHTTP_DEFAULT_ACCEPT_TYPES,
+		URL,
+		NULL, 
+		WINHTTP_NO_REFERER,
+		WINHTTP_DEFAULT_ACCEPT_TYPES,
 #ifdef HTTPS_12306
-			WINHTTP_FLAG_SECURE
+		WINHTTP_FLAG_SECURE
 #else
-			WINHTTP_FLAG_REFRESH
+		WINHTTP_FLAG_REFRESH
 #endif
-			);
+		);
 
 	if(hRequest == NULL)
 		goto SENDGETDATAFAIL;
@@ -174,7 +172,7 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 	if(_tstol(statuscode) != 200)
 	{
 		// see who will fall into this branch?
-		int i = 10;
+		goto SENDGETDATAFAIL;
 	}
 
 	// try to get cookie
@@ -212,23 +210,23 @@ BOOL CHTTPContent::SendDatabyGet( const CString& URL )
 	buffUsed = buffPostion;
 
 	WinHttpCloseHandle(hRequest);
-	status = 1;
+	status = HTTP_OK;
 	return TRUE;
 
 SENDGETDATAFAIL:
 	if(hRequest)
 		WinHttpCloseHandle(hRequest);
-	status = -1;
+	status = HTTP_SEND_FAIL;
 	return FALSE;
 }
 
-BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additionalData )
+BOOL CHTTPConnection::SendDatabyPost( const CString& URL, const CString& additionalData )
 {
 	SwitchSite();
 
 	HINTERNET hRequest = 0;
 
-	if (status == -1)
+	if (status == HTTP_CONNECT_FAIL)
 		goto SENDGETDATAFAIL;
 
 	buffUsed = 0;
@@ -413,20 +411,20 @@ BOOL CHTTPContent::SendDatabyPost( const CString& URL, const CString& additional
 	buffUsed = buffPostion;
 
 	WinHttpCloseHandle(hRequest);
-	status = 1;
+	status = HTTP_OK;
 	return TRUE;
 
 SENDGETDATAFAIL:
 	if(hRequest)
 		WinHttpCloseHandle(hRequest);
-	status = -1;
+	status = HTTP_SEND_FAIL;
 	return FALSE;
 }
 
-void CHTTPContent::GetResponseStr( CString& result )
+void CHTTPConnection::GetResponseStr( CString& result )
 {
 	result.Empty();
-	if(status == -1 || buffUsed == 0)
+	if(status != HTTP_OK || buffUsed == 0)
 		return;
 
 	LPTSTR unicodeBuf = NULL;
@@ -439,23 +437,22 @@ void CHTTPContent::GetResponseStr( CString& result )
 	}
 }
 
-void CHTTPContent::GetResponseRaw( BYTE* result, DWORD& size )
+void CHTTPConnection::GetResponseRaw( BYTE* result, DWORD& size )
 {
-	if(status == -1 || buffUsed == 0)
+	if(status != HTTP_OK || buffUsed == 0)
 		return;
 
-	//size = (size < buffUsed) ? size : buffUsed;
 	size = buffUsed;
 	memcpy(result, buff, size );
 }
 
-void CHTTPContent::ConnectInit( const CString& site )
+void CHTTPConnection::ConnectInit( const CString& site )
 {
 	CleanCookie();
 	ConnectSite(site);
 }
 
-void CHTTPContent::SwitchSite()
+void CHTTPConnection::SwitchSite()
 {
 #ifdef CDN_SWITCH
 	static int cdn_index = 0;
@@ -465,17 +462,17 @@ void CHTTPContent::SwitchSite()
 #endif
 }
 
-void CHTTPContent::SetRefStr( CString& str )
+void CHTTPConnection::SetRefStr( CString& str )
 {
 	refStr = str;
 }
 
-void CHTTPContent::CleanCookie()
+void CHTTPConnection::CleanCookie()
 {
 	cookieStr.Empty();
 }
 
-void CHTTPContent::ConnectSite( const CString& site )
+void CHTTPConnection::ConnectSite( const CString& site )
 {
 	siteAdr = site;
 
@@ -486,7 +483,7 @@ void CHTTPContent::ConnectSite( const CString& site )
 		WINHTTP_NO_PROXY_BYPASS, 0);
 
 	if (hSession == NULL)
-		status = -1;
+		status = HTTP_CONNECT_FAIL;
 
 	hConnect = WinHttpConnect( hSession, siteAdr,
 #ifdef HTTPS_12306
@@ -497,12 +494,12 @@ void CHTTPContent::ConnectSite( const CString& site )
 		0);
 
 	if(hConnect == NULL)
-		status = -1;
+		status = HTTP_CONNECT_FAIL;
 
-	status = 1;
+	status = HTTP_OK;
 }
 
-void CHTTPContent::GetCookie( HINTERNET hRequest )
+void CHTTPConnection::GetCookie( HINTERNET hRequest )
 {
 	TCHAR cookie[128], cookie2[128];
 	DWORD cookiesize = 128;

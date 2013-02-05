@@ -11,7 +11,7 @@
 #include "resource.h"		// Ö÷·ûºÅ
 #include "ValidationCtrl.h"
 #include "regex.h"
-#include "HTTPContent.h"
+#include "HTTPConnection.h"
 #include "Info.h"
 #include "RandPage.h"
 #include "LoginPage.h"
@@ -48,7 +48,7 @@ public:
 	void BookTickets();
 
 private:
-	CHTTPContent httpContent;
+	CHTTPConnection httpContent;
 	CRandPage randPage;
 	CLoginPage loginPage;
 	CQueryPage queryPage;

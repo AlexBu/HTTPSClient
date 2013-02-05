@@ -41,7 +41,7 @@
 
 //#define LOG_TO_FILE
 //#define HTTPS_12306
-#define CDN_SWITCH
+//#define CDN_SWITCH
 
 // customized message
 #define WM_SETSTR	(WM_USER + 1)

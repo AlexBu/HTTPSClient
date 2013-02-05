@@ -1,10 +1,10 @@
 #pragma once
 
-class CHTTPContent
+class CHTTPConnection
 {
 public:
-	CHTTPContent();
-	virtual ~CHTTPContent(void);
+	CHTTPConnection();
+	virtual ~CHTTPConnection(void);
 	void ConnectInit(const CString& site);
 	void ConnectSite(const CString& site);
 	void SwitchSite();
