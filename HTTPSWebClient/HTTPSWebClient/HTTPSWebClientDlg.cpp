@@ -19,8 +19,8 @@ CHTTPSWebClientDlg::CHTTPSWebClientDlg(CWnd* pParent /*=NULL*/)
 	, usernameStr(_T(""))
 	, passwordStr(_T(""))
 	, trainNo(_T(""))
-	, stationFrom(_T(""))
-	, stationTo(_T(""))
+	, fromStation(_T(""))
+	, toStation(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -31,8 +31,8 @@ void CHTTPSWebClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_USERNAME, usernameStr);
 	DDX_Text(pDX, IDC_EDIT_PASSWORD, passwordStr);
 	DDX_Text(pDX, IDC_EDIT_TRAIN, trainNo);
-	DDX_Text(pDX, IDC_EDIT_STATION_FROM, stationFrom);
-	DDX_Text(pDX, IDC_EDIT_STATION_TO, stationTo);
+	DDX_Text(pDX, IDC_EDIT_STATION_FROM, fromStation);
+	DDX_Text(pDX, IDC_EDIT_STATION_TO, toStation);
 	DDX_Control(pDX, IDC_EDIT_GET, outputBox);
 	DDX_Control(pDX, IDC_LIST_PASSENGER_BOARD, ctrlPassengerList);
 	DDX_Control(pDX, IDC_DATETIMEPICKER_DATE, ctrlDate);
@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(CHTTPSWebClientDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_ADDPASS, &CHTTPSWebClientDlg::OnAddBoardPassenger)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVEPASS, &CHTTPSWebClientDlg::OnRemoveBoardPassenger)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_PASSENGER_BOARD, &CHTTPSWebClientDlg::OnNMDblclkListBoardPassenger)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -68,7 +69,6 @@ BOOL CHTTPSWebClientDlg::OnInitDialog()
 
 	// init date ctrl
 	InitDate();
-
 
 	LoadConfig();
 
@@ -117,24 +117,19 @@ void CHTTPSWebClientDlg::OnBook()
 {
 	UpdateData(TRUE);
 
-	// fill up user info
-	GetUserInfo();
-	// fill up passengers info
-	GetPassengerInfo();
+	// collect input info
+	CollectInputInfo();
 
 	theApp.BookTickets();
 	// set response
 	UpdateData(FALSE);
 }
 
-void CHTTPSWebClientDlg::GetUserInfo()
+void CHTTPSWebClientDlg::CollectInputInfo()
 {
 	theApp.loginInfo.username = usernameStr;
 	theApp.loginInfo.password = passwordStr;
-}
 
-void CHTTPSWebClientDlg::GetPassengerInfo()
-{
 	for(int i = 0; i < dataPassengerList.GetCount(); i++)
 	{
 		theApp.ticketInfo.passengers.Add(dataPassengerList[i]);
@@ -144,10 +139,10 @@ void CHTTPSWebClientDlg::GetPassengerInfo()
 	ctrlDate.GetTime(departDate);
 	CString str = departDate.Format(L"%Y-%m-%d");
 	theApp.queryInfo.departDate = str;
-	theApp.queryInfo.fromStation = stationFrom;
-	theApp.queryInfo.toStation = stationTo;
-	theApp.trainInfo.stationFromTeName = stationFrom;
-	theApp.trainInfo.stationToTeName = stationTo;
+	theApp.queryInfo.fromStation = fromStation;
+	theApp.queryInfo.toStation = toStation;
+	theApp.trainInfo.stationFromTeName = fromStation;
+	theApp.trainInfo.stationToTeName = toStation;
 	theApp.trainInfo.trainCode = trainNo;
 	theApp.trainInfo.trainDate = str;
 	theApp.trainInfo.trainRoundDate = str;
@@ -206,6 +201,10 @@ LRESULT CHTTPSWebClientDlg::OnGetCode( WPARAM wParam, LPARAM lParam )
 void CHTTPSWebClientDlg::LoadConfig()
 {
 	InitPassengerListCtrl();
+
+	SetLastCloseInput();
+
+	UpdateBoardPassengerListCtrl();
 }
 
 void CHTTPSWebClientDlg::OnSelectUser()
@@ -439,3 +438,48 @@ void CHTTPSWebClientDlg::InitDate()
 	ctrlDate.SetTime(&orderdate);
 }
 
+void CHTTPSWebClientDlg::GetLastCloseInput()
+{
+	InputInfo& input = CConfig::GetConfig().GetInput();
+	input.userinfo.name = usernameStr;
+	input.userinfo.pass = passwordStr;
+	input.passengerlist.pass.RemoveAll();
+	for(int i = 0; i < dataPassengerList.GetCount(); i++)
+	{
+		input.passengerlist.pass.Add(dataPassengerList[i]);
+	}
+	input.passengerlist.count = input.passengerlist.pass.GetCount();
+	input.fromStation = fromStation;
+	input.toStation = toStation;
+	input.trainNo = trainNo;
+
+	CTime departDate;
+	ctrlDate.GetTime(departDate);
+	input.date = departDate.Format(L"%Y-%m-%d");
+}
+
+void CHTTPSWebClientDlg::OnClose()
+{
+	UpdateData(TRUE);
+	GetLastCloseInput();
+	CConfig::GetConfig().SetUpdate();
+	CConfig::GetConfig().ReleaseConfig();
+	CDialog::OnClose();
+}
+
+void CHTTPSWebClientDlg::SetLastCloseInput()
+{
+	InputInfo& input = CConfig::GetConfig().GetInput();
+	usernameStr = input.userinfo.name;
+	passwordStr = input.userinfo.pass;
+
+	dataPassengerList.RemoveAll();
+	for(int i = 0; i < input.passengerlist.pass.GetCount(); i++)
+	{
+		dataPassengerList.Add(input.passengerlist.pass[i]);
+	}
+
+	fromStation = input.fromStation;
+	toStation = input.toStation;
+	trainNo = input.trainNo;
+}

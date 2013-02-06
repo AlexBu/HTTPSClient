@@ -7,19 +7,15 @@ CConfig::CConfig(void)
 	LoadConfig();
 }
 
-CConfig::~CConfig(void)
+CConfig::~CConfig( void )
 {
+
 }
 
 CConfig& CConfig::GetConfig()
 {
 	static CConfig config;
 	return config;
-}
-
-CConfig& CConfig::operator=( CConfig const& config )
-{
-	return GetConfig();
 }
 
 BOOL CConfig::LoadConfig()
@@ -48,6 +44,9 @@ BOOL CConfig::LoadConfig()
 	// cdn list
 	LoadCDNList(configFile, cfgData.cdnlist);
 
+	// input info
+	LoadInputInfo(configFile, cfgData.lastClostInfo);
+
 	configFile.Close();
 	return TRUE;
 }
@@ -64,16 +63,19 @@ BOOL CConfig::SaveConfig()
 	}
 
 	// version
-	WriteString(configFile, cfgData.version);
+	SaveString(configFile, cfgData.version);
 
 	// user list
-	WriteUserList(configFile, cfgData.userlist);
+	SaveUserList(configFile, cfgData.userlist);
 
 	// pass list
-	WritePassList(configFile, cfgData.passlist);
+	SavePassList(configFile, cfgData.passlist);
 
 	// cdn list
-	WriteCDNList(configFile, cfgData.cdnlist);
+	SaveCDNList(configFile, cfgData.cdnlist);
+
+	// input info
+	SaveInputInfo(configFile, cfgData.lastClostInfo);
 
 	configFile.Close();
 	return TRUE;
@@ -99,6 +101,11 @@ CArray<UserInfo>& CConfig::GetUser()
 CArray<PassengerInfo>& CConfig::GetPassenger()
 {
 	return cfgData.passlist.pass;
+}
+
+InputInfo& CConfig::GetInput()
+{
+	return cfgData.lastClostInfo;
 }
 
 void CConfig::LoadDword( CFile &file, DWORD& n )
@@ -152,7 +159,7 @@ void CConfig::LoadUserList( CFile &file, UserList& userlist )
 	}
 }
 
-void CConfig::LoadPassList( CFile &file, PassList& passlist )
+void CConfig::LoadPassList( CFile &file, PassengerList& passlist )
 {
 	LoadDword(file, passlist.count);
 
@@ -176,12 +183,22 @@ void CConfig::LoadCDNList( CFile &file, CDNList& cdnlist )
 	}
 }
 
-void CConfig::WriteDword( CFile &file, DWORD n )
+void CConfig::LoadInputInfo( CFile &file, InputInfo& inputinfo )
+{
+	LoadUserInfo(file, inputinfo.userinfo);
+	LoadPassList(file, inputinfo.passengerlist);
+	LoadString(file, inputinfo.date);
+	LoadString(file, inputinfo.fromStation);
+	LoadString(file, inputinfo.toStation);
+	LoadString(file, inputinfo.trainNo);
+}
+
+void CConfig::SaveDword( CFile &file, DWORD n )
 {
 	file.Write(&n, sizeof(DWORD));
 }
 
-void CConfig::WriteString( CFile &file, CString& str )
+void CConfig::SaveString( CFile &file, CString& str )
 {
 	DWORD count = str.GetLength() + 1;
 	file.Write(&count, sizeof(DWORD));
@@ -191,56 +208,66 @@ void CConfig::WriteString( CFile &file, CString& str )
 	delete []buf;
 }
 
-void CConfig::WriteUserInfo( CFile &file, UserInfo& userinfo )
+void CConfig::SaveUserInfo( CFile &file, UserInfo& userinfo )
 {
-	WriteString(file, userinfo.name);
-	WriteString(file, userinfo.pass);
+	SaveString(file, userinfo.name);
+	SaveString(file, userinfo.pass);
 }
 
-void CConfig::WritePassInfo( CFile &file, PassengerInfo& passinfo )
+void CConfig::SavePassInfo( CFile &file, PassengerInfo& passinfo )
 {
-	WriteString(file, passinfo.name);
-	WriteString(file, passinfo.passTyp);
-	WriteString(file, passinfo.passNo);
-	WriteString(file, passinfo.mobileNo);
-	WriteString(file, passinfo.seatTyp);
+	SaveString(file, passinfo.name);
+	SaveString(file, passinfo.passTyp);
+	SaveString(file, passinfo.passNo);
+	SaveString(file, passinfo.mobileNo);
+	SaveString(file, passinfo.seatTyp);
 }
 
-void CConfig::WriteUserList( CFile &file, UserList& userlist )
+void CConfig::SaveUserList( CFile &file, UserList& userlist )
 {
 	userlist.count = userlist.user.GetCount();
 
-	WriteDword(file, userlist.count);
+	SaveDword(file, userlist.count);
 
 	for(DWORD i = 0; i < userlist.count; i++)
 	{
 		UserInfo& userinfo = userlist.user[i];
-		WriteUserInfo(file, userinfo);
+		SaveUserInfo(file, userinfo);
 	}
 }
 
-void CConfig::WritePassList( CFile &file, PassList& passlist )
+void CConfig::SavePassList( CFile &file, PassengerList& passlist )
 {
 	passlist.count = passlist.pass.GetCount();
 
-	WriteDword(file, passlist.count);
+	SaveDword(file, passlist.count);
 
 	for(DWORD i = 0; i < passlist.count; i++)
 	{
 		PassengerInfo& passinfo = passlist.pass[i];
-		WritePassInfo(file, passinfo);
+		SavePassInfo(file, passinfo);
 	}
 }
 
-void CConfig::WriteCDNList( CFile &file, CDNList& cdnlist )
+void CConfig::SaveCDNList( CFile &file, CDNList& cdnlist )
 {
 	cdnlist.count = cdnlist.ip.GetCount();
 
-	WriteDword(file, cdnlist.count);
+	SaveDword(file, cdnlist.count);
 
 	for(DWORD i = 0; i < cdnlist.count; i++)
 	{
 		CString& str = cdnlist.ip[i];
-		WriteString(file, str);
+		SaveString(file, str);
 	}
+}
+
+void CConfig::SaveInputInfo( CFile &file, InputInfo& inputinfo )
+{
+	SaveUserInfo(file, inputinfo.userinfo);
+	SavePassList(file, inputinfo.passengerlist);
+	SaveString(file, inputinfo.date);
+	SaveString(file, inputinfo.fromStation);
+	SaveString(file, inputinfo.toStation);
+	SaveString(file, inputinfo.trainNo);
 }

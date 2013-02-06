@@ -46,17 +46,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 public:
 	void BookTickets();
-
 private:
-	CHTTPConnection httpContent;
-	CRandPage randPage;
-	CLoginPage loginPage;
-	CQueryPage queryPage;
-	CBookPage bookPage;
-	CCheckPage checkPage;
-	CQueuePage queuePage;
-	CConfirmPage confirmPage;
-	CWaitPage waitPage;
 	CLoginValPage loginValPage;
 	CBookValPage bookValPage;
 public:
@@ -79,17 +69,19 @@ public:
 	void GetLoginValCodeInput();
 	void GetBookValCodeInput();
 
-	int GetLoginValPageAction();
-	int GetBookValPageAction();
-	int GetRandPageAction();
-	int GetLoginPageAction();
-	int GetQueryPageAction();
-	int GetBookPageAction();
-	int GetCheckPageAction();
-	int GetQueuePageAction();
-	int GetConfirmPageAction();
-	int GetWaitPageAction();
+	int GetLoginValPageAction(CHTTPConnection& httpContent);
+	int GetBookValPageAction(CHTTPConnection& httpContent);
+	int GetRandPageAction(CHTTPConnection& httpContent);
+	int GetLoginPageAction(CHTTPConnection& httpContent);
+	int GetQueryPageAction(CHTTPConnection& httpContent);
+	int GetBookPageAction(CHTTPConnection& httpContent);
+	int GetCheckPageAction(CHTTPConnection& httpContent);
+	int GetQueuePageAction(CHTTPConnection& httpContent);
+	int GetConfirmPageAction(CHTTPConnection& httpContent);
+	int GetWaitPageAction(CHTTPConnection& httpContent);
 
-	int ResetHttpContent();
+	int ResetHttpContent(CHTTPConnection& httpContent);
+	void CDNListProbe( CHTTPConnection& httpContent );
+
 };
 extern CHTTPSWebClientApp theApp;

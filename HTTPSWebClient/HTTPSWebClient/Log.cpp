@@ -13,11 +13,6 @@ CLog::CLog(void)
 #endif
 }
 
-CLog::CLog( const CLog& log )
-{
-
-}
-
 CLog::~CLog(void)
 {
 #ifdef LOG_TO_FILE
@@ -43,9 +38,4 @@ CLog& CLog::GetLog()
 {
 	static CLog log;
 	return log;
-}
-
-CLog& CLog::operator=( CLog const& log )
-{
-	return GetLog();
 }

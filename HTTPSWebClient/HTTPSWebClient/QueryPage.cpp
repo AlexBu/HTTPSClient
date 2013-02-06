@@ -11,6 +11,17 @@ CQueryPage::~CQueryPage(void)
 
 void CQueryPage::BuildRequest( QueryInfo& input )
 {
+	static int i;
+	CString str;
+	if(i%2)
+	{
+		str = L"00";
+	}
+	else
+	{
+		str = L"18";
+	}
+	i++;
 	reqStr.Format( L"/otsweb/order/querySingleAction.do?method=queryLeftTicket"
 		L"&orderRequest.train_date=%s"
 		L"&orderRequest.from_station_telecode=%s"
@@ -20,10 +31,11 @@ void CQueryPage::BuildRequest( QueryInfo& input )
 		L"&trainClass=QB%%23D%%23Z%%23T%%23K%%23QT%%23"
 		L"&includeStudent=00"
 		L"&seatTypeAndNum="
-		L"&orderRequest.start_time_str=00%%3A00--24%%3A00",
+		L"&orderRequest.start_time_str=%s%%3A00--24%%3A00",
 		input.departDate,
 		from_station_telecodeGet(input),
 		to_station_telecodeGet(input)
+		,str
 		);
 	refStr = L"/otsweb/order/querySingleAction.do?method=init";
 }

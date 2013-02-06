@@ -6,8 +6,6 @@ struct UserInfo
 	CString pass;
 };
 
-
-
 struct PassengerInfo
 {
 	CString name;
@@ -16,8 +14,6 @@ struct PassengerInfo
 	CString mobileNo;
 	CString seatTyp;
 };
-
-
 
 struct LoginInfo
 {

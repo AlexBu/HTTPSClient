@@ -37,3 +37,27 @@ BOOL CRegex::matchGet( DWORD matchIndex, CString& result )
 
 	return TRUE;
 }
+
+BOOL CRegex::GetStringByPattern(CStringArray& strList, CString& content, CString& pattern)
+{
+	if( regularExpression.Parse( pattern ) != REPARSE_ERROR_OK )
+		return FALSE;
+	LPCTSTR afterMatch = NULL;
+	if(!regularExpression.Match( content, &matchContext, &afterMatch))
+		return FALSE;
+
+	for(UINT i = 0; i < matchContext.m_uNumGroups; i++)
+	{
+		const CAtlREMatchContext<>::RECHAR* szStart = 0;
+		const CAtlREMatchContext<>::RECHAR* szEnd = 0;
+		matchContext.GetMatch(i, &szStart, &szEnd);
+
+		DWORD strSize = szEnd - szStart;
+		CString str;
+		LPTSTR strBuf = str.GetBuffer(strSize + 1);
+		memcpy(strBuf, szStart, strSize*sizeof(TCHAR));
+		str.ReleaseBuffer(strSize);
+		strList.Add(str);
+	}
+	return TRUE;
+}

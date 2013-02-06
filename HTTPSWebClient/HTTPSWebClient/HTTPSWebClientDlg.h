@@ -47,11 +47,11 @@ protected:
 	afx_msg void OnNMDblclkListBoardPassenger(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnAddBoardPassenger();
 	afx_msg void OnRemoveBoardPassenger();
+	afx_msg void OnClose();
 	DECLARE_MESSAGE_MAP()
 
 public:
-	void GetPassengerInfo();
-	void GetUserInfo();
+	void CollectInputInfo();
 
 	void LoadConfig();
 
@@ -64,12 +64,14 @@ public:
 	void UpdateUserListConfig();
 	void UpdatePassengerListConfig();
 	void InitDate();
+	void GetLastCloseInput();
+	void SetLastCloseInput();
 private:
 	CString usernameStr;
 	CString passwordStr;
 	CString trainNo;
-	CString stationFrom;
-	CString stationTo;
+	CString fromStation;
+	CString toStation;
 
 public:
 	CEdit outputBox;

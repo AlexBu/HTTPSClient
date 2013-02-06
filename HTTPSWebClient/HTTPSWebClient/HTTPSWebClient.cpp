@@ -9,7 +9,7 @@
 #include <atlrx.h>
 
 // delay second
-#define GENERAL_DELAY		(7)
+#define GENERAL_DELAY		(5)
 
 
 #ifdef _DEBUG
@@ -84,65 +84,74 @@ UINT AFX_CDECL CHTTPSWebClientApp::BookWorker( LPVOID param )
 
 	CHTTPSWebClientApp* app = (CHTTPSWebClientApp*)param;
 
+	CHTTPConnection httpContent;
+
 	// build a state table
 	STATUS state_table[12][16] = {
 		//ok		general	http	logic	val		user	pass	overl	noseat	order	many	real	cancel	inqueue	server	notrain
 		{LOGINV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT	},	//START
-		{RAND,		EXIT,	START,	EXIT,	LOGINV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	LOGINV,	EXIT	},	//LOGINV
-		{LOGIN,		RAND,	START,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	RAND,	EXIT	},	//RAND
-		{QUERY,		LOGINV,	START,	EXIT,	LOGINV,	EXIT,	EXIT,	RAND,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	LOGIN,	EXIT	},	//LOGIN
-		{BOOK,		QUERY,	START,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT	},	//QUERY
-		{BOOKV,		QUERY,	START,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOK,	EXIT	},	//BOOK
-		{CHECK,		BOOKV,	START,	EXIT,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOKV,	EXIT	},	//BOOKV
-		{QUEUE,		CHECK,	START,	BOOK,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	CHECK,	EXIT	},	//CHECK
-		{CONFRM,	QUEUE,	START,	BOOK,	QUEUE,	EXIT,	EXIT,	QUEUE,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUEUE,	EXIT	},	//QUEUE
-		{WAIT,		CONFRM,	START,	BOOK,	CONFRM,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	CONFRM,	EXIT	},	//CONFRM
-		{EXIT,		WAIT,	EXIT,	EXIT,	WAIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	WAIT,	WAIT,	EXIT	},	//WAIT
+		{RAND,		EXIT,	LOGINV,	EXIT,	LOGINV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	LOGINV,	EXIT	},	//LOGINV
+		{LOGIN,		RAND,	RAND,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	RAND,	EXIT	},	//RAND
+		{QUERY,		LOGINV,	LOGIN,	EXIT,	LOGINV,	EXIT,	EXIT,	RAND,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	LOGIN,	EXIT	},	//LOGIN
+		{QUERY,		QUERY,	QUERY,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT	},	//QUERY
+		{BOOKV,		QUERY,	BOOK,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUERY,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOK,	EXIT	},	//BOOK
+		{CHECK,		BOOKV,	BOOKV,	EXIT,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	BOOKV,	EXIT	},	//BOOKV
+		{QUEUE,		CHECK,	CHECK,	BOOK,	BOOKV,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	CHECK,	EXIT	},	//CHECK
+		{CONFRM,	QUEUE,	QUEUE,	BOOK,	QUEUE,	EXIT,	EXIT,	QUEUE,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	QUEUE,	EXIT	},	//QUEUE
+		{WAIT,		CONFRM,	CONFRM,	BOOK,	CONFRM,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	CONFRM,	EXIT	},	//CONFRM
+		{EXIT,		WAIT,	WAIT,	EXIT,	WAIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	WAIT,	WAIT,	EXIT	},	//WAIT
 		{EXIT,		EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT,	EXIT	},	//EXIT
 	};
 	STATUS current_status = START;
 	int return_val = ERROR_OK;
 	BOOL machine_stop = FALSE;
+
+#ifdef CDN_SWITCH
+	// start a cdn list probe
+	app->CDNListProbe(httpContent);
+#endif
+
+	// start state machine
 	while(TRUE)
 	{
 		// do action
 		switch(current_status)
 		{
 		case START:
-			return_val = app->ResetHttpContent();
+			return_val = app->ResetHttpContent(httpContent);
 			break;
 		case LOGINV:
-			return_val = app->GetLoginValPageAction();
+			return_val = app->GetLoginValPageAction(httpContent);
 			break;
 		case RAND:
-			return_val = app->GetRandPageAction();
+			return_val = app->GetRandPageAction(httpContent);
 			break;
 		case LOGIN:
-			return_val = app->GetLoginPageAction();
+			return_val = app->GetLoginPageAction(httpContent);
 			// do something after login success
 			if(return_val == ERROR_OK)
 				app->m_pMainWnd->SendMessage(WM_LOGIN, 0, 0);
 			break;
 		case QUERY:
-			return_val = app->GetQueryPageAction();
+			return_val = app->GetQueryPageAction(httpContent);
 			break;
 		case BOOK:
-			return_val = app->GetBookPageAction();
+			return_val = app->GetBookPageAction(httpContent);
 			break;
 		case BOOKV:
-			return_val = app->GetBookValPageAction();
+			return_val = app->GetBookValPageAction(httpContent);
 			break;
 		case CHECK:
-			return_val = app->GetCheckPageAction();
+			return_val = app->GetCheckPageAction(httpContent);
 			break;
 		case QUEUE:
-			return_val = app->GetQueuePageAction();
+			return_val = app->GetQueuePageAction(httpContent);
 			break;
 		case CONFRM:
-			return_val = app->GetConfirmPageAction();
+			return_val = app->GetConfirmPageAction(httpContent);
 			break;
 		case WAIT:
-			return_val = app->GetWaitPageAction();
+			return_val = app->GetWaitPageAction(httpContent);
 			break;
 		case EXIT:
 			// fall through
@@ -162,7 +171,7 @@ UINT AFX_CDECL CHTTPSWebClientApp::BookWorker( LPVOID param )
 		{
 			// log and exit
 			CString statusMsg;
-			statusMsg.Format(L"status machine exit, exit code: %d", current_status);
+			statusMsg.Format(L"status machine exit, status: %d, exit code: %d", current_status, return_val);
 			app->SendString(statusMsg);
 		}
 		current_status = next_status;
@@ -223,7 +232,7 @@ void CHTTPSWebClientApp::SendString( CString &msg )
 	m_pMainWnd->SendMessage(WM_SETSTR, 0, (LPARAM)(LPCTSTR)msg);
 }
 
-int CHTTPSWebClientApp::GetLoginValPageAction()
+int CHTTPSWebClientApp::GetLoginValPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
@@ -269,7 +278,7 @@ int CHTTPSWebClientApp::GetLoginValPageAction()
 	return loginValStatus;
 }
 
-int CHTTPSWebClientApp::GetBookValPageAction()
+int CHTTPSWebClientApp::GetBookValPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
@@ -314,14 +323,16 @@ int CHTTPSWebClientApp::GetBookValPageAction()
 	return bookValStatus;
 }
 
-int CHTTPSWebClientApp::GetRandPageAction()
+int CHTTPSWebClientApp::GetRandPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
+
+	CRandPage randPage;
 
 	statusMsg.Format(L"request login random number");
 	SendString(statusMsg);
 
-	// post request to get rand number
+	CLoginValPage loginValPage;
 	randPage.BuildRequest();
 	randPage.GetPageStr(httpContent);
 	randPage.ParseOutput(loginInfo);
@@ -338,13 +349,14 @@ int CHTTPSWebClientApp::GetRandPageAction()
 	return loginRandStatus;
 }
 
-int CHTTPSWebClientApp::GetLoginPageAction()
+int CHTTPSWebClientApp::GetLoginPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
 	statusMsg.Format(L"send login request");
 	SendString(statusMsg);
 
+	CLoginPage loginPage;
 	loginPage.BuildRequest(loginInfo);
 	loginPage.GetPageStr(httpContent);
 	loginPage.ParseOutput();
@@ -365,7 +377,7 @@ int CHTTPSWebClientApp::GetLoginPageAction()
 	return loginStatus;
 }
 
-int CHTTPSWebClientApp::GetQueryPageAction()
+int CHTTPSWebClientApp::GetQueryPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
@@ -373,6 +385,7 @@ int CHTTPSWebClientApp::GetQueryPageAction()
 	SendString(statusMsg);
 
 	CLog::GetLog().AddLog(L"query action start");
+	CQueryPage queryPage;
 	queryPage.BuildRequest(queryInfo);
 	queryPage.GetPageStr(httpContent);
 	queryPage.ParseOutput(trainInfo);
@@ -399,13 +412,15 @@ int CHTTPSWebClientApp::GetQueryPageAction()
 	return queryStatus;
 }
 
-int CHTTPSWebClientApp::GetBookPageAction()
+int CHTTPSWebClientApp::GetBookPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
 	statusMsg.Format(L"booking tickets...");
 	SendString(statusMsg);
 	CLog::GetLog().AddLog(L"book action start");
+
+	CBookPage bookPage;
 	bookPage.BuildRequest(trainInfo);
 	bookPage.GetPageStr(httpContent);
 	bookPage.ParseOutput(ticketInfo);
@@ -431,13 +446,15 @@ int CHTTPSWebClientApp::GetBookPageAction()
 	return bookStatus;
 }
 
-int CHTTPSWebClientApp::GetCheckPageAction()
+int CHTTPSWebClientApp::GetCheckPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
 	statusMsg.Format(L"checking order...");
 	SendString(statusMsg);
 	CLog::GetLog().AddLog(L"check action start");
+
+	CCheckPage checkPage;
 	checkPage.BuildRequest(ticketInfo);
 	checkPage.GetPageStr(httpContent);
 	checkPage.ParseOutput(orderInfo);
@@ -469,13 +486,15 @@ int CHTTPSWebClientApp::GetCheckPageAction()
 	return checkStatus;
 }
 
-int CHTTPSWebClientApp::GetQueuePageAction()
+int CHTTPSWebClientApp::GetQueuePageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
 	statusMsg.Format(L"queueing order...");
 	SendString(statusMsg);
 	CLog::GetLog().AddLog(L"queue action start");
+
+	CQueuePage queuePage;
 	queuePage.BuildRequest(ticketInfo);
 	queuePage.GetPageStr(httpContent);
 	queuePage.ParseOutput(orderInfo);
@@ -506,13 +525,15 @@ int CHTTPSWebClientApp::GetQueuePageAction()
 	return queueStatus;
 }
 
-int CHTTPSWebClientApp::GetConfirmPageAction()
+int CHTTPSWebClientApp::GetConfirmPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
 	statusMsg.Format(L"confirming order...");
 	SendString(statusMsg);
 	CLog::GetLog().AddLog(L"confirm action start");
+
+	CConfirmPage confirmPage;
 	confirmPage.BuildRequest(ticketInfo);
 	confirmPage.GetPageStr(httpContent);
 	confirmPage.ParseOutput(orderInfo);
@@ -545,13 +566,15 @@ int CHTTPSWebClientApp::GetConfirmPageAction()
 	return confirmStatus;
 }
 
-int CHTTPSWebClientApp::GetWaitPageAction()
+int CHTTPSWebClientApp::GetWaitPageAction(CHTTPConnection& httpContent)
 {
 	CString statusMsg;
 
 	statusMsg.Format(L"waiting for result...");
 	SendString(statusMsg);
 	CLog::GetLog().AddLog(L"wait action start");
+
+	CWaitPage waitPage;
 	waitPage.BuildRequest(orderInfo);
 	waitPage.GetPageStr(httpContent);
 	waitPage.ParseOutput(orderInfo);
@@ -583,8 +606,14 @@ int CHTTPSWebClientApp::GetWaitPageAction()
 	return waitStatus;
 }
 
-int CHTTPSWebClientApp::ResetHttpContent()
+int CHTTPSWebClientApp::ResetHttpContent(CHTTPConnection& httpContent)
 {
 	httpContent.ConnectInit(L"dynamic.12306.cn");
 	return ERROR_OK;
+}
+
+void CHTTPSWebClientApp::CDNListProbe( CHTTPConnection& httpContent )
+{
+	// probe cdn list and remove the dead links
+	httpContent.CDNListProbe();
 }

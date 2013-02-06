@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "HTTPConnection.h"
 
+#include <stdlib.h>
+
 #define MAX_CONTENT_SIZE	(1L*1024*1024)
 #define GB2312_CODEPAGE		(936)
 
@@ -217,6 +219,7 @@ SENDGETDATAFAIL:
 	if(hRequest)
 		WinHttpCloseHandle(hRequest);
 	status = HTTP_SEND_FAIL;
+	RemoveInvalidCDN();
 	return FALSE;
 }
 
@@ -418,6 +421,7 @@ SENDGETDATAFAIL:
 	if(hRequest)
 		WinHttpCloseHandle(hRequest);
 	status = HTTP_SEND_FAIL;
+	RemoveInvalidCDN();
 	return FALSE;
 }
 
@@ -456,9 +460,10 @@ void CHTTPConnection::SwitchSite()
 {
 #ifdef CDN_SWITCH
 	static int cdn_index = 0;
+	ConnectSite(cdnlist[cdn_index]);
+	cdn_index++;
 	if(cdn_index >= cdnlist.GetCount())
 		cdn_index = 0;
-	ConnectSite(cdnlist[cdn_index++]);
 #endif
 }
 
@@ -527,4 +532,31 @@ void CHTTPConnection::GetCookie( HINTERNET hRequest )
 			}
 		}
 	}
+}
+
+void CHTTPConnection::RemoveInvalidCDN()
+{
+#ifdef CDN_SWITCH
+	for(int i = 0; i < cdnlist.GetCount(); i++)
+	{
+		if(siteAdr == cdnlist[i])
+		{
+			cdnlist.RemoveAt(i);
+			break;
+		}
+	}
+#endif
+}
+
+void CHTTPConnection::CDNListProbe()
+{
+#if 0
+	// TODO
+	for(int i = 0; i < cdnlist.GetCount(); i++)
+	{
+		ConnectSite(cdnlist[i]);
+		// reduce timeout value
+		WinHttpSetTimeouts();
+	}
+#endif
 }

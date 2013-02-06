@@ -17,6 +17,8 @@ public:
 	void GetResponseRaw(BYTE* result, DWORD& size);
 	void SetRefStr(CString& str);
 	void CleanCookie();
+	void RemoveInvalidCDN();
+	void CDNListProbe();
 private:
 	BYTE* buff;
 	CString siteAdr;

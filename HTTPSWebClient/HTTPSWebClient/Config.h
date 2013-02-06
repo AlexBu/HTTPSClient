@@ -8,7 +8,7 @@ struct UserList
 	CArray<UserInfo> user;
 };
 
-struct PassList
+struct PassengerList
 {
 	DWORD count;
 	CArray<PassengerInfo> pass;
@@ -20,12 +20,23 @@ struct CDNList
 	CStringArray ip;
 };
 
+struct InputInfo
+{
+	UserInfo userinfo;
+	PassengerList passengerlist;
+	CString date;
+	CString fromStation;
+	CString toStation;
+	CString trainNo;
+};
+
 struct CfgData
 {
 	CString version;
 	UserList userlist;
-	PassList passlist;
+	PassengerList passlist;
 	CDNList cdnlist;
+	InputInfo lastClostInfo;
 };
 
 class CConfig
@@ -33,6 +44,7 @@ class CConfig
 public:
 	CArray<UserInfo>& GetUser();
 	CArray<PassengerInfo>& GetPassenger();
+	InputInfo& GetInput();
 	void SetUpdate();
 private:
 	BOOL LoadConfig();
@@ -43,16 +55,18 @@ private:
 	void LoadUserInfo( CFile &file, UserInfo& userinfo );
 	void LoadPassInfo( CFile &file, PassengerInfo& passinfo );
 	void LoadUserList( CFile &file, UserList& userlist );
-	void LoadPassList( CFile &file, PassList& passlist );
+	void LoadPassList( CFile &file, PassengerList& passlist );
 	void LoadCDNList( CFile &file, CDNList& cdnlist );
+	void LoadInputInfo( CFile &file, InputInfo& inputinfo );
 
-	void WriteDword( CFile &file, DWORD n );
-	void WriteString( CFile &file, CString& str );
-	void WriteUserInfo( CFile &file, UserInfo& userinfo );
-	void WritePassInfo( CFile &file, PassengerInfo& passinfo );
-	void WriteUserList( CFile &file, UserList& userlist );
-	void WritePassList( CFile &file, PassList& passlist );
-	void WriteCDNList( CFile &file, CDNList& cdnlist );
+	void SaveDword( CFile &file, DWORD n );
+	void SaveString( CFile &file, CString& str );
+	void SaveUserInfo( CFile &file, UserInfo& userinfo );
+	void SavePassInfo( CFile &file, PassengerInfo& passinfo );
+	void SaveUserList( CFile &file, UserList& userlist );
+	void SavePassList( CFile &file, PassengerList& passlist );
+	void SaveCDNList( CFile &file, CDNList& cdnlist );
+	void SaveInputInfo( CFile &file, InputInfo& inputinfo );
 
 	CConfig(void);
 	CConfig(const CConfig& config);
