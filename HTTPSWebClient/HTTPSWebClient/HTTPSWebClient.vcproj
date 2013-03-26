@@ -131,7 +131,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include\regex&quot;;&quot;$(SolutionDir)\include\jpeg&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\include\regex&quot;;&quot;$(SolutionDir)\include\pnglib&quot;;&quot;$(SolutionDir)\include\jpeg&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
